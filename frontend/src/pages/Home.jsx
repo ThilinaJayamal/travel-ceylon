@@ -2,6 +2,7 @@ import React from 'react';
 import { asserts } from '../assets/assets';
 import VisitCard from '../components/VisitCard';
 import TestimonialCard from '../components/TestimonialCard';
+import ProvinceCard from '../components/ProvinceCard';
 
 function Home() {
 
@@ -112,6 +113,74 @@ function Home() {
                         <button className='px-4 py-2 rounded-md border-2 border-green-300 cursor-pointer'>Add Review</button>
                     </div>
 
+                </div>
+            </div>
+
+            {/** Registration & Instructions */}
+            <div className='mt-12 bg-green-300 rounded-4xl border border-gray-200 p-4'>
+
+                <div className='grid lg:grid-cols-[1fr_1.5fr] grid-cols-1 gap-2'>
+                    <div className='flex justify-end order-2 lg:order-1'>
+                        <img src={asserts.womenWithHand} alt="" className='max-w-full w-auto' />
+                    </div>
+                    <div className='order-1 lg:order-2 flex justify-center items-center'>
+                        <span className='md:text-4xl text-2xl font-medium text-center max-w-[600px] md:leading-12 leading-8 lg:mt-0 mt-12'>
+                            "Why wait? If you own a hotel, rent vehicles, or offer tour guide, list with us today!"
+                        </span>
+                    </div>
+
+                </div>
+
+                <div className='bg-white p-4 rounded-4xl'>
+                    <div className='grid md:grid-cols-7 grid-cols-2 gap-4 my-6 px-4'>
+                        <div className='flex items-center justify-center flex-col text-base text-center'>
+                            <img src={asserts.r1} alt="" className='size-10' />
+                            <p>Register now in travelCeylon</p>
+                        </div>
+                        <div className='flex items-center justify-center'>
+                            <img src={asserts.r5} alt="" className='size-14' />
+                        </div>
+                        <div className='flex items-center justify-center flex-col text-base text-center'>
+                            <img src={asserts.r2} alt="" className='size-10' />
+                            <p>List out your properties</p>
+                        </div>
+                        <div className='flex items-center justify-center'>
+                            <img src={asserts.r5} alt="" className='size-14' />
+                        </div>
+                        <div className='flex items-center justify-center flex-col text-base text-center'>
+                            <img src={asserts.r3} alt="" className='size-10' />
+                            <p>Join with 10000+ tourists</p>
+                        </div>
+                        <div className='flex items-center justify-center'>
+                            <img src={asserts.r5} alt="" className='size-14' />
+                        </div>
+                        <div className='flex items-center justify-center flex-col text-base text-center'>
+                            <img src={asserts.r4} alt="" className='size-10' />
+                            <p>get your dollar income</p>
+                        </div>
+                    </div>
+
+                    <div className='mt-8'>
+                        <button className='px-4 py-2 bg-green-600 rounded-full w-full text-xl font-medium cursor-pointer text-white'>
+                            Register Now! It is Free
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/** locations */}
+            <div className='mt-12 p-4'>
+                <h2 className='text-4xl font-semibold'>We Cover all</h2>
+                <p className='text-xl mt-2'>We cover all the Provinces in Sri Lanka</p>
+                <div className="grid grid-cols-3 gap-4 mt-12">
+                    {asserts.provinces.map((item, index) => (
+                        <ProvinceCard
+                            key={index}
+                            item={item}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

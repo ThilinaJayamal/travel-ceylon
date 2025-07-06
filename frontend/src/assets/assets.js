@@ -11,6 +11,12 @@ import star from '../assets/star.png';
 import user1 from '../assets/user1.jpg';
 import user2 from '../assets/user2.jpg';
 import user3 from '../assets/user3.jpg';
+import womenWithHand from '../assets/women_with_hand.png';
+import r1 from '../assets/r1.svg';
+import r2 from '../assets/r2.svg';
+import r3 from '../assets/r3.svg';
+import r4 from '../assets/r4.svg';
+import r5 from '../assets/r5.svg';
 
 const visitCardList = [
     {
@@ -57,6 +63,54 @@ const visitCardList = [
     }
   ];
 
+  const provinces = [
+        {
+            Image: "src/assets/southern.png",
+            title: "Southern Province",
+            description: "Sun, Sand, and Serendipity"        
+        },
+        {
+            Image: "src/assets/eastern.png",
+            title: "Eastern Province",
+            description: "Where the Island Breezes"
+        },
+        {
+            Image: "src/assets/uva.png",
+            title: "Uva Province",
+            description: "Nature's Playgrounds"
+        },
+        {
+            Image: "src/assets/western.png",
+            title: "Western Province",
+            description: "City Vibes, Coastal Charms"
+        },
+        {
+            Image: "src/assets/northern.png",
+            title: "Nothern Province",
+            description: "Ancient Soul, Modern Vibe"
+        },
+        {
+            Image: "src/assets/sabaragamuwa.png",
+            title: "Sabaragamuwa Province",
+            description: "Hidden Gems Awaitts"
+        },
+        {
+            Image: "src/assets/central.png",
+            title: "Central Province",
+            description: "Hill Country Heartbeat"
+        },
+        {
+            Image: "src/assets/northwest.png",
+            title: "North Western Province",
+            description: "History Untouched"
+        },
+        {
+            Image: "src/assets/northcentral.png",
+            title: "North Central Province",
+            description: "Land of Legends"
+        }
+    ]
+
 export const asserts = {
     heroBg,
     shareLocation,
@@ -70,5 +124,12 @@ export const asserts = {
     visitCardList,
     star,
     user1,
-    testimonials
+    testimonials,
+    womenWithHand,
+    r1,
+    r2,
+    r3,
+    r4,
+    r5,
+    provinces
 }
