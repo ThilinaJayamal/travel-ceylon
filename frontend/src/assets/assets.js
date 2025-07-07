@@ -33,6 +33,9 @@ import whatsapp from '../assets/whatsapp.svg';
 import instagram from '../assets/instagram.svg';
 import email from '../assets/email.svg';
 
+import tick from '../assets/tick.svg';
+import close from '../assets/close.svg';
+
 const visitCardList = [
     {
         title: "Stays",
@@ -151,5 +154,7 @@ export const asserts = {
     fb,
     whatsapp,
     email,
-    instagram
+    instagram,
+    tick,
+    close
 }

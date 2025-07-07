@@ -3,8 +3,11 @@ import { asserts } from '../assets/assets';
 import VisitCard from '../components/VisitCard';
 import TestimonialCard from '../components/TestimonialCard';
 import ProvinceCard from '../components/ProvinceCard';
+import { useAppStore } from '../store/app-store';
 
 function Home() {
+
+    const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
 
     return (
         <>
@@ -123,7 +126,10 @@ function Home() {
                         </div>
 
                         <div className='flex justify-end items-center'>
-                            <button className='px-4 py-2 rounded-md border-2 border-green-300 cursor-pointer'>Add Review</button>
+                            <button onClick={() => toggleReviewOpen()}
+                                className='px-4 py-2 rounded-md border-2 border-green-300 cursor-pointer'>
+                                Add Review
+                            </button>
                         </div>
 
                     </div>
