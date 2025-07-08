@@ -27,11 +27,15 @@ import Southern from '../assets/Southern.jpg';
 import Uva from '../assets/Uva.jpg';
 import Western from '../assets/Western.jpg';
 import Bt_bg from '../assets/Bt_bg.jpg';
+import login_img from '../assets/login_img.png';
+import register_img from '../assets/register_img.png';
 
 import fb from '../assets/fb.svg';
 import whatsapp from '../assets/whatsapp.svg';
 import instagram from '../assets/instagram.svg';
 import email from '../assets/email.svg';
+import google from '../assets/google.svg';
+import fb_color from '../assets/fb_color.svg';
 
 import tick from '../assets/tick.svg';
 import close from '../assets/close.svg';
@@ -156,5 +160,9 @@ export const asserts = {
     email,
     instagram,
     tick,
-    close
+    close,
+    login_img,
+    register_img,
+    google,
+    fb_color
 }
