@@ -64,9 +64,12 @@ function Home() {
                             <Link to={"/login"}>
                                 <button className="cursor-pointer hover:text-green-300 transition">Login</button>
                             </Link>
-                            <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
-                                Sign Up
-                            </button>
+
+                            <Link to={"/login"}>
+                                <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
+                                    Sign Up
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
