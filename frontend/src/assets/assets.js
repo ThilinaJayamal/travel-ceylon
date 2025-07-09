@@ -39,6 +39,7 @@ import fb_color from '../assets/fb_color.svg';
 
 import tick from '../assets/tick.svg';
 import close from '../assets/close.svg';
+import userBg from '../assets/userBg.jpg';
 
 const visitCardList = [
     {
@@ -164,5 +165,6 @@ export const asserts = {
     login_img,
     register_img,
     google,
-    fb_color
+    fb_color,
+    userBg
 }

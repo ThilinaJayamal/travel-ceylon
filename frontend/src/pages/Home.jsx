@@ -43,7 +43,7 @@ function Home() {
                         </p>
                     </div>
 
-
+                    {/** Hero section navigation bar */}
                     <div className="flex flex-col md:flex-row justify-between items-center w-full gap-6 text-lg mt-6">
                         <div className="flex justify-center gap-6 items-center">
                             <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
