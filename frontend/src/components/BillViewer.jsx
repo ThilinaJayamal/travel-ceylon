@@ -3,7 +3,7 @@ import { asserts } from '../assets/assets'
 
 function BillViewer() {
     return (
-        <div className='max-w-xl p-4 md:p-8 rounded-md bg-white border border-gray-200 max-h-fit'>
+        <div className='max-w-xl p-4 md:p-8 rounded-md bg-white border border-gray-200 max-h-fit mx-auto'>
             <div className='grid grid-cols-[1fr_2fr] gap-4'>
                 <img src={asserts.Bt_bg} className='max-w-full max-h-32 rounded-md' alt="" />
                 <div className='flex flex-col items-start justify-end'>
