@@ -40,6 +40,7 @@ import fb_color from '../assets/fb_color.svg';
 import tick from '../assets/tick.svg';
 import close from '../assets/close.svg';
 import userBg from '../assets/userBg.jpg';
+import new_bg from '../assets/new_bg.png';
 
 const visitCardList = [
     {
@@ -134,6 +135,28 @@ const visitCardList = [
         }
     ]
 
+    const heroSlides = [
+        {
+            image: heroBg,
+            heading: "Dream it - Plan it",
+            subheading: "We’ll make it happen",
+            description: "Your travel dreams, our responsibility",
+        },
+        {
+            image: Bt_bg,
+            heading: "Explore - Experience",
+            subheading: "Live your adventure",
+            description: "Curated trips with local experts",
+        },
+        {
+            image: new_bg,
+            heading: "Relax - Rejuvenate",
+            subheading: "Your island escape",
+            description: "Luxury stays at your fingertips",
+        },
+    ];
+    
+
 export const asserts = {
     heroBg,
     shareLocation,
@@ -166,5 +189,7 @@ export const asserts = {
     register_img,
     google,
     fb_color,
-    userBg
+    userBg,
+    new_bg,
+    heroSlides
 }
