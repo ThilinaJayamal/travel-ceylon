@@ -4,25 +4,9 @@ import TestimonialCard from '../components/TestimonialCard';
 import ProvinceCard from '../components/ProvinceCard';
 import { useAppStore } from '../store/app-store';
 import { Link } from 'react-router-dom';
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 
 function Home() {
-    const [current, setCurrent] = useState(0);
-    const [prev, setPrev] = useState(0);
-    const [isTransitioning, setIsTransitioning] = useState(false);
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setIsTransitioning(true);
-            setPrev(current);
-            setCurrent((prev) => (prev + 1) % asserts.heroSlides.length);
-            setTimeout(() => setIsTransitioning(false), 1000); // match transition duration
-        }, 6000);
-
-        return () => clearInterval(timer);
-    }, [current]);
 
     const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
 
@@ -31,100 +15,65 @@ function Home() {
             <div className='md:mx-8 mx-4 md:mt-8 mt-4 min-h-screen'>
 
                 {/* Hero Section */}
-                <div className="relative h-[80vh] rounded-4xl overflow-hidden mt-12">
-                    {/* Background Layer */}
-                    <div className="absolute inset-0 w-full h-full overflow-hidden">
-                        {/* Previous Image */}
-                        <motion.div
-                            key={`prev-${prev}`}
-                            initial={{ opacity: 1, scale: 1 }}
-                            animate={{ opacity: isTransitioning ? 0 : 1, scale: isTransitioning ? 1.05 : 1 }}
-                            transition={{ duration: 1, ease: "easeInOut" }}
-                            className="absolute inset-0 w-full h-full bg-cover bg-center"
-                            style={{
-                                backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url(${asserts.heroSlides[prev].image})`,
-                                zIndex: 0,
-                            }}
-                        />
+                <div
+                    style={{
+                        backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url(${asserts.heroBg})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
+                    }}
+                    className="h-[80vh] rounded-4xl overflow-hidden relative md:px-14 px-7 py-12 mt-12 flex flex-col justify-between items-center text-white"
+                >
 
-                        {/* Current Image */}
-                        <motion.div
-                            key={`current-${current}`}
-                            initial={{ opacity: 0, scale: 1.05 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 1, ease: "easeInOut" }}
-                            className="absolute inset-0 w-full h-full bg-cover bg-center"
-                            style={{
-                                backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url(${asserts.heroSlides[current].image})`,
-                                zIndex: 1,
-                            }}
-                        />
+                    <div className="absolute top-6 right-6 z-10 border-2 border-white rounded-full size-10 flex justify-center items-center cursor-pointer bg-white/10 backdrop-blur-md">
+                        <span className="text-sm font-semibold text-white">EN</span>
                     </div>
 
-                    {/* Overlay content */}
-                    <div className="relative z-10 h-full w-full px-7 md:px-14 py-12 flex flex-col justify-between items-center text-white">
-                        {/* Language switch */}
-                        <div className="absolute top-6 right-6 z-20 border-2 border-white rounded-full size-10 flex justify-center items-center cursor-pointer bg-white/10 backdrop-blur-md">
-                            <span className="text-sm font-semibold text-white">EN</span>
+                    <h1 className="md:text-5xl text-3xl font-bold text-center">
+                        Travel <span className="text-green-200">Ceylon</span>
+                    </h1>
+
+                    <div className="text-center">
+                        <span className="font-semibold lg:text-6xl md:text-4xl text-3xl  block">
+                            Dream it - Plan it<br />
+                            We’ll make it happen
+                        </span>
+                        <p className="lg:text-2xl md:text-xl text-lg mt-2">
+                            Your travel dreams, our responsibility
+                        </p>
+                    </div>
+
+                    {/** Hero section navigation bar */}
+                    <div className="flex flex-col md:flex-row justify-between items-center w-full gap-6 text-lg mt-6">
+                        <div className="flex justify-center gap-6 items-center">
+                            <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
+                                <img src={asserts.stays} alt="Stays" />
+                                Stays
+                            </button>
+                            <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
+                                <img src={asserts.taxiAlert} alt="Taxi" />
+                                Taxi
+                            </button>
+                            <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
+                                <img src={asserts.shareLocation} alt="Tour Guides" />
+                                Tour Guides
+                            </button>
                         </div>
 
-                        {/* Static title */}
-                        <h1 className="md:text-5xl text-3xl font-bold text-center z-20">
-                            Travel <span className="text-green-200">Ceylon</span>
-                        </h1>
+                        <div className="flex justify-center gap-6 items-center">
+                            <Link to={"/login"}>
+                                <button className="cursor-pointer hover:text-green-300 transition">Login</button>
+                            </Link>
 
-                        {/* Animated Text */}
-                        <motion.div
-                            key={current}
-                            className="text-center z-20"
-                            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                            exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <span className="font-semibold lg:text-6xl md:text-4xl text-3xl block">
-                                {asserts.heroSlides[current].heading}
-                                <br />
-                                {asserts.heroSlides[current].subheading}
-                            </span>
-                            <p className="lg:text-2xl md:text-xl text-lg mt-2">
-                                {asserts.heroSlides[current].description}
-                            </p>
-                        </motion.div>
-
-                        {/* Bottom buttons */}
-                        <div className="flex flex-col md:flex-row justify-between items-center w-full gap-6 text-lg mt-6 z-20">
-                            <div className="flex justify-center gap-6 items-center">
-                                <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
-                                    <img src={asserts.stays} alt="Stays" />
-                                    Stays
+                            <Link to={"/login"}>
+                                <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
+                                    Sign Up
                                 </button>
-                                <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
-                                    <img src={asserts.taxiAlert} alt="Taxi" />
-                                    Taxi
-                                </button>
-                                <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
-                                    <img src={asserts.shareLocation} alt="Tour Guides" />
-                                    Tour Guides
-                                </button>
-                            </div>
-
-                            <div className="flex justify-center gap-6 items-center">
-                                <Link to={"/login"}>
-                                    <button className="cursor-pointer hover:text-green-300 transition">
-                                        Login
-                                    </button>
-                                </Link>
-
-                                <Link to={"/login"}>
-                                    <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
-                                        Sign Up
-                                    </button>
-                                </Link>
-                            </div>
+                            </Link>
                         </div>
                     </div>
                 </div>
+
 
                 {/* Trip Planning Section */}
                 <div className='mt-20 grid lg:grid-cols-[2.5fr_2fr] gap-4 grid-cols-1'>
