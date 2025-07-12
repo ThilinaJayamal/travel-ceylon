@@ -7,6 +7,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
 import Navbar from './components/Navbar';
+import StaysAdmin from './pages/StaysAdmin';
 
 function App() {
 
@@ -34,7 +35,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/user' element={<UserProfile />} />
+        <Route path='/user-profile' element={<UserProfile />} />
+        <Route path='/stays-admin' element={<StaysAdmin/>}/>
       </Routes>
 
       {showFooter() && <Footer />}

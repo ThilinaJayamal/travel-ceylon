@@ -42,6 +42,10 @@ import close from '../assets/close.svg';
 import userBg from '../assets/userBg.jpg';
 import new_bg from '../assets/new_bg.png';
 
+import hotel1 from '../assets/hotel1.jpg';
+import hotel2 from '../assets/hotel2.jpg';
+import hotel3 from '../assets/hotel3.jpg';
+
 const visitCardList = [
     {
         title: "Stays",
@@ -191,5 +195,8 @@ export const asserts = {
     fb_color,
     userBg,
     new_bg,
-    heroSlides
+    heroSlides,
+    hotel1,
+    hotel3,
+    hotel2
 }
