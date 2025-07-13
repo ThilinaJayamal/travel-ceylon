@@ -18,6 +18,34 @@ import r3 from '../assets/r3.svg';
 import r4 from '../assets/r4.svg';
 import r5 from '../assets/r5.svg';
 import Stays_hero_section from '../assets/Stays_hero_section.png'
+import Central from '../assets/Central.jpg';
+import Estern from '../assets/Eastern.jpg';
+import North from '../assets/North.jpg';
+import NorthWestern from '../assets/NorthWestern.jpg';
+import Sabaragamuwa from '../assets/Sabaragamuwa.jpg';
+import Northern from '../assets/Northern.jpg';
+import Southern from '../assets/Southern.jpg';
+import Uva from '../assets/Uva.jpg';
+import Western from '../assets/Western.jpg';
+import Bt_bg from '../assets/Bt_bg.jpg';
+import login_img from '../assets/login_img.png';
+import register_img from '../assets/register_img.png';
+
+import fb from '../assets/fb.svg';
+import whatsapp from '../assets/whatsapp.svg';
+import instagram from '../assets/instagram.svg';
+import email from '../assets/email.svg';
+import google from '../assets/google.svg';
+import fb_color from '../assets/fb_color.svg';
+
+import tick from '../assets/tick.svg';
+import close from '../assets/close.svg';
+import userBg from '../assets/userBg.jpg';
+import new_bg from '../assets/new_bg.png';
+
+import hotel1 from '../assets/hotel1.jpg';
+import hotel2 from '../assets/hotel2.jpg';
+import hotel3 from '../assets/hotel3.jpg';
 
 const visitCardList = [
     {
@@ -66,51 +94,73 @@ const visitCardList = [
 
   const provinces = [
         {
-            Image: "src/assets/southern.png",
+            Image: Southern,
             title: "Southern Province",
             description: "Sun, Sand, and Serendipity"        
         },
         {
-            Image: "src/assets/eastern.png",
+            Image: Estern,
             title: "Eastern Province",
             description: "Where the Island Breezes"
         },
         {
-            Image: "src/assets/uva.png",
+            Image: Uva,
             title: "Uva Province",
             description: "Nature's Playgrounds"
         },
         {
-            Image: "src/assets/western.png",
+            Image: Western,
             title: "Western Province",
             description: "City Vibes, Coastal Charms"
         },
         {
-            Image: "src/assets/northern.png",
+            Image: Northern,
             title: "Nothern Province",
             description: "Ancient Soul, Modern Vibe"
         },
         {
-            Image: "src/assets/sabaragamuwa.png",
+            Image: Sabaragamuwa,
             title: "Sabaragamuwa Province",
             description: "Hidden Gems Awaitts"
         },
         {
-            Image: "src/assets/central.png",
+            Image: Central,
             title: "Central Province",
             description: "Hill Country Heartbeat"
         },
         {
-            Image: "src/assets/northwest.png",
+            Image: NorthWestern,
             title: "North Western Province",
             description: "History Untouched"
         },
         {
-            Image: "src/assets/northcentral.png",
+            Image: North,
             title: "North Central Province",
             description: "Land of Legends"
         }
     ]
+
+    const heroSlides = [
+        {
+            image: heroBg,
+            heading: "Dream it - Plan it",
+            subheading: "We’ll make it happen",
+            description: "Your travel dreams, our responsibility",
+        },
+        {
+            image: Bt_bg,
+            heading: "Explore - Experience",
+            subheading: "Live your adventure",
+            description: "Curated trips with local experts",
+        },
+        {
+            image: new_bg,
+            heading: "Relax - Rejuvenate",
+            subheading: "Your island escape",
+            description: "Luxury stays at your fingertips",
+        },
+    ];
+    
 
 export const asserts = {
     heroBg,
@@ -133,5 +183,22 @@ export const asserts = {
     r4,
     r5,
     provinces,
-    Stays_hero_section
+    Stays_hero_section,
+    Bt_bg,
+    fb,
+    whatsapp,
+    email,
+    instagram,
+    tick,
+    close,
+    login_img,
+    register_img,
+    google,
+    fb_color,
+    userBg,
+    new_bg,
+    heroSlides,
+    hotel1,
+    hotel3,
+    hotel2
 }

@@ -13,3 +13,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+body{
+    @apply bg-gray-50
+}
