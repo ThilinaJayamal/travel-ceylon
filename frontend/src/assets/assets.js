@@ -17,6 +17,7 @@ import r2 from '../assets/r2.svg';
 import r3 from '../assets/r3.svg';
 import r4 from '../assets/r4.svg';
 import r5 from '../assets/r5.svg';
+import Stays_hero_section from '../assets/Stays_hero_section.png'
 
 const visitCardList = [
     {
@@ -131,5 +132,6 @@ export const asserts = {
     r3,
     r4,
     r5,
-    provinces
+    provinces,
+    Stays_hero_section
 }
