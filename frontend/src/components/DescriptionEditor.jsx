@@ -24,6 +24,7 @@ Why Guests Love Us 
         <div>
                 {isEditing ? (
                     <textarea
+                    rows={12}
                         className="w-full max-h-[300px] min-h-[150px] p-4 bg-white border border-gray-300 rounded-md resize-y text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-400"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
