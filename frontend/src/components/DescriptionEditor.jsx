@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
+import { SquarePen } from 'lucide-react';
+import { Save } from 'lucide-react';
 
 function DescriptionEditor() {
     const [isEditing, setIsEditing] = useState(false);
-    const [text, setText] = useState(`Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla non expedita, dicta aliquam, quidem atque dolor laboriosam suscipit consequatur corrupti quibusdam officia iste totam sequi molestiae aspernatur a sit? Optio soluta ipsa ullam ducimus praesentium, consectetur totam fugiat minus modi voluptas, nihil voluptatum provident sint cum voluptatibus.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla non expedita, dicta aliquam, quidem atque dolor laboriosam suscipit consequatur corrupti quibusdam officia iste totam sequi molestiae aspernatur a sit? Optio soluta ipsa ullam ducimus praesentium, consectetur totam fugiat minus modi voluptas, nihil voluptatum provident sint cum voluptatibus.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla non expedita, dicta aliquam, quidem atque dolor laboriosam suscipit consequatur corrupti quibusdam officia iste totam sequi molestiae aspernatur a sit? Optio soluta ipsa ullam ducimus praesentium, consectetur totam fugiat minus modi voluptas, nihil voluptatum provident sint cum voluptatibus.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla non expedita, dicta aliquam, quidem atque dolor laboriosam suscipit consequatur corrupti quibusdam officia iste totam sequi molestiae aspernatur a sit? Optio soluta ipsa ullam ducimus praesentium, consectetur totam fugiat minus modi voluptas, nihil voluptatum provident sint cum voluptatibus.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla non expedita, dicta aliquam, quidem atque dolor laboriosam suscipit consequatur corrupti quibusdam officia iste totam sequi molestiae aspernatur a sit? Optio soluta ipsa ullam ducimus praesentium, consectetur totam fugiat minus modi voluptas, nihil voluptatum provident sint cum voluptatibus.`);
+    const [text, setText] = useState(`Where Coastal Charm Meets Modern Comfort
+
+Nestled on the fringes of Yala National Park, Cinnamon Wild Yala offers a unique blend of adventure and comfort, where luxury meets the untamed wilderness. This eco-friendly resort is designed to immerse you in nature, with rustic-chic accommodations that harmonize with the surrounding jungle and beachscape. Just minutes away from Yala National Park (famous for leopards, elephants, and exotic birds), the resort organizes thrilling jeep safaris for unforgettable wildlife encounters.Committed to sustainability, the resort uses solar power, minimizes plastic, and supports local conservation efforts.
+
+Why Guests Love Us 
+
+🌿 Located between the wild jungles of Yala and the pristine shores of the Indian Ocean, the resort offers a rare combination of safari excitement and beachside serenity.
+🛖 Choose from cozy jungle chalets. each thoughtfully designed with natural materials and modern comforts, offering stunning views of the wilderness or ocean.
+🐘 Just minutes away from Yala National Park  the resort organizes thrilling jeep safaris for unforgettable wildlife encounters.
+🍽️ Dining with Nature. Enjoy delicious Sri Lankan and international cuisine at the open-air restaurant, where you might spot wildlife roaming nearby.
+🌍 Committed to sustainability, the resort uses solar power, minimizes plastic, and supports local conservation efforts.`);
 
     const handleToggle = () => {
         setIsEditing((prev) => !prev);
@@ -14,8 +22,6 @@ function DescriptionEditor() {
 
     return (
         <div>
-            <h3 className="text-xl font-semibold text-black/70 mt-6">Description</h3>
-            <div className='ml-12 mt-3'>
                 {isEditing ? (
                     <textarea
                         className="w-full max-h-[300px] min-h-[150px] p-4 bg-white border border-gray-300 rounded-md resize-y text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -31,13 +37,12 @@ function DescriptionEditor() {
                 <div className="flex justify-end items-center mt-3">
                     <button
                         onClick={handleToggle}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                        className="cursor-pointer"
                     >
-                        {isEditing ? 'Save' : 'Edit'}
+                        {isEditing ? <Save className='size-6' /> : <SquarePen className='size-6' />}
                     </button>
                 </div>
             </div>
-        </div>
     );
 }
 

@@ -64,102 +64,139 @@ const visitCardList = [
     }
 ]
 
-  const testimonials = [
+const testimonials = [
     {
-      user: 'Sofia',
-      country: 'Germany',
-      text:
-        'Really appreciate the help and support from the staff during these tough times. Shoutout to Katie for helping me always, even when I was out of the country. And always available when needed.',
-      rating: 4,
-      img: user1,
+        user: 'Sofia',
+        country: 'Germany',
+        text:
+            'Really appreciate the help and support from the staff during these tough times. Shoutout to Katie for helping me always, even when I was out of the country. And always available when needed.',
+        rating: 4,
+        img: user1,
     },
     {
-      user: 'Zara',
-      country: 'Canada',
-      text:
-        'Really appreciate the help and support from the staff during these tough times. Shoutout to Katie for helping me always, even when I was out of the country. And always available when needed.',
-      rating: 5,
-      img: user2,
+        user: 'Zara',
+        country: 'Canada',
+        text:
+            'Really appreciate the help and support from the staff during these tough times. Shoutout to Katie for helping me always, even when I was out of the country. And always available when needed.',
+        rating: 5,
+        img: user2,
     },
     {
-      user: 'Jean-Luc',
-      country: 'United Kingdom',
-      text:
-        'Really appreciate the help and support from the staff during these tough times. Shoutout to Katie for helping me always, even when I was out of the country. And always available when needed.',
-      rating: 5,
-      img: user3,
+        user: 'Jean-Luc',
+        country: 'United Kingdom',
+        text:
+            'Really appreciate the help and support from the staff during these tough times. Shoutout to Katie for helping me always, even when I was out of the country. And always available when needed.',
+        rating: 5,
+        img: user3,
     }
-  ];
+];
 
-  const provinces = [
-        {
-            Image: Southern,
-            title: "Southern Province",
-            description: "Sun, Sand, and Serendipity"        
-        },
-        {
-            Image: Estern,
-            title: "Eastern Province",
-            description: "Where the Island Breezes"
-        },
-        {
-            Image: Uva,
-            title: "Uva Province",
-            description: "Nature's Playgrounds"
-        },
-        {
-            Image: Western,
-            title: "Western Province",
-            description: "City Vibes, Coastal Charms"
-        },
-        {
-            Image: Northern,
-            title: "Nothern Province",
-            description: "Ancient Soul, Modern Vibe"
-        },
-        {
-            Image: Sabaragamuwa,
-            title: "Sabaragamuwa Province",
-            description: "Hidden Gems Awaitts"
-        },
-        {
-            Image: Central,
-            title: "Central Province",
-            description: "Hill Country Heartbeat"
-        },
-        {
-            Image: NorthWestern,
-            title: "North Western Province",
-            description: "History Untouched"
-        },
-        {
-            Image: North,
-            title: "North Central Province",
-            description: "Land of Legends"
-        }
-    ]
+const provinces = [
+    {
+        Image: Southern,
+        title: "Southern Province",
+        description: "Sun, Sand, and Serendipity"
+    },
+    {
+        Image: Estern,
+        title: "Eastern Province",
+        description: "Where the Island Breezes"
+    },
+    {
+        Image: Uva,
+        title: "Uva Province",
+        description: "Nature's Playgrounds"
+    },
+    {
+        Image: Western,
+        title: "Western Province",
+        description: "City Vibes, Coastal Charms"
+    },
+    {
+        Image: Northern,
+        title: "Nothern Province",
+        description: "Ancient Soul, Modern Vibe"
+    },
+    {
+        Image: Sabaragamuwa,
+        title: "Sabaragamuwa Province",
+        description: "Hidden Gems Awaitts"
+    },
+    {
+        Image: Central,
+        title: "Central Province",
+        description: "Hill Country Heartbeat"
+    },
+    {
+        Image: NorthWestern,
+        title: "North Western Province",
+        description: "History Untouched"
+    },
+    {
+        Image: North,
+        title: "North Central Province",
+        description: "Land of Legends"
+    }
+]
 
-    const heroSlides = [
-        {
-            image: heroBg,
-            heading: "Dream it - Plan it",
-            subheading: "We’ll make it happen",
-            description: "Your travel dreams, our responsibility",
-        },
-        {
-            image: Bt_bg,
-            heading: "Explore - Experience",
-            subheading: "Live your adventure",
-            description: "Curated trips with local experts",
-        },
-        {
-            image: new_bg,
-            heading: "Relax - Rejuvenate",
-            subheading: "Your island escape",
-            description: "Luxury stays at your fingertips",
-        },
-    ];
-    
+const heroSlides = [
+    {
+        image: heroBg,
+        heading: "Dream it - Plan it",
+        subheading: "We’ll make it happen",
+        description: "Your travel dreams, our responsibility",
+    },
+    {
+        image: Bt_bg,
+        heading: "Explore - Experience",
+        subheading: "Live your adventure",
+        description: "Curated trips with local experts",
+    },
+    {
+        image: new_bg,
+        heading: "Relax - Rejuvenate",
+        subheading: "Your island escape",
+        description: "Luxury stays at your fingertips",
+    },
+];
+
+
+const locations = [
+    {
+        title: "Top Attractions",
+        items: [
+            { name: "Tissamaharama Raja Maha Vihara", distance: "02 km" },
+            { name: "Yatala Raja Maha Vihara", distance: "04 km" },
+            { name: "Kataragama Dewalaya", distance: "17 km" },
+            { name: "Sithulpawwa temple", distance: "23 km" }
+        ]
+    }
+    ,
+    {
+        title: "Nature",
+        items: [
+            { name: "Yala National Park", distance: "25 km" },
+            { name: "Bundala Bird Sanctuary", distance: "15 km" },
+            { name: "Lunugamwehera National Park", distance: "14 km" },
+            { name: "Lunugamwehera Tank", distance: "10 km" },
+            { name: "Debarawewa Bird sanctuary", distance: "02 km" },
+            { name: "Kirinda Beach", distance: "15 km" },
+            { name: "Andagala Beach", distance: "12 km" }
+        ]
+    }
+    ,
+    {
+        title: "Practical Access",
+        items: [
+            { name: "Tissamaharama Bus stand", distance: "02 km" },
+            { name: "Southern Express way", distance: "18 km" },
+            { name: "Mattala International Airport", distance: "24 km" },
+            { name: "Beliatta Railway", distance: "63 km" }
+        ]
+    }
+];
+
+
 
 export const asserts = {
     heroBg,
@@ -198,5 +235,6 @@ export const asserts = {
     heroSlides,
     hotel1,
     hotel3,
-    hotel2
+    hotel2,
+    locations
 }
