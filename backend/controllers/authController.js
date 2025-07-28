@@ -1,6 +1,5 @@
 import User from '../models/User.js';
 import asyncHandler from 'express-async-handler';
-import crypto from 'crypto';
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -26,14 +25,17 @@ export const register = asyncHandler(async (req, res) => {
 
   if (user) {
     const token = user.getSignedJwtToken();
+
+    res.cookie('token', token);
+
     res.status(201).json({
       success: true,
-      token,
-      data: {
+      user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        image: user.image
       }
     });
   } else {
@@ -69,14 +71,17 @@ export const login = asyncHandler(async (req, res) => {
   }
 
   const token = user.getSignedJwtToken();
+
+  res.cookie('token', token);
+
   res.status(200).json({
     success: true,
-    token,
-    data: {
+    user: {
       id: user._id,
       name: user.name,
       email: user.email,
       role: user.role,
+      image: user.image,
       hotelProfile: user.hotelProfile,
       taxiProfile: user.taxiProfile,
       guideProfile: user.guideProfile
@@ -91,7 +96,7 @@ export const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
   res.status(200).json({
     success: true,
-    data: user
+    user: user
   });
 });
 

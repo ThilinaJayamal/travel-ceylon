@@ -15,11 +15,13 @@ router.route('/')
   .get(getReviews)
   .post(protect, validateReview, handleValidationErrors, createReview);
 
+
 router.route('/:serviceType/:serviceId')
   .get(getServiceReviews);
 
 router.route('/:id')
   .put(protect, updateReview)
   .delete(protect, deleteReview);
+
 
 export default router;

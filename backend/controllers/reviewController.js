@@ -8,13 +8,14 @@ import asyncHandler from 'express-async-handler';
 // @route   GET /api/reviews
 // @access  Public
 export const getReviews = asyncHandler(async (req, res) => {
-  const reviews = await Review.find().populate('userId', 'name');
+  const reviews = await Review.find().populate('user', 'name');
   res.status(200).json({
     success: true,
     count: reviews.length,
     data: reviews
   });
 });
+
 
 // @desc    Get reviews for a specific service
 // @route   GET /api/reviews/:serviceType/:serviceId
@@ -36,13 +37,13 @@ export const getServiceReviews = asyncHandler(async (req, res) => {
 // @route   POST /api/reviews
 // @access  Private/User
 export const createReview = asyncHandler(async (req, res) => {
-  req.body.userId = req.user.id;
+  req.body.user = req.user.id;
 
   // Check if user has already reviewed this service
   const existingReview = await Review.findOne({
     serviceType: req.body.serviceType,
     serviceId: req.body.serviceId,
-    userId: req.user.id
+    user: req.user.id
   });
 
   if (existingReview) {
@@ -123,7 +124,7 @@ export const deleteReview = asyncHandler(async (req, res) => {
 // Helper function to update service ratings
 const updateServiceRating = async (serviceType, serviceId) => {
   const reviews = await Review.find({ serviceType, serviceId });
-  const averageRating = reviews.length > 0 
+  const averageRating = reviews.length > 0
     ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
     : 0;
 

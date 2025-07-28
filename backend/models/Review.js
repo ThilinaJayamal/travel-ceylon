@@ -3,15 +3,15 @@ import mongoose from 'mongoose';
 const reviewSchema = new mongoose.Schema({
   serviceType: {
     type: String,
-    enum: ['hotel', 'taxi', 'guide', 'platform'],
+    enum: ['hotel', 'taxi', 'guide'],
     required: [true, 'Service type is required']
   },
   serviceId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: [true, 'Service ID is required'],
-    refPath: 'serviceType'
+    refPath: 'serviceType',
+    required:true
   },
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true

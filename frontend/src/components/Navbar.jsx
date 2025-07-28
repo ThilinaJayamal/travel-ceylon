@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BedDouble, CarTaxiFront, MapPinned, Menu, X } from 'lucide-react';
 import { asserts } from '../assets/assets';
+import { useAuthStore } from '../store/auth-store';
 
 function Navbar() {
+    const user = useAuthStore((state) => state.user);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
@@ -37,7 +39,7 @@ function Navbar() {
                 {/* Right - Avatar & Menu Toggle */}
                 <div className="flex items-center gap-4">
                     <img
-                        src={asserts.user1}
+                        src={user.image}
                         alt="User Avatar"
                         className="size-10 md:size-12 rounded-full object-cover border border-gray-300"
                     />

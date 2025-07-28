@@ -4,11 +4,33 @@ import TestimonialCard from '../components/TestimonialCard';
 import ProvinceCard from '../components/ProvinceCard';
 import { useAppStore } from '../store/app-store';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../store/auth-store';
+import { useReviewStore } from '../store/review-store';
+import { useEffect, useState } from 'react';
 
 
 function Home() {
 
+    const user = useAuthStore((state) => state.user);
+    const setReviewBelongsTo = useAppStore((state) => state.setReviewBelongsTo);
     const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
+    const getPlatformReviews = useReviewStore((state) => state.getPlatformReviews);
+
+    const [reviews, setReviews] = useState([]);
+
+    const fetchAllReviews = async () => {
+        try {
+            const data = await getPlatformReviews();
+            console.log(data)
+            setReviews(data);
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    useEffect(() => {
+        fetchAllReviews();
+    }, [])
 
     return (
         <>
@@ -60,17 +82,24 @@ function Home() {
                             </button>
                         </div>
 
-                        <div className="flex justify-center gap-6 items-center">
-                            <Link to={"/login"}>
-                                <button className="cursor-pointer hover:text-green-300 transition">Login</button>
+                        {user ? (
+                            <Link to={"/user-profile"}>
+                                <img src={user?.image} alt="" className='size-10 rounded-full' />
                             </Link>
+                        ) : (
+                            <div className="flex justify-center gap-6 items-center">
+                                <Link to={"/login"}>
+                                    <button className="cursor-pointer hover:text-green-300 transition">Login</button>
+                                </Link>
+                                <Link to={"/signup"}>
+                                    <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
+                                        Sign Up
+                                    </button>
+                                </Link>
+                            </div>
+                        )}
 
-                            <Link to={"/login"}>
-                                <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
-                                    Sign Up
-                                </button>
-                            </Link>
-                        </div>
+
                     </div>
                 </div>
 
@@ -118,21 +147,25 @@ function Home() {
                         <p className='text-lg text-black/90 mt-3'>What people say about our facilities and services</p>
 
                         <div className='flex gap-6 items-center justify-start mt-12 overflow-x-auto scrollbar-hide w-auto pb-8 pr-8'>
-                            {asserts.testimonials.map((item, index) => (
+                            {reviews.map((item, index) => (
                                 <TestimonialCard
                                     key={index}
-                                    user={item.user}
-                                    country={item.country}
-                                    text={item.text}
+                                    user={item.user.name}
+                                    country={"England"}
+                                    text={item.comment}
                                     rating={item.rating}
-                                    img={item.img}
+                                    img={item.user.image}
                                     star={asserts.star}
                                 />
                             ))}
                         </div>
 
                         <div className='flex justify-end items-center'>
-                            <button onClick={() => toggleReviewOpen()}
+                            <button onClick={() => {
+                                toggleReviewOpen();
+                                setReviewBelongsTo('platform')
+
+                            }}
                                 className='px-4 py-2 rounded-md border-2 border-green-300 cursor-pointer'>
                                 Add Review
                             </button>

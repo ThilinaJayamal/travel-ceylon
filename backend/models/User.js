@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     match: [/^\+?[1-9]\d{1,14}$/, 'Please provide a valid phone number']
   },
+  image: {
+    type: String,
+    default: 'https://cdn-icons-png.flaticon.com/512/9187/9187604.png'
+  },
   role: {
     type: String,
     enum: ['user', 'admin'],
@@ -61,24 +65,24 @@ const userSchema = new mongoose.Schema({
 });
 
 // Encrypt password before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
-  
+
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
 // Sign JWT token
-userSchema.methods.getSignedJwtToken = function() {
+userSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
 };
 
 // Match user entered password to hashed password in database
-userSchema.methods.matchPassword = async function(enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

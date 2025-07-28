@@ -2,5 +2,9 @@ import { create } from 'zustand';
 
 export const useAppStore = create((set) => ({
     reviewOpen: false,
-    toggleReviewOpen: () => set((state) => ({ reviewOpen: !state.reviewOpen }))
+    reviewBelongsTo:null,
+
+    toggleReviewOpen: () => set((state) => ({ reviewOpen: !state.reviewOpen })),
+
+    setReviewBelongsTo:(name)=>(set({reviewBelongsTo:name}))
 }))

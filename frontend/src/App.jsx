@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Home from './pages/Home'
 import Footer from './components/Footer'
 import ReviewBox from './components/ReviewBox';
@@ -8,10 +8,18 @@ import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
 import Navbar from './components/Navbar';
 import StaysAdmin from './pages/StaysAdmin';
+import { useAuthStore } from './store/auth-store';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
 
   const reviewOpen = useAppStore((state) => state.reviewOpen);
+  const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus);
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
+
   const path = useLocation().pathname;
 
   const showFooter = () => {
@@ -36,7 +44,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/user-profile' element={<UserProfile />} />
-        <Route path='/stays-admin' element={<StaysAdmin/>}/>
+        <Route path='/stays-admin' element={<StaysAdmin />} />
       </Routes>
 
       {showFooter() && <Footer />}
@@ -44,6 +52,8 @@ function App() {
       {
         reviewOpen && <ReviewBox />
       }
+
+      <Toaster/>
     </>
   )
 }

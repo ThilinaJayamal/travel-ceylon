@@ -2,9 +2,59 @@ import React, { useState } from 'react'
 import { asserts } from '../assets/assets'
 import CustomInput from '../components/CustomInput'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAuthStore } from '../store/auth-store'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
+    const { login, register} = useAuthStore();
+
+    const navigate = useNavigate();
+
     const [formType, setFormType] = useState("Login");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError("");
+        setLoading(true);
+
+        const result = await login({ email, password });
+        if (!result.success) {
+            setError(result.error || "Login failed");
+        }
+        else {
+            navigate('/');
+        }
+
+        setLoading(false);
+    };
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setError("");
+        setLoading(true);
+
+        const result = await register({ name, email, password });
+        if (!result.success) {
+            setError(result.error || "Registration failed");
+        }
+        else {
+            navigate('/')
+        }
+
+        setLoading(false);
+    };
+
+    const clearForm = () => {
+        setName("");
+        setEmail("");
+        setPassword("");
+        setError("");
+    };
 
     return (
         <div className='min-h-screen w-full grid lg:grid-cols-2 grid-cols-1 gap-6 bg-gray-50'>
@@ -38,15 +88,42 @@ function Login() {
                     >
                         <h1 className='text-4xl font-bold mb-12 text-center'>Travel <span className='text-green-300'>Ceylon</span></h1>
 
-                        {formType !== "Login" && <CustomInput label={"Name"} />}
-                        <CustomInput label={"Email"} />
-                        <CustomInput label={"Password"} />
+                        <form onSubmit={formType === "Login" ? handleLogin : handleRegister}>
+                            {formType !== "Login" && (
+                                <CustomInput
+                                    label={"Name"}
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            )}
+                            <CustomInput
+                                label={"Email"}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <CustomInput
+                                label={"Password"}
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
 
-                        <div className='flex items-center justify-start w-full'>
-                            <button className='px-8 py-2 mt-2 bg-green-300 rounded-full cursor-pointer'>
-                                {formType}
-                            </button>
-                        </div>
+                            {error && (
+                                <div className="text-red-500 text-sm py-2">
+                                    {error}
+                                </div>
+                            )}
+
+                            <div className='flex items-center justify-start w-full'>
+                                <button
+                                    type="submit"
+                                    className='px-8 py-2 mt-2 bg-green-300 rounded-full cursor-pointer disabled:opacity-50'
+                                    disabled={loading}
+                                >
+                                    {loading ? "Processing..." : formType}
+                                </button>
+                            </div>
+                        </form>
 
                         <p className='text-lg mt-4'>
                             {formType === "Login" ? (
@@ -54,7 +131,10 @@ function Login() {
                                     Don’t have an account?{' '}
                                     <span
                                         className='text-green-400 cursor-pointer font-semibold'
-                                        onClick={() => setFormType("Sign Up")}
+                                        onClick={() => {
+                                            setFormType("Sign Up");
+                                            clearForm();
+                                        }}
                                     >
                                         Create one
                                     </span>
@@ -64,7 +144,10 @@ function Login() {
                                     Already have an account?{' '}
                                     <span
                                         className='text-green-400 cursor-pointer font-semibold'
-                                        onClick={() => setFormType("Login")}
+                                        onClick={() => {
+                                            setFormType("Login");
+                                            clearForm();
+                                        }}
                                     >
                                         Log in
                                     </span>
