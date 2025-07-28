@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import axios from 'axios';
-import { getAllPlatformReviews } from '../../../backend/controllers/platformReviewController';
 
 axios.defaults.withCredentials = true;
 
