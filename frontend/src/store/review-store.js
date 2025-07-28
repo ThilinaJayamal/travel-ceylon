@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import axios from 'axios';
+import {toast} from 'react-hot-toast'
 
 axios.defaults.withCredentials = true;
 
 export const useReviewStore = create((set) => ({
     reviews: [],
     loading: false,
-    error: null,
 
     // ✅ Create Review
     createPlatformReview: async (reviewData) => {
@@ -17,9 +17,10 @@ export const useReviewStore = create((set) => ({
                 reviews: [...state.reviews, res.data.data],
                 loading: false,
             }));
+            toast.success("Successfully added your review!")
         } catch (err) {
-            set({ loading: false, error: err.response?.data?.message || 'Create failed' });
-            throw err;
+            set({ loading: false})
+            toast.error(err.response?.data?.message)
         }
     },
 

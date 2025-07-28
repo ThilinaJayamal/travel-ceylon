@@ -3,7 +3,6 @@ import PlatformReview from '../models/PlatformReview.js';
 export const createPlatformReview = async (req, res) => {
   const userId = req.user._id;
   const { rating, comment } = req.body;
-
   try {
     const existing = await PlatformReview.findOne({ user: userId });
     if (existing) return res.status(400).json({ message: 'You already reviewed the platform.' });

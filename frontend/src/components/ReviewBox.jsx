@@ -6,8 +6,7 @@ import { Star } from 'lucide-react';
 
 function ReviewBox() {
   const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
-  const reviewBelongsTo = useAppStore((state) => state.reviewBelongsTo);
-  const createPlatformReview = useReviewStore((state) => state.ccreatePlatformReview);
+  const createPlatformReview = useReviewStore((state) => state.createPlatformReview);
 
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
