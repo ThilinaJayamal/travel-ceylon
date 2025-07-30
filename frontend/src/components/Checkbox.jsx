@@ -1,11 +1,11 @@
 function Checkbox({ title, checked, onChange }) {
   return (
-    <label className="flex items-center gap-2 cursor-pointer text-gray-700">
+    <label className="flex items-center w-fit gap-2 cursor-pointer text-gray-700">
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="w-4 h-4 accent-green-500"
+        className="size-6"
       />
       <span>{title}</span>
     </label>
