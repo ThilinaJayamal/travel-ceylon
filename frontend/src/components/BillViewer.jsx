@@ -1,73 +1,53 @@
-import React from 'react'
-import { asserts } from '../assets/assets'
+import React from 'react';
 
-function BillViewer() {
-    return (
-        <div className='max-w-xl p-4 md:p-8 rounded-md bg-white border border-gray-200 max-h-fit mx-auto'>
-            <div className='grid grid-cols-[1fr_2fr] gap-4'>
-                <img src={asserts.Bt_bg} className='max-w-full max-h-32 rounded-md' alt="" />
-                <div className='flex flex-col items-start justify-end'>
-                    <h3 className='text-2xl font-semibold'>Toyota  Vitz  CAX-0696</h3>
-                    <p className='text-lg'>sample taxiDriver</p>
-                </div>
-            </div>
-            <hr className='mt-4' />
-
-            <h4 className='mt-4 text-xl font-semibold text-black/70'>Journey Details</h4>
-
-            <div className='ml-8 mt-4'>
-
-                <div className='flex justify-between items-center text-black/70'>
-                    <p>Pickup</p>
-                    <p>Tissamaharama</p>
-                </div>
-
-                <div className='flex justify-between items-center text-black/70'>
-                    <p>Pickup</p>
-                    <p>Tissamaharama</p>
-                </div>
-
-                <div className='flex justify-between items-center text-black/70'>
-                    <p>Pickup</p>
-                    <p>Tissamaharama</p>
-                </div>
-
-            </div>
-
-            <hr className='mt-4' />
-
-            <h4 className='mt-4 text-xl font-semibold text-black/70'>Payment Details</h4>
-
-            <div className='ml-8 mt-4'>
-
-                <div className='flex justify-between items-center text-black/70'>
-                    <p>Pickup</p>
-                    <p>Tissamaharama</p>
-                </div>
-
-                <div className='flex justify-between items-center text-black/70'>
-                    <p>Pickup</p>
-                    <p>Tissamaharama</p>
-                </div>
-
-                <div className='flex justify-between items-center text-black/70'>
-                    <p>Pickup</p>
-                    <p>Tissamaharama</p>
-                </div>
-
-            </div>
-
-            <hr className='mt-4' />
-
-            <div className='ml-8 mt-4'>
-
-                <div className='flex justify-between items-center text-black/70'>
-                    <p>Total amount</p>
-                    <p>$170.00</p>
-                </div>
-            </div>
+function BillViewer({
+  image,
+  title,
+  subtitle,
+  sections = [],
+  totalAmount
+}) {
+  return (
+    <div className='max-w-xl p-4 md:p-8 rounded-md bg-white border border-gray-200 max-h-fit mx-auto'>
+      {/* Top Info */}
+      <div className='grid grid-cols-[1fr_2fr] gap-4'>
+        <img src={image} className='max-w-full max-h-32 rounded-md' alt="Preview" />
+        <div className='flex flex-col items-start justify-end'>
+          <h3 className='text-2xl font-semibold'>{title}</h3>
+          <p className='text-lg'>{subtitle}</p>
         </div>
-    )
+      </div>
+
+      {/* Sections */}
+      {sections.map((section, sIdx) => (
+        <div key={sIdx}>
+          <hr className='mt-4' />
+          <h4 className='mt-4 text-xl font-semibold text-black/70'>{section.heading}</h4>
+          <div className='ml-8 mt-4 space-y-2'>
+            {section.items.map((item, iIdx) => (
+              <div key={iIdx} className='flex justify-between items-center text-black/70'>
+                <p>{item.label}</p>
+                <p>{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {/* Total */}
+      {totalAmount && (
+        <>
+          <hr className='mt-4' />
+          <div className='ml-8 mt-4'>
+            <div className='flex justify-between items-center text-black/70 font-semibold'>
+              <p>Total Amount</p>
+              <p>{totalAmount}</p>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
-export default BillViewer
+export default BillViewer;

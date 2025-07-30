@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 function Home() {
 
     const user = useAuthStore((state) => state.user);
+    const logout = useAuthStore((state)=>state.logout);
     const setReviewBelongsTo = useAppStore((state) => state.setReviewBelongsTo);
     const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
     const getPlatformReviews = useReviewStore((state) => state.getPlatformReviews);
@@ -39,7 +40,7 @@ function Home() {
                 {/* Hero Section */}
                 <div
                     style={{
-                        backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url(${asserts.heroBg})`,
+                        backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url(${asserts.heroBg})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat'
@@ -47,12 +48,8 @@ function Home() {
                     className="h-[80vh] rounded-4xl overflow-hidden relative md:px-14 px-7 py-12 mt-12 flex flex-col justify-between items-center text-white"
                 >
 
-                    <div className="absolute top-6 right-6 z-10 border-2 border-white rounded-full size-10 flex justify-center items-center cursor-pointer bg-white/10 backdrop-blur-md">
-                        <span className="text-sm font-semibold text-white">EN</span>
-                    </div>
-
                     <h1 className="md:text-5xl text-3xl font-bold text-center">
-                        Travel <span className="text-green-200">Ceylon</span>
+                        Travel <span className="text-green-300">Ceylon</span>
                     </h1>
 
                     <div className="text-center">
@@ -83,9 +80,12 @@ function Home() {
                         </div>
 
                         {user ? (
-                            <Link to={"/user-profile"}>
-                                <img src={user?.image} alt="" className='size-10 rounded-full' />
-                            </Link>
+                            <div className='flex items-center gap-4'>
+                                <Link to={"/user-profile"}>
+                                    <img src={user?.image} alt="" className='size-10 rounded-full' />
+                                </Link>
+                                <button onClick={()=>logout()} className='bg-red-600 text-white rounded-md hover:bg-red-700 cursor-pointer px-4 py-1 text-base'>Logout</button>
+                            </div>
                         ) : (
                             <div className="flex justify-center gap-6 items-center">
                                 <Link to={"/login"}>

@@ -1,4 +1,4 @@
-import heroBg from '../assets/hero_bg.jpg';
+import heroBg from '../assets/HeroBg.jpg';
 import shareLocation from '../assets/share_location.svg';
 import taxiAlert from '../assets/taxi_alert.svg';
 import stays from '../assets/stays.svg';

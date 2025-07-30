@@ -47,7 +47,7 @@ function StaysAdmin() {
             {/* Hero section with background */}
             <div
                 style={{
-                    backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url(${asserts.userBg})`,
+                    backgroundImage: `url(${asserts.userBg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
