@@ -149,27 +149,6 @@ const provinces = [
     }
 ]
 
-const heroSlides = [
-    {
-        image: heroBg,
-        heading: "Dream it - Plan it",
-        subheading: "We’ll make it happen",
-        description: "Your travel dreams, our responsibility",
-    },
-    {
-        image: Bt_bg,
-        heading: "Explore - Experience",
-        subheading: "Live your adventure",
-        description: "Curated trips with local experts",
-    },
-    {
-        image: new_bg,
-        heading: "Relax - Rejuvenate",
-        subheading: "Your island escape",
-        description: "Luxury stays at your fingertips",
-    },
-];
-
 
 const locations = [
     {
