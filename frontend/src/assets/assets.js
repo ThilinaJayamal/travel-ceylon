@@ -60,7 +60,8 @@ const visitCardList = [
     {
         title: "Stays",
         icon: kingBed,
-        desc: "1000+ Hotels and stays for you"
+        desc: "1000+ Hotels and stays for you",
+        to:'/stays'
     },
     {
         title: "Rides",

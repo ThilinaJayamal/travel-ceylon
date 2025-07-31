@@ -8,7 +8,7 @@ const StaticLabelInput = ({ label,type = "text", value, onChange }) => {
         type={type}
         value={value}
         onChange={onChange}
-        className="w-full rounded-md border border-gray-400 px-3 pt-5 pb-2 text-sm text-gray-900"
+        className="w-full rounded-md border border-gray-400 px-3 pt-5 pb-2 text-md text-gray-900"
       />
 
       {/* Always-visible Label */}

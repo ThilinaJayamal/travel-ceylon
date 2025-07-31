@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { asserts } from '../assets/assets'
 import CustomInput from '../components/CustomInput'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -6,7 +6,9 @@ import { useAuthStore } from '../store/auth-store'
 import { useNavigate } from 'react-router-dom'
 
 function Login() {
-    const { login, register} = useAuthStore();
+    const login = useAuthStore((state) => state.login);
+    const register = useAuthStore((state) => state.register);
+    const user = useAuthStore((state) => state.user);
 
     const navigate = useNavigate();
 
@@ -56,6 +58,13 @@ function Login() {
         setError("");
     };
 
+    // If there is a user, navigate to homepage
+    useEffect(() => {
+        if (user) {
+            navigate("/");
+        }
+    }, [user])
+
     return (
         <div className='min-h-screen w-full grid lg:grid-cols-2 grid-cols-1 gap-6 bg-gray-50'>
             {/* Left side image */}
@@ -88,7 +97,7 @@ function Login() {
                     >
                         <h1 className='text-4xl font-bold mb-12 text-center'>Travel <span className='text-green-300'>Ceylon</span></h1>
 
-                        <form onSubmit={formType === "Login" ? handleLogin : handleRegister}>
+                        <form onSubmit={formType === "Login" ? handleLogin : handleRegister} className='grid grid-cols-1 gap-2'>
                             {formType !== "Login" && (
                                 <CustomInput
                                     label={"Name"}
@@ -108,19 +117,13 @@ function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
 
-                            {error && (
-                                <div className="text-red-500 text-sm py-2">
-                                    {error}
-                                </div>
-                            )}
-
                             <div className='flex items-center justify-start w-full'>
                                 <button
                                     type="submit"
                                     className='px-8 py-2 mt-2 bg-green-300 rounded-full cursor-pointer disabled:opacity-50'
                                     disabled={loading}
                                 >
-                                    {loading ? "Processing..." : formType}
+                                    {loading ? "wait..." : formType}
                                 </button>
                             </div>
                         </form>

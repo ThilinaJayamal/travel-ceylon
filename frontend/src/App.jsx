@@ -13,6 +13,7 @@ import { useAuthStore } from './store/auth-store';
 import { Toaster } from 'react-hot-toast';
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
+import NotFound from './pages/NotFound';
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -49,6 +50,7 @@ function App() {
         <Route path='/stays-admin' element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
+        <Route path='*' element={<NotFound/>}/>
       </Routes>
 
       {showFooter() && <Footer />}

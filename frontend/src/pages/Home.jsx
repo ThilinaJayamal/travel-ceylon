@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/auth-store';
 import { useReviewStore } from '../store/review-store';
 import { useEffect, useState } from 'react';
+import { LogOut } from 'lucide-react';
 
 
 function Home() {
 
     const user = useAuthStore((state) => state.user);
+    const logout = useAuthStore((state) => state.logout);
     const setReviewBelongsTo = useAppStore((state) => state.setReviewBelongsTo);
     const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
     const getPlatformReviews = useReviewStore((state) => state.getPlatformReviews);
@@ -83,9 +85,14 @@ function Home() {
                         </div>
 
                         {user ? (
-                            <Link to={"/user-profile"}>
-                                <img src={user?.image} alt="" className='size-10 rounded-full' />
-                            </Link>
+                            <div className='flex gap-6 items-center'>
+                                <Link to={"/user-profile"}>
+                                    <img src={user?.image} alt="" className='size-10 rounded-full' />
+                                </Link>
+                                <button className='flex gap-1 items-center cursor-pointer hover:text-red-600' onClick={() => logout()}>
+                                    <LogOut /> Logout
+                                </button>
+                            </div>
                         ) : (
                             <div className="flex justify-center gap-6 items-center">
                                 <Link to={"/login"}>
@@ -131,7 +138,7 @@ function Home() {
 
                         <div className='flex md:flex-row md:justify-center md:items-center flex-col gap-6'>
                             {asserts.visitCardList.map((item, index) => (
-                                <VisitCard key={index} item={item} />
+                                <VisitCard key={index} item={item}/>
                             ))}
                         </div>
                     </div>

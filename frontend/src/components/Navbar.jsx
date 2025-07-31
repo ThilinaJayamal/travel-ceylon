@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BedDouble, CarTaxiFront, MapPinned, Menu, X } from 'lucide-react';
-import { asserts } from '../assets/assets';
 import { useAuthStore } from '../store/auth-store';
 
 function Navbar() {
@@ -9,11 +8,12 @@ function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
-        { icon: <BedDouble className="size-5" />, label: 'Stays' },
+        { icon: <BedDouble className="size-5" />, label: 'Stays', to: "/stays" },
         { icon: <CarTaxiFront className="size-5" />, label: 'Taxi' },
         { icon: <MapPinned className="size-5" />, label: 'Tour Guides' }
     ];
 
+    const navigate = useNavigate();
     return (
         <nav className="absolute top-0 left-0 right-0 z-50">
             <div className="flex items-center justify-between h-20 px-4 md:px-8">
@@ -21,9 +21,9 @@ function Navbar() {
                 {/* Left Nav (Desktop) */}
                 <div className="hidden md:flex items-center gap-6">
                     {navItems.map((item, index) => (
-                        <button
+                        <button onClick={() => navigate(item.to, scrollTo(0, 0))}
                             key={index}
-                            className="flex items-center gap-2 text-gray-700 hover:text-green-500 transition"
+                            className="flex items-center gap-2 text-white hover:text-green-500 transition"
                         >
                             {item.icon}
                             <span>{item.label}</span>
@@ -32,17 +32,19 @@ function Navbar() {
                 </div>
 
                 {/* Logo */}
-                <Link to="/" className="text-xl md:text-2xl font-bold">
+                <Link to="/" className="text-xl md:text-2xl font-bold text-white">
                     Travel <span className="text-green-500">Ceylon</span>
                 </Link>
 
                 {/* Right - Avatar & Menu Toggle */}
                 <div className="flex items-center gap-4">
-                    <img
-                        src={user.image}
-                        alt="User Avatar"
-                        className="size-10 md:size-12 rounded-full object-cover border border-gray-300"
-                    />
+                    <Link to={"/user-profile"}>
+                        <img
+                            src={user.image}
+                            alt="User Avatar"
+                            className="size-10 md:size-12 rounded-full object-cover border border-gray-300"
+                        />
+                    </Link>
                     {/* Mobile Menu Toggle */}
                     <button
                         className="md:hidden"
