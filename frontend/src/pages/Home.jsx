@@ -3,7 +3,7 @@ import VisitCard from '../components/VisitCard';
 import TestimonialCard from '../components/TestimonialCard';
 import ProvinceCard from '../components/ProvinceCard';
 import { useAppStore } from '../store/app-store';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth-store';
 import { useReviewStore } from '../store/review-store';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,8 @@ function Home() {
 
     const [reviews, setReviews] = useState([]);
 
+    const navigate = useNavigate();
+
     const fetchAllReviews = async () => {
         try {
             const data = await getPlatformReviews();
@@ -32,7 +34,7 @@ function Home() {
 
     useEffect(() => {
         fetchAllReviews();
-    }, [])
+    }, [fetchAllReviews])
 
     return (
         <>
@@ -70,11 +72,13 @@ function Home() {
                     {/** Hero section navigation bar */}
                     <div className="flex flex-col md:flex-row justify-between items-center w-full gap-6 text-lg mt-6">
                         <div className="flex justify-center gap-6 items-center">
-                            <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
+                            <button onClick={() => navigate("/stays", scrollTo(0, 0))}
+                                className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
                                 <img src={asserts.stays} alt="Stays" />
                                 Stays
                             </button>
-                            <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
+                            <button onClick={() => navigate("/taxi", scrollTo(0, 0))}
+                                className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
                                 <img src={asserts.taxiAlert} alt="Taxi" />
                                 Taxi
                             </button>
@@ -86,9 +90,8 @@ function Home() {
 
                         {user ? (
                             <div className='flex gap-6 items-center'>
-                                <Link to={"/user-profile"}>
-                                    <img src={user?.image} alt="" className='size-10 rounded-full' />
-                                </Link>
+                                <img onClick={()=>navigate("/user-profile",scrollTo(0,0))} 
+                                src={user?.image} alt="" className='size-10 rounded-full' />
                                 <button className='flex gap-1 items-center cursor-pointer hover:text-red-600' onClick={() => logout()}>
                                     <LogOut /> Logout
                                 </button>
@@ -138,7 +141,7 @@ function Home() {
 
                         <div className='flex md:flex-row md:justify-center md:items-center flex-col gap-6'>
                             {asserts.visitCardList.map((item, index) => (
-                                <VisitCard key={index} item={item}/>
+                                <VisitCard key={index} item={item} />
                             ))}
                         </div>
                     </div>

@@ -31,7 +31,8 @@ import Bt_bg from '../assets/Bt_bg.jpg';
 import login_img from '../assets/login_img.png';
 import register_img from '../assets/register_img.png';
 import searchMan from '../assets/SearchMan.jpg'
-
+import taxiBanner from '../assets/taxiBanner.jpg';
+import taxibtm from '../assets/taxibtm.png';
 import StaysOffer1 from '../assets/StaysOffer1.svg';
 import StaysOffer2 from '../assets/staysOffer2.svg';
 import StaysOffer3 from '../assets/StaysOffer3.svg';
@@ -51,17 +52,22 @@ import close from '../assets/close.svg';
 import userBg from '../assets/userBg.jpg';
 import new_bg from '../assets/new_bg.png';
 
+import bikes from '../assets/bikes.png';
+import buses from '../assets/buses.png';
+import cars from '../assets/cars.png';
+import tuktuk from '../assets/tuktuk.png';
+
 import hotel1 from '../assets/hotel1.jpg';
 import hotel2 from '../assets/hotel2.jpg';
 import hotel3 from '../assets/hotel3.jpg';
-import Stays from '../pages/Stays';
+import taxiBg from '../assets/taxiBg.jpg';
 
 const visitCardList = [
     {
         title: "Stays",
         icon: kingBed,
         desc: "1000+ Hotels and stays for you",
-        to:'/stays'
+        to: '/stays'
     },
     {
         title: "Rides",
@@ -72,6 +78,29 @@ const visitCardList = [
         title: "Guides",
         icon: followSign,
         desc: "Discover places with local experts"
+    }
+]
+
+const taxiTypeCard = [
+    {
+        name: "Bikes",
+        start: "$3.00",
+        img:bikes
+    },
+    {
+        name: "TukTuks",
+        start: "$4.00",
+        img:tuktuk
+    },
+    {
+        name: "Cars",
+        start: "$5.00",
+        img:cars
+    },
+    {
+        name: "Vans",
+        start: "$7.00",
+        img:buses
     }
 ]
 
@@ -187,48 +216,48 @@ const locations = [
 ];
 
 const heroSlides = [
-        {
-            image: heroBg,
-            heading: "Dream it - Plan it",
-            subheading: "We’ll make it happen",
-            description: "Your travel dreams, our responsibility",
-        },
-        {
-            image: Bt_bg,
-            heading: "Explore - Experience",
-            subheading: "Live your adventure",
-            description: "Curated trips with local experts",
-        },
-        {
-            image: new_bg,
-            heading: "Relax - Rejuvenate",
-            subheading: "Your island escape",
-            description: "Luxury stays at your fingertips",
-        },
-    ];
-    
-    const staysOffers =[
-        {
-            image: StaysOffer1,
-            heading: "Early Check-in Privilege",
-            description:"Arriving before standard check-in time? We’ll do our best to get your room ready early so you can relax or freshen up right away."
-        },
-        {
-            image: StaysOffer2,
-            heading: "Special In-Room Amenities",
-            description: "From bathrobes and spa kits to curated snacks or welcome flowers, enjoy thoughtful touches that elevate your comfort"
-        },
-        {
-            image: StaysOffer3,
-            heading: "Secure Booking Guarantee",
-            description: "All bookings are protected with advanced encryption and instant confirmations, so you can plan with peace of mind."
-        },
-        {
-            image: StaysOffer4,
-            heading: "Complimentary Airport Pickup",
-            description: "Enjoy smooth airport-to-hotel transfers arranged by your host. It's free, punctual, and stress-free—no taxis or waiting in lines"
-        }
-    ];
+    {
+        image: heroBg,
+        heading: "Dream it - Plan it",
+        subheading: "We’ll make it happen",
+        description: "Your travel dreams, our responsibility",
+    },
+    {
+        image: Bt_bg,
+        heading: "Explore - Experience",
+        subheading: "Live your adventure",
+        description: "Curated trips with local experts",
+    },
+    {
+        image: new_bg,
+        heading: "Relax - Rejuvenate",
+        subheading: "Your island escape",
+        description: "Luxury stays at your fingertips",
+    },
+];
+
+const staysOffers = [
+    {
+        image: StaysOffer1,
+        heading: "Early Check-in Privilege",
+        description: "Arriving before standard check-in time? We’ll do our best to get your room ready early so you can relax or freshen up right away."
+    },
+    {
+        image: StaysOffer2,
+        heading: "Special In-Room Amenities",
+        description: "From bathrobes and spa kits to curated snacks or welcome flowers, enjoy thoughtful touches that elevate your comfort"
+    },
+    {
+        image: StaysOffer3,
+        heading: "Secure Booking Guarantee",
+        description: "All bookings are protected with advanced encryption and instant confirmations, so you can plan with peace of mind."
+    },
+    {
+        image: StaysOffer4,
+        heading: "Complimentary Airport Pickup",
+        description: "Enjoy smooth airport-to-hotel transfers arranged by your host. It's free, punctual, and stress-free—no taxis or waiting in lines"
+    }
+];
 
 export const asserts = {
     heroBg,
@@ -245,6 +274,8 @@ export const asserts = {
     user1,
     testimonials,
     womenWithHand,
+    taxiBanner,
+    taxibtm,
     r1,
     r2,
     r3,
@@ -261,6 +292,7 @@ export const asserts = {
     close,
     login_img,
     register_img,
+    taxiBg,
     google,
     fb_color,
     userBg,
@@ -272,5 +304,6 @@ export const asserts = {
     searchMan,
     staysOffers,
     businessman,
-    locations
+    locations,
+    taxiTypeCard
 }

@@ -9,7 +9,7 @@ function Navbar() {
 
     const navItems = [
         { icon: <BedDouble className="size-5" />, label: 'Stays', to: "/stays" },
-        { icon: <CarTaxiFront className="size-5" />, label: 'Taxi' },
+        { icon: <CarTaxiFront className="size-5" />, label: 'Taxi',to:"/taxi" },
         { icon: <MapPinned className="size-5" />, label: 'Tour Guides' }
     ];
 
@@ -40,7 +40,7 @@ function Navbar() {
                 <div className="flex items-center gap-4">
                     <Link to={"/user-profile"}>
                         <img
-                            src={user.image}
+                            src={user?.image}
                             alt="User Avatar"
                             className="size-10 md:size-12 rounded-full object-cover border border-gray-300"
                         />

@@ -14,6 +14,7 @@ import { Toaster } from 'react-hot-toast';
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
 import NotFound from './pages/NotFound';
+import Taxi from './pages/Taxi';
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -46,11 +47,12 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/taxi' element={<Taxi />} />
         <Route path='/user-profile' element={<UserProfile />} />
         <Route path='/stays-admin' element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
-        <Route path='*' element={<NotFound/>}/>
+        <Route path='*' element={<NotFound />} />
       </Routes>
 
       {showFooter() && <Footer />}
@@ -59,7 +61,7 @@ function App() {
         reviewOpen && <ReviewBox />
       }
 
-      <Toaster/>
+      <Toaster />
     </>
   );
 }
