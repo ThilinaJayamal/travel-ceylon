@@ -2,39 +2,11 @@ import { asserts } from '../assets/assets';
 import VisitCard from '../components/VisitCard';
 import TestimonialCard from '../components/TestimonialCard';
 import ProvinceCard from '../components/ProvinceCard';
-import { useAppStore } from '../store/app-store';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/auth-store';
-import { useReviewStore } from '../store/review-store';
-import { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
 
-
 function Home() {
-
-    const user = useAuthStore((state) => state.user);
-    const logout = useAuthStore((state) => state.logout);
-    const setReviewBelongsTo = useAppStore((state) => state.setReviewBelongsTo);
-    const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
-    const getPlatformReviews = useReviewStore((state) => state.getPlatformReviews);
-
-    const [reviews, setReviews] = useState([]);
-
     const navigate = useNavigate();
-
-    const fetchAllReviews = async () => {
-        try {
-            const data = await getPlatformReviews();
-            console.log(data)
-            setReviews(data);
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
-    useEffect(() => {
-        fetchAllReviews();
-    }, [fetchAllReviews])
 
     return (
         <>
@@ -50,7 +22,6 @@ function Home() {
                     }}
                     className="h-[80vh] rounded-4xl overflow-hidden relative md:px-14 px-7 py-12 mt-12 flex flex-col justify-between items-center text-white"
                 >
-
                     <div className="absolute top-6 right-6 z-10 border-2 border-white rounded-full size-10 flex justify-center items-center cursor-pointer bg-white/10 backdrop-blur-md">
                         <span className="text-sm font-semibold text-white">EN</span>
                     </div>
@@ -60,7 +31,7 @@ function Home() {
                     </h1>
 
                     <div className="text-center">
-                        <span className="font-semibold lg:text-6xl md:text-4xl text-3xl  block">
+                        <span className="font-semibold lg:text-6xl md:text-4xl text-3xl block">
                             Dream it - Plan it<br />
                             We’ll make it happen
                         </span>
@@ -69,7 +40,7 @@ function Home() {
                         </p>
                     </div>
 
-                    {/** Hero section navigation bar */}
+                    {/* Hero section navigation */}
                     <div className="flex flex-col md:flex-row justify-between items-center w-full gap-6 text-lg mt-6">
                         <div className="flex justify-center gap-6 items-center">
                             <button onClick={() => navigate("/stays", scrollTo(0, 0))}
@@ -88,31 +59,19 @@ function Home() {
                             </button>
                         </div>
 
-                        {user ? (
-                            <div className='flex gap-6 items-center'>
-                                <img onClick={()=>navigate("/user-profile",scrollTo(0,0))} 
-                                src={user?.image} alt="" className='size-10 rounded-full' />
-                                <button className='flex gap-1 items-center cursor-pointer hover:text-red-600' onClick={() => logout()}>
-                                    <LogOut /> Logout
+                        {/* Guest view only (no user logic) */}
+                        <div className="flex justify-center gap-6 items-center">
+                            <Link to={"/login"}>
+                                <button className="cursor-pointer hover:text-green-300 transition">Login</button>
+                            </Link>
+                            <Link to={"/signup"}>
+                                <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
+                                    Sign Up
                                 </button>
-                            </div>
-                        ) : (
-                            <div className="flex justify-center gap-6 items-center">
-                                <Link to={"/login"}>
-                                    <button className="cursor-pointer hover:text-green-300 transition">Login</button>
-                                </Link>
-                                <Link to={"/signup"}>
-                                    <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
-                                        Sign Up
-                                    </button>
-                                </Link>
-                            </div>
-                        )}
-
-
+                            </Link>
+                        </div>
                     </div>
                 </div>
-
 
                 {/* Trip Planning Section */}
                 <div className='mt-20 grid lg:grid-cols-[2.5fr_2fr] gap-4 grid-cols-1'>
@@ -120,7 +79,7 @@ function Home() {
                         <h2 className='text-5xl font-semibold uppercase'>Plan your Perfect trip</h2>
                         <p className='text-2xl mt-3 text-black/90'>Search Hotels and Places Hire to our most popular destinations in Sri Lanka.</p>
                         <p className='text-xl mt-6 text-black/70'>
-                            Where we make your journeys seamless and exciting! Our platform helps you find the best destinations, book hassle-free trips, and discover must-visit places with ease. Whether you're planning your next adventure or need assistance with vehicle rentals, route navigation, or nearby facilities, we've got you covered.
+                            Where we make your journeys seamless and exciting! Our platform helps you find the best destinations, book hassle-free trips, and discover must-visit places with ease.
                         </p>
                         <button className='px-4 py-2.5 bg-green-300 font-semibold rounded-md mt-12 cursor-pointer'>
                             Explore Sri Lanka
@@ -150,43 +109,24 @@ function Home() {
                     </div>
                 </div>
 
-                {/* Testimonial Section */}
+                {/* Testimonials Placeholder (no reviews since logic removed) */}
                 <div className='mt-12'>
                     <div className='p-4 w-full'>
                         <h3 className='text-4xl font-semibold'>What People Say About Us</h3>
                         <p className='text-lg text-black/90 mt-3'>What people say about our facilities and services</p>
 
                         <div className='flex gap-6 items-center justify-start mt-12 overflow-x-auto scrollbar-hide w-auto pb-8 pr-8'>
-                            {reviews.map((item, index) => (
-                                <TestimonialCard
-                                    key={index}
-                                    user={item.user.name}
-                                    country={"England"}
-                                    text={item.comment}
-                                    rating={item.rating}
-                                    img={item.user.image}
-                                    star={asserts.star}
-                                />
-                            ))}
+                            {/* Empty since reviews logic removed */}
+                            {/* <TestimonialCard ... /> */}
+                            <span className="text-gray-400">No reviews available</span>
                         </div>
 
-                        <div className='flex justify-end items-center'>
-                            <button onClick={() => {
-                                toggleReviewOpen();
-                                setReviewBelongsTo('platform')
-
-                            }}
-                                className='px-4 py-2 rounded-md border-2 border-green-300 cursor-pointer'>
-                                Add Review
-                            </button>
-                        </div>
-
+                        {/* Hidden add review button */}
                     </div>
                 </div>
 
-                {/** Registration & Instructions */}
+                {/* Registration Info */}
                 <div className='mt-12 bg-green-300 rounded-4xl border border-gray-200 px-4 pt-8 pb-4'>
-
                     <div className='grid lg:grid-cols-[1fr_1.5fr] grid-cols-1 gap-4'>
                         <div className='flex lg:justify-end justify-center order-2 lg:order-1'>
                             <img src={asserts.womenWithHand} alt="" className='max-h-[300px] w-auto' />
@@ -196,36 +136,16 @@ function Home() {
                                 "Why wait? If you own a hotel, rent vehicles, or offer tour guide, list with us today!"
                             </span>
                         </div>
-
                     </div>
 
                     <div className='bg-white p-4 rounded-4xl'>
                         <div className='grid md:grid-cols-7 grid-cols-2 gap-4 my-6 px-4'>
-                            <div className='flex items-center justify-center flex-col text-base text-center'>
-                                <img src={asserts.r1} alt="" className='size-10' />
-                                <p>Register now in travelCeylon</p>
-                            </div>
-                            <div className='flex items-center justify-center'>
-                                <img src={asserts.r5} alt="" className='size-14' />
-                            </div>
-                            <div className='flex items-center justify-center flex-col text-base text-center'>
-                                <img src={asserts.r2} alt="" className='size-10' />
-                                <p>List out your properties</p>
-                            </div>
-                            <div className='flex items-center justify-center'>
-                                <img src={asserts.r5} alt="" className='size-14' />
-                            </div>
-                            <div className='flex items-center justify-center flex-col text-base text-center'>
-                                <img src={asserts.r3} alt="" className='size-10' />
-                                <p>Join with 10000+ tourists</p>
-                            </div>
-                            <div className='flex items-center justify-center'>
-                                <img src={asserts.r5} alt="" className='size-14' />
-                            </div>
-                            <div className='flex items-center justify-center flex-col text-base text-center'>
-                                <img src={asserts.r4} alt="" className='size-10' />
-                                <p>get your dollar income</p>
-                            </div>
+                            {[asserts.r1, asserts.r2, asserts.r3, asserts.r4].map((img, idx) => (
+                                <div key={idx} className='flex items-center justify-center flex-col text-base text-center'>
+                                    <img src={img} alt="" className='size-10' />
+                                    <p>{["Register now", "List your properties", "Join with 10000+", "Get your dollar income"][idx]}</p>
+                                </div>
+                            ))}
                         </div>
 
                         <div className='mt-8'>
@@ -233,22 +153,17 @@ function Home() {
                                 Register Now! It is Free
                             </button>
                         </div>
-
                     </div>
                 </div>
-
             </div>
 
-            {/** locations */}
+            {/* Provinces Section */}
             <div style={{ backgroundImage: `url(${asserts.Bt_bg})` }} className='md:px-14 px-7 py-14 pb-28 mt-12'>
                 <h2 className='text-4xl font-semibold text-white'>We Cover all</h2>
                 <p className='text-xl mt-2 text-white'>We cover all the Provinces in Sri Lanka</p>
                 <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 mt-12">
                     {asserts.provinces.map((item, index) => (
-                        <ProvinceCard
-                            key={index}
-                            item={item}
-                        />
+                        <ProvinceCard key={index} item={item} />
                     ))}
                 </div>
             </div>
