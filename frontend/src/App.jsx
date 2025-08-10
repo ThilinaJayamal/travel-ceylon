@@ -8,6 +8,11 @@ import Navbar from './components/Navbar';
 import { Toaster } from 'react-hot-toast';
 import ReviewBox from './components/ReviewBox';
 import useAuthStore from './store/authStore'; // Import the Zustand store
+import UserProfile from './pages/UserProfile';
+import Taxi from './pages/Taxi';
+import StaysAdmin from './pages/StaysAdmin';
+import StaysFilter from './pages/StaysFilter';
+import Stays from './pages/Stays';
 
 function App() {
   const [showReviewBox, setShowReviewBox] = useState(false);
@@ -45,6 +50,13 @@ function App() {
       <Routes>
         <Route path='/' element={<Home setShowReviewBox={setShowReviewBox} setReviewFor={setReviewFor} />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/user-profile' element={<UserProfile />} />
+        
+        <Route path='/taxi' element={<Taxi />} />
+
+        <Route path='/stays-admin' element={<StaysAdmin />} />
+        <Route path='/stays' element={<Stays />} />
+        <Route path='/stays-filters' element={<StaysFilter />} />
       </Routes>
 
       {showFooter() && <Footer />}
