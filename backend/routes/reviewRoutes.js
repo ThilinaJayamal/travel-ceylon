@@ -1,27 +1,25 @@
 import express from 'express';
-import {
-  getReviews,
-  getServiceReviews,
-  createReview,
-  updateReview,
-  deleteReview
-} from '../controllers/reviewController.js';
 import { protect } from '../middleware/auth.js';
-import { validateReview, handleValidationErrors } from '../middleware/validation.js';
+import { 
+  createReview, 
+  getServiceReviews,
+  getPlatformReviews,
+  updateReview,
+  deleteReview,
+  getUserReviews
+} from '../controllers/reviewController.js';
 
 const router = express.Router();
 
 router.route('/')
-  .get(getReviews)
-  .post(protect, validateReview, handleValidationErrors, createReview);
-
-
-router.route('/:serviceType/:serviceId')
-  .get(getServiceReviews);
+  .post(protect, createReview)
+  .get(protect, getUserReviews);
 
 router.route('/:id')
   .put(protect, updateReview)
   .delete(protect, deleteReview);
 
+router.get('/service/:serviceId', getServiceReviews);
+router.get('/platform', getPlatformReviews);
 
 export default router;

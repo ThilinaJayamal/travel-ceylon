@@ -1,123 +1,99 @@
 import Guide from '../models/Guide.js';
-import User from '../models/User.js';
-import asyncHandler from 'express-async-handler';
+import Taxi from '../models/Taxi.js';
+import Hotel from '../models/Hotel.js';
+import RentalVehicle from '../models/RentalVehicle.js';
 
-// @desc    Get all guides
-// @route   GET /api/guides
-// @access  Public
-export const getGuides = asyncHandler(async (req, res) => {
-  const guides = await Guide.find({ isActive: true }).populate('ownerId', 'name email');
-  res.status(200).json({
-    success: true,
-    count: guides.length,
-    data: guides
-  });
-});
+const createGuide = async (req, res) => {
+  const { name, bio, languages, experienceYears, hourlyRate, dailyRate, locationsServed } = req.body;
 
-// @desc    Get single guide
-// @route   GET /api/guides/:id
-// @access  Public
-export const getGuide = asyncHandler(async (req, res) => {
-  const guide = await Guide.findById(req.params.id).populate('ownerId', 'name email');
+  try {
+    // Check if user already has ANY service
+    const existingTaxi = await Taxi.findOne({ providerId: req.user._id });
+    const existingHotel = await Hotel.findOne({ providerId: req.user._id });
+    const existingGuide = await Guide.findOne({ providerId: req.user._id });
+    const existingRental = await RentalVehicle.findOne({ providerId: req.user._id });
+    
+    if (existingTaxi || existingHotel || existingGuide || existingRental) {
+      return res.status(400).json({ message: 'You already have a service. Each user can only create one service.' });
+    }
 
-  if (!guide || !guide.isActive) {
-    res.status(404);
-    throw new Error('Guide not found');
+    const guide = await Guide.create({
+      name,
+      bio,
+      languages,
+      experienceYears,
+      hourlyRate,
+      dailyRate,
+      locationsServed,
+      providerId: req.user._id,
+    });
+    res.status(201).json(guide);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
+};
 
-  res.status(200).json({
-    success: true,
-    data: guide
-  });
-});
-
-// @desc    Create new guide
-// @route   POST /api/guides
-// @access  Private
-export const createGuide = asyncHandler(async (req, res) => {
-  // Check if user already has a guide profile
-  const existingGuide = await Guide.findOne({ ownerId: req.user.id });
-  if (existingGuide) {
-    res.status(400);
-    throw new Error('You already have a guide profile');
+const getGuides = async (req, res) => {
+  try {
+    const guides = await Guide.find({ status: 'active' });
+    res.json(guides);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
+
+const getGuideById = async (req, res) => {
+  try {
+    const guide = await Guide.findById(req.params.id);
+    if (guide) {
+      res.json(guide);
+    } else {
+      res.status(404).json({ message: 'Guide not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const updateGuide = async (req, res) => {
+  const { name, bio, languages, experienceYears, hourlyRate, dailyRate, locationsServed, status } = req.body;
   
-  const userRole = await User.findById(req.user.id).role;
-  if (userRole !== 'user') {
-    res.status(400);
-    throw new Error("You're not allowed to create more than 1 service account");
+  try {
+    const guide = await Guide.findOne({ providerId: req.user._id });
+    
+    if (guide) {
+      guide.name = name || guide.name;
+      guide.bio = bio || guide.bio;
+      guide.languages = languages || guide.languages;
+      guide.experienceYears = experienceYears || guide.experienceYears;
+      guide.hourlyRate = hourlyRate || guide.hourlyRate;
+      guide.dailyRate = dailyRate || guide.dailyRate;
+      guide.locationsServed = locationsServed || guide.locationsServed;
+      guide.status = status || guide.status;
+      
+      const updatedGuide = await guide.save();
+      res.json(updatedGuide);
+    } else {
+      res.status(404).json({ message: 'Guide not found' });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
+};
 
-  req.body.ownerId = req.user.id;
-  const guide = await Guide.create(req.body);
-
-  // Update user with guide profile reference
-  await User.findByIdAndUpdate(req.user.id, {
-    guideProfile: guide._id,
-    role: 'guide_owner' // Update role to guide_owner
-  });
-
-  res.status(201).json({
-    success: true,
-    data: guide
-  });
-});
-
-// @desc    Update guide
-// @route   PUT /api/guides/:id
-// @access  Private/Guide Owner
-export const updateGuide = asyncHandler(async (req, res) => {
-  let guide = await Guide.findById(req.params.id);
-
-  if (!guide) {
-    res.status(404);
-    throw new Error('Guide not found');
+const deleteGuide = async (req, res) => {
+  try {
+    const guide = await Guide.findOne({ providerId: req.user._id });
+    
+    if (guide) {
+      await guide.remove();
+      res.json({ message: 'Guide removed' });
+    } else {
+      res.status(404).json({ message: 'Guide not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
 
-  // Make sure user is guide owner
-  if (guide.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to update this guide');
-  }
-
-  guide = await Guide.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
-
-  res.status(200).json({
-    success: true,
-    data: guide
-  });
-});
-
-// @desc    Delete guide
-// @route   DELETE /api/guides/:id
-// @access  Private/Guide Owner
-export const deleteGuide = asyncHandler(async (req, res) => {
-  const guide = await Guide.findById(req.params.id);
-
-  if (!guide) {
-    res.status(404);
-    throw new Error('Guide not found');
-  }
-
-  // Make sure user is guide owner
-  if (guide.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to delete this guide');
-  }
-
-  await guide.remove();
-
-  // Remove guide profile reference from user
-  await User.findByIdAndUpdate(req.user.id, {
-    $unset: { guideProfile: "" },
-    role: 'user' // Reset role to user
-  });
-
-  res.status(200).json({
-    success: true,
-    data: {}
-  });
-});
+export { createGuide, getGuides, getGuideById, updateGuide, deleteGuide };

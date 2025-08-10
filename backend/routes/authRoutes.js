@@ -1,22 +1,25 @@
+// routes/authRoutes.js
 import express from 'express';
-import {
-  register,
-  login,
-  getMe,
-  updateDetails,
-  updatePassword,
-  logout
-} from '../controllers/authController.js';
+import passport from 'passport';
+import { registerUser, loginUser, logoutUser, getMe, googleCallback } from '../controllers/authController.js';
 import { protect } from '../middleware/auth.js';
-import { validateUserRegistration, handleValidationErrors } from '../middleware/validation.js';
 
 const router = express.Router();
 
-router.post('/register', validateUserRegistration, handleValidationErrors, register);
-router.post('/login', login);
-router.post('/logout', logout)
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.post('/logout', logoutUser);
 router.get('/me', protect, getMe);
-router.put('/updatedetails', protect, updateDetails);
-router.put('/updatepassword', protect, updatePassword);
+
+// Google OAuth routes
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: `${process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : 'http://localhost:3000')}/login`,
+    session: false
+  }),
+  googleCallback
+);
 
 export default router;

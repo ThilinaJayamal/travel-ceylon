@@ -1,70 +1,70 @@
+// config/passport.js
 import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
-import FacebookStrategy from 'passport-facebook';
 import User from '../models/User.js';
 
-passport.use(new GoogleStrategy.Strategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "/api/auth/google/callback"
-}, async (accessToken, refreshToken, profile, done) => {
-  try {
-    let user = await User.findOne({ email: profile.emails[0].value });
-    
-    if (user) {
-      return done(null, user);
+const configurePassport = () => {
+  passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/api/auth/google/callback"
+  },
+  async (accessToken, refreshToken, profile, done) => {
+    try {
+      console.log("Google Profile Received:", profile.id, profile.displayName, profile.emails[0].value);
+
+      let user = await User.findOne({ googleId: profile.id });
+
+      if (user) {
+        console.log("Found existing user by googleId:", user._id);
+        return done(null, user);
+      }
+
+      user = await User.findOne({ email: profile.emails[0].value });
+
+      if (user) {
+        console.log("Linking Google account to existing email user:", user._id);
+        if (!user.googleId) {
+            user.googleId = profile.id;
+            // Optionally update profile picture from Google on link
+            if (profile.photos && profile.photos[0] && profile.photos[0].value && !user.profilePic) {
+                user.profilePic = profile.photos[0].value;
+            }
+            await user.save();
+        }
+        return done(null, user);
+      }
+
+      const newUser = new User({
+        googleId: profile.id,
+        name: profile.displayName,
+        email: profile.emails[0].value,
+        // Set profile picture from Google on creation
+        profilePic: profile.photos && profile.photos[0] && profile.photos[0].value ? profile.photos[0].value : null,
+      });
+
+      const savedUser = await newUser.save();
+      console.log("New user created:", savedUser._id);
+      return done(null, savedUser);
+    } catch (err) {
+      console.error("Passport Google Strategy Error:", err);
+      return done(err, null);
     }
-
-    user = await User.create({
-      name: profile.displayName,
-      email: profile.emails[0].value,
-      role: 'user',
-      isEmailVerified: true,
-      googleId: profile.id
-    });
-
-    done(null, user);
-  } catch (error) {
-    done(error, null);
   }
-}));
+));
 
-passport.use(new FacebookStrategy.Strategy({
-  clientID: process.env.FACEBOOK_APP_ID,
-  clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: "/api/auth/facebook/callback",
-  profileFields: ['id', 'emails', 'name']
-}, async (accessToken, refreshToken, profile, done) => {
-  try {
-    let user = await User.findOne({ email: profile.emails[0].value });
-    
-    if (user) {
-      return done(null, user);
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await User.findById(id);
+      done(null, user);
+    } catch (err) {
+      done(err, null);
     }
+  });
+};
 
-    user = await User.create({
-      name: `${profile.name.givenName} ${profile.name.familyName}`,
-      email: profile.emails[0].value,
-      role: 'user',
-      isEmailVerified: true,
-      facebookId: profile.id
-    });
-
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
-}));
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
-});
+export default configurePassport;

@@ -1,36 +1,27 @@
 import React, { useState } from 'react';
 import { asserts } from '../assets/assets';
-import { useAppStore } from '../store/app-store';
-import { useReviewStore } from '../store/review-store';
 import { Star } from 'lucide-react';
 
-function ReviewBox() {
-  const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
-  const createPlatformReview = useReviewStore((state) => state.createPlatformReview);
-
+function ReviewBox({setShowReviewBox}) {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [review, setReview] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const addReview = async () => {
-
     try {
-      setLoading(true);
-      await createPlatformReview({
-        rating,
-        comment: review,
-      });
-
-      setRating(0);
-      setReview('');
-      toggleReviewOpen();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+      
+    } catch (error) {
+      
     }
   };
+
+  const onClose = () =>{
+    try {
+      setShowReviewBox(false)
+    } catch (error) {
+      
+    }
+  }
 
   return (
     <div className='fixed inset-0 w-screen h-screen bg-black/30 flex justify-center items-center z-50'>
@@ -79,16 +70,15 @@ function ReviewBox() {
         <div className='flex justify-center items-center'>
           <button
             className='mt-6 px-12 py-2 bg-green-300 rounded-md hover:bg-green-400 transition-all disabled:opacity-50'
-            disabled={loading}
             onClick={addReview}
           >
-            {loading ? 'Submitting...' : 'Submit'}
+           Submit
           </button>
         </div>
 
         {/* Close Button */}
         <div
-          onClick={toggleReviewOpen}
+          onClick={onClose}
           className='absolute top-2 right-2 size-8 bg-red-400 rounded-full cursor-pointer flex justify-center items-center hover:bg-red-500 transition-all'
         >
           <img src={asserts.close} alt="close" className='size-4' />

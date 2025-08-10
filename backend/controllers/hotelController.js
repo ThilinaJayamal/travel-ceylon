@@ -1,175 +1,95 @@
 import Hotel from '../models/Hotel.js';
-import User from '../models/User.js';
-import asyncHandler from 'express-async-handler';
+import Taxi from '../models/Taxi.js';
+import Guide from '../models/Guide.js';
+import RentalVehicle from '../models/RentalVehicle.js';
 
-// @desc    Get all hotels
-// @route   GET /api/hotels
-// @access  Public
-export const getHotels = asyncHandler(async (req, res) => {
-  const hotels = await Hotel.find({ isActive: true }).populate('ownerId', 'name email');
-  res.status(200).json({
-    success: true,
-    count: hotels.length,
-    data: hotels
-  });
-});
+const createHotel = async (req, res) => {
+  const { name, description, location, roomTypes, amenities } = req.body;
 
-// @desc    Get single hotel
-// @route   GET /api/hotels/:id
-// @access  Public
-export const getHotel = asyncHandler(async (req, res) => {
-  const hotel = await Hotel.findById(req.params.id).populate('ownerId', 'name email');
+  try {
+    // Check if user already has ANY service
+    const existingTaxi = await Taxi.findOne({ providerId: req.user._id });
+    const existingHotel = await Hotel.findOne({ providerId: req.user._id });
+    const existingGuide = await Guide.findOne({ providerId: req.user._id });
+    const existingRental = await RentalVehicle.findOne({ providerId: req.user._id });
+    
+    if (existingTaxi || existingHotel || existingGuide || existingRental) {
+      return res.status(400).json({ message: 'You already have a service. Each user can only create one service.' });
+    }
 
-  if (!hotel || !hotel.isActive) {
-    res.status(404);
-    throw new Error('Hotel not found');
+    const hotel = await Hotel.create({
+      name,
+      description,
+      location,
+      roomTypes,
+      amenities,
+      providerId: req.user._id,
+    });
+    res.status(201).json(hotel);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
+};
 
-  res.status(200).json({
-    success: true,
-    data: hotel
-  });
-});
-
-// @desc    Create new hotel
-// @route   POST /api/hotels
-// @access  Private
-export const createHotel = asyncHandler(async (req, res) => {
-  // Check if user already has a hotel profile
-  const existingHotel = await Hotel.findOne({ ownerId: req.user.id });
-  if (existingHotel) {
-    res.status(400);
-    throw new Error('You already have a hotel profile');
+const getHotels = async (req, res) => {
+  try {
+    const hotels = await Hotel.find({ status: 'active' });
+    res.json(hotels);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
 
-  const userRole = await User.findById(req.user.id).role;
-  if (userRole !== 'user') {
-    res.status(400);
-    throw new Error("You're not allowed to create more than 1 service account");
+const getHotelById = async (req, res) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    if (hotel) {
+      res.json(hotel);
+    } else {
+      res.status(404).json({ message: 'Hotel not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
 
-  req.body.ownerId = req.user.id;
-  const hotel = await Hotel.create(req.body);
-
-  // Update user with hotel profile reference
-  await User.findByIdAndUpdate(req.user.id, {
-    hotelProfile: hotel._id,
-    role: 'hotel_owner' // Update role to hotel_owner
-  });
-
-  res.status(201).json({
-    success: true,
-    data: hotel
-  });
-});
-
-// @desc    Update hotel
-// @route   PUT /api/hotels/:id
-// @access  Private/Hotel Owner
-export const updateHotel = asyncHandler(async (req, res) => {
-  let hotel = await Hotel.findById(req.params.id);
-
-  if (!hotel) {
-    res.status(404);
-    throw new Error('Hotel not found');
+const updateHotel = async (req, res) => {
+  const { name, description, location, roomTypes, amenities, status } = req.body;
+  
+  try {
+    const hotel = await Hotel.findOne({ providerId: req.user._id });
+    
+    if (hotel) {
+      hotel.name = name || hotel.name;
+      hotel.description = description || hotel.description;
+      hotel.location = location || hotel.location;
+      hotel.roomTypes = roomTypes || hotel.roomTypes;
+      hotel.amenities = amenities || hotel.amenities;
+      hotel.status = status || hotel.status;
+      
+      const updatedHotel = await hotel.save();
+      res.json(updatedHotel);
+    } else {
+      res.status(404).json({ message: 'Hotel not found' });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
+};
 
-  // Make sure user is hotel owner
-  if (hotel.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to update this hotel');
+const deleteHotel = async (req, res) => {
+  try {
+    const hotel = await Hotel.findOne({ providerId: req.user._id });
+    
+    if (hotel) {
+      await hotel.remove();
+      res.json({ message: 'Hotel removed' });
+    } else {
+      res.status(404).json({ message: 'Hotel not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
 
-  hotel = await Hotel.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
-
-  res.status(200).json({
-    success: true,
-    data: hotel
-  });
-});
-
-// @desc    Delete hotel
-// @route   DELETE /api/hotels/:id
-// @access  Private/Hotel Owner
-export const deleteHotel = asyncHandler(async (req, res) => {
-  const hotel = await Hotel.findById(req.params.id);
-
-  if (!hotel) {
-    res.status(404);
-    throw new Error('Hotel not found');
-  }
-
-  // Make sure user is hotel owner
-  if (hotel.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to delete this hotel');
-  }
-
-  await hotel.remove();
-
-  // Remove hotel profile reference from user
-  await User.findByIdAndUpdate(req.user.id, {
-    $unset: { hotelProfile: "" },
-    role: 'user' // Reset role to user
-  });
-
-  res.status(200).json({
-    success: true,
-    data: {}
-  });
-});
-
-// @desc    Add room to hotel
-// @route   POST /api/hotels/:id/rooms
-// @access  Private/Hotel Owner
-export const addRoom = asyncHandler(async (req, res) => {
-  const hotel = await Hotel.findById(req.params.id);
-
-  if (!hotel) {
-    res.status(404);
-    throw new Error('Hotel not found');
-  }
-
-  // Make sure user is hotel owner
-  if (hotel.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to update this hotel');
-  }
-
-  hotel.rooms.push(req.body);
-  await hotel.save();
-
-  res.status(200).json({
-    success: true,
-    data: hotel
-  });
-});
-
-// @desc    Remove room from hotel
-// @route   DELETE /api/hotels/:id/rooms/:roomId
-// @access  Private/Hotel Owner
-export const removeRoom = asyncHandler(async (req, res) => {
-  const hotel = await Hotel.findById(req.params.id);
-
-  if (!hotel) {
-    res.status(404);
-    throw new Error('Hotel not found');
-  }
-
-  // Make sure user is hotel owner
-  if (hotel.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to update this hotel');
-  }
-
-  hotel.rooms = hotel.rooms.filter(room => room._id.toString() !== req.params.roomId);
-  await hotel.save();
-
-  res.status(200).json({
-    success: true,
-    data: hotel
-  });
-});
+export { createHotel, getHotels, getHotelById, updateHotel, deleteHotel };

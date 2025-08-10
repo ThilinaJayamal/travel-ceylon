@@ -1,19 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BedDouble, CarTaxiFront, MapPinned, Menu, X } from 'lucide-react';
-import { useAuthStore } from '../store/auth-store';
+import axios from 'axios'; // Make sure to install axios: npm install axios
+import useAuthStore from '../store/authStore';
 
 function Navbar() {
-    const user = useAuthStore((state) => state.user);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { user } = useAuthStore();
+    const navigate = useNavigate();
+
+    // Fetch user data on component mount
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get('/api/auth/me', { withCredentials: true });
+                setUser(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                // Handle error (e.g., user not authenticated)
+                setUser(null); // Ensure user is null if fetch fails
+            }
+        };
+
+        fetchUserData();
+    }, []); // Empty dependency array means this runs once on mount
 
     const navItems = [
-        { icon: <BedDouble className="size-5" />, label: 'Stays', to: "/stays" },
-        { icon: <CarTaxiFront className="size-5" />, label: 'Taxi',to:"/taxi" },
-        { icon: <MapPinned className="size-5" />, label: 'Tour Guides' }
+        { icon: BedDouble, label: 'Stays', to: "/stays" },
+        { icon: CarTaxiFront, label: 'Taxi', to: "/taxi" },
+        { icon: MapPinned, label: 'Tour Guides', to: "/tour-guides" }
     ];
 
-    const navigate = useNavigate();
+    const handleNavClick = (to) => {
+        navigate(to);
+        window.scrollTo(0, 0); // Corrected from scrollTo to window.scrollTo
+        setIsMobileMenuOpen(false);
+    };
+
+    // Fallback profile image URL
+    const fallbackProfileImage = "https://via.placeholder.com/100x100?text=Profile";
+
     return (
         <nav className="absolute top-0 left-0 right-0 z-50">
             <div className="flex items-center justify-between h-20 px-4 md:px-8">
@@ -21,11 +47,12 @@ function Navbar() {
                 {/* Left Nav (Desktop) */}
                 <div className="hidden md:flex items-center gap-6">
                     {navItems.map((item, index) => (
-                        <button onClick={() => navigate(item.to, scrollTo(0, 0))}
+                        <button
                             key={index}
+                            onClick={() => handleNavClick(item.to)}
                             className="flex items-center gap-2 text-white hover:text-green-500 transition"
                         >
-                            {item.icon}
+                            <item.icon className="w-5 h-5" />
                             <span>{item.label}</span>
                         </button>
                     ))}
@@ -36,22 +63,21 @@ function Navbar() {
                     Travel <span className="text-green-500">Ceylon</span>
                 </Link>
 
-                {/* Right - Avatar & Menu Toggle */}
+                {/* Right - Avatar & Mobile Menu Toggle */}
                 <div className="flex items-center gap-4">
-                    <Link to={"/user-profile"}>
+                    <Link to="/user-profile">
                         <img
-                            src={user?.image}
+                            src={user?.profilePic}
                             alt="User Avatar"
-                            className="size-10 md:size-12 rounded-full object-cover border border-gray-300"
+                            className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border border-gray-300"
                         />
                     </Link>
-                    {/* Mobile Menu Toggle */}
                     <button
-                        className="md:hidden"
+                        className="md:hidden text-white"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label="Toggle Menu"
                     >
-                        {isMobileMenuOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+                        {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                     </button>
                 </div>
             </div>
@@ -62,9 +88,10 @@ function Navbar() {
                     {navItems.map((item, index) => (
                         <button
                             key={index}
+                            onClick={() => handleNavClick(item.to)}
                             className="flex items-center gap-2 w-full text-left text-gray-700 hover:text-green-500 transition"
                         >
-                            {item.icon}
+                            <item.icon className="w-5 h-5" />
                             <span>{item.label}</span>
                         </button>
                     ))}

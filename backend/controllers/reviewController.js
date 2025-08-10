@@ -1,147 +1,129 @@
 import Review from '../models/Review.js';
-import Hotel from '../models/Hotel.js';
-import Taxi from '../models/Taxi.js';
-import Guide from '../models/Guide.js';
-import asyncHandler from 'express-async-handler';
+import User from '../models/User.js';
 
-// @desc    Get all reviews
-// @route   GET /api/reviews
-// @access  Public
-export const getReviews = asyncHandler(async (req, res) => {
-  const reviews = await Review.find().populate('user', 'name');
-  res.status(200).json({
-    success: true,
-    count: reviews.length,
-    data: reviews
-  });
-});
+const createReview = async (req, res) => {
+  const { rating, comment, entityType, serviceId } = req.body;
 
+  try {
+    // Check if user already reviewed this specific service/platform
+    let existingReview;
+    
+    if (entityType === 'platform') {
+      // For platform reviews, check if user already reviewed the platform
+      existingReview = await Review.findOne({
+        reviewerId: req.user._id,
+        entityType: 'platform',
+        serviceId: null
+      });
+    } else {
+      // For service reviews, check if user already reviewed this specific service
+      existingReview = await Review.findOne({
+        reviewerId: req.user._id,
+        entityType: entityType,
+        serviceId: serviceId
+      });
+    }
 
-// @desc    Get reviews for a specific service
-// @route   GET /api/reviews/:serviceType/:serviceId
-// @access  Public
-export const getServiceReviews = asyncHandler(async (req, res) => {
-  const reviews = await Review.find({
-    serviceType: req.params.serviceType,
-    serviceId: req.params.serviceId
-  }).populate('userId', 'name');
+    if (existingReview) {
+      return res.status(400).json({ 
+        message: `You have already reviewed this ${entityType}. You can update your existing review instead.` 
+      });
+    }
 
-  res.status(200).json({
-    success: true,
-    count: reviews.length,
-    data: reviews
-  });
-});
+    const reviewData = {
+      rating,
+      comment,
+      reviewerId: req.user._id,
+      reviewerName: req.user.name,
+      entityType: entityType
+    };
 
-// @desc    Create new review
-// @route   POST /api/reviews
-// @access  Private/User
-export const createReview = asyncHandler(async (req, res) => {
-  req.body.user = req.user.id;
+    // For service reviews, include serviceId
+    if (entityType !== 'platform') {
+      reviewData.serviceId = serviceId;
+    }
 
-  // Check if user has already reviewed this service
-  const existingReview = await Review.findOne({
-    serviceType: req.body.serviceType,
-    serviceId: req.body.serviceId,
-    user: req.user.id
-  });
+    const review = await Review.create(reviewData);
 
-  if (existingReview) {
-    res.status(400);
-    throw new Error('You have already reviewed this service');
-  }
-
-  const review = await Review.create(req.body);
-
-  // Update average rating for the service
-  await updateServiceRating(req.body.serviceType, req.body.serviceId);
-
-  res.status(201).json({
-    success: true,
-    data: review
-  });
-});
-
-// @desc    Update review
-// @route   PUT /api/reviews/:id
-// @access  Private/User
-export const updateReview = asyncHandler(async (req, res) => {
-  let review = await Review.findById(req.params.id);
-
-  if (!review) {
-    res.status(404);
-    throw new Error('Review not found');
-  }
-
-  // Check if user owns this review
-  if (review.userId.toString() !== req.user.id) {
-    res.status(401);
-    throw new Error('Not authorized to update this review');
-  }
-
-  review = await Review.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
-
-  // Update average rating for the service
-  await updateServiceRating(review.serviceType, review.serviceId);
-
-  res.status(200).json({
-    success: true,
-    data: review
-  });
-});
-
-// @desc    Delete review
-// @route   DELETE /api/reviews/:id
-// @access  Private/User/Admin
-export const deleteReview = asyncHandler(async (req, res) => {
-  const review = await Review.findById(req.params.id);
-
-  if (!review) {
-    res.status(404);
-    throw new Error('Review not found');
-  }
-
-  // Check if user owns this review or is admin
-  if (review.userId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to delete this review');
-  }
-
-  await review.remove();
-
-  // Update average rating for the service
-  await updateServiceRating(review.serviceType, review.serviceId);
-
-  res.status(200).json({
-    success: true,
-    data: {}
-  });
-});
-
-// Helper function to update service ratings
-const updateServiceRating = async (serviceType, serviceId) => {
-  const reviews = await Review.find({ serviceType, serviceId });
-  const averageRating = reviews.length > 0
-    ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
-    : 0;
-
-  if (serviceType === 'hotel') {
-    await Hotel.findByIdAndUpdate(serviceId, {
-      averageRating,
-      totalReviews: reviews.length
-    });
-  } else if (serviceType === 'taxi') {
-    await Taxi.findByIdAndUpdate(serviceId, {
-      averageRating,
-      totalReviews: reviews.length
-    });
-  } else if (serviceType === 'guide') {
-    await Guide.findByIdAndUpdate(serviceId, {
-      averageRating,
-      totalReviews: reviews.length
-    });
+    res.status(201).json(review);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
+
+const getServiceReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ 
+      serviceId: req.params.serviceId,
+      entityType: { $ne: 'platform' }
+    }).sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const getPlatformReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ 
+      entityType: 'platform'
+    }).sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const updateReview = async (req, res) => {
+  const { rating, comment } = req.body;
+
+  try {
+    const review = await Review.findOne({
+      _id: req.params.id,
+      reviewerId: req.user._id
+    });
+    
+    if (review) {
+      review.rating = rating || review.rating;
+      review.comment = comment || review.comment;
+      review.updatedAt = Date.now();
+      
+      const updatedReview = await review.save();
+      res.json(updatedReview);
+    } else {
+      res.status(404).json({ message: 'Review not found or you are not authorized to update this review' });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+const deleteReview = async (req, res) => {
+  try {
+    const review = await Review.findOne({
+      _id: req.params.id,
+      reviewerId: req.user._id
+    });
+    
+    if (review) {
+      await review.remove();
+      res.json({ message: 'Review removed' });
+    } else {
+      res.status(404).json({ message: 'Review not found or you are not authorized to delete this review' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const getUserReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({ reviewerId: req.user._id })
+      .sort({ createdAt: -1 });
+    res.json(reviews);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export { createReview, getServiceReviews, getPlatformReviews, updateReview, deleteReview, getUserReviews };

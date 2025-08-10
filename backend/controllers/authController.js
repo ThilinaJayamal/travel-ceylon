@@ -1,162 +1,236 @@
+// controllers/authController.js
 import User from '../models/User.js';
-import asyncHandler from 'express-async-handler';
+import bcrypt from 'bcryptjs';
+import generateToken from '../utils/generateToken.js';
+import Taxi from '../models/Taxi.js';
+import Hotel from '../models/Hotel.js';
+import RentalVehicle from '../models/RentalVehicle.js';
+import Guide from '../models/Guide.js';
 
-// @desc    Register user
-// @route   POST /api/auth/register
-// @access  Public
-export const register = asyncHandler(async (req, res) => {
-  const { name, email, password, phone } = req.body;
+const registerUser = async (req, res) => {
+  const { name, email, password, role } = req.body;
 
-  // Check if user exists
-  const userExists = await User.findOne({ email });
-  if (userExists) {
-    res.status(400);
-    throw new Error('User already exists');
-  }
+  try {
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
 
-  // Create user with default role 'user'
-  const user = await User.create({
-    name,
-    email,
-    password,
-    phone,
-    role: 'user'
-  });
+    if (!password) {
+      return res.status(400).json({ message: 'Password is required for email registration' });
+    }
 
-  if (user) {
-    const token = user.getSignedJwtToken();
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    res.cookie('token', token);
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role
+    });
 
-    res.status(201).json({
-      success: true,
-      user: {
-        id: user._id,
+    if (user) {
+      const token = generateToken(user._id);
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 30 * 24 * 60 * 60 * 1000
+      });
+
+      res.status(201).json({
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
-        image: user.image
-      }
-    });
-  } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+        providerStatus: user.providerStatus,
+      });
+    } else {
+      res.status(400).json({ message: 'Invalid user data' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
-});
+};
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
-export const login = asyncHandler(async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  // Validate email & password
-  if (!email || !password) {
-    res.status(400);
-    throw new Error('Please provide an email and password');
-  }
+  try {
+    const user = await User.findOne({ email });
+    console.log(user)
+    if (user && user.password && (await bcrypt.compare(password, user.password))) {
+      user.lastLogin = new Date();
+      user.loginCount = user.loginCount + 1;
+      await user.save();
 
-  // Check for user
-  const user = await User.findOne({ email }).select('+password');
-  if (!user) {
-    res.status(401);
-    throw new Error('Invalid credentials');
-  }
+      const token = generateToken(user._id);
 
-  // Check if password matches
-  const isMatch = await user.matchPassword(password);
-  if (!isMatch) {
-    res.status(401);
-    throw new Error('Invalid credentials');
-  }
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 30 * 24 * 60 * 60 * 1000
+      });
 
-  const token = user.getSignedJwtToken();
+      if (user.role !== 'traveler') {
+        const taxiProfile = await Taxi.findOne({ providerId: user._id });
+        const hotelProfile = await Hotel.findOne({ providerId: user._id });
+        const rentProfile = await RentalVehicle.findOne({ providerId: user._id });
+        const guideProfile = await Guide.findOne({ providerId: user._id });
 
-  res.cookie('token', token);
+        let serviceProfile = null;
+        let serviceType = null;
 
-  res.status(200).json({
-    success: true,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      image: user.image,
-      hotelProfile: user.hotelProfile,
-      taxiProfile: user.taxiProfile,
-      guideProfile: user.guideProfile
+        if (taxiProfile) {
+          serviceProfile = taxiProfile;
+          serviceType = 'taxi';
+        } else if (hotelProfile) {
+          serviceProfile = hotelProfile;
+          serviceType = 'hotel';
+        } else if (rentProfile) {
+          serviceProfile = rentProfile;
+          serviceType = 'rental';
+        } else if (guideProfile) {
+          serviceProfile = guideProfile;
+          serviceType = 'guide';
+        }
+
+        return res.json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          profilePic: user.profilePic,
+          providerStatus: user.providerStatus,
+          lastLogin: user.lastLogin,
+          loginCount: user.loginCount,
+          serviceProfile: serviceProfile,
+          serviceType: serviceType
+        });
+      } else {
+        console.log(user)
+        return res.json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          profilePic: user.profilePic,
+          role: user.role,
+          lastLogin: user.lastLogin,
+          loginCount: user.loginCount
+        });
+      }
+    } else if (user && !user.password) {
+      return res.status(400).json({ message: 'This account was created using Google Sign-In. Please use Google to log in.' });
+    } else {
+      res.status(401).json({ message: 'Invalid email or password' });
     }
-  });
-});
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
-
-// @desc    Logout user and clear cookie
-// @route   GET /api/auth/logout
-// @access  Public
-export const logout = asyncHandler(async (req, res) => {
+const logoutUser = async (req, res) => {
   res.cookie('token', '', {
     httpOnly: true,
-    expires: new Date(0), // Expire the cookie immediately
-    sameSite: 'Lax', // or 'Strict' depending on your frontend
-    secure: process.env.NODE_ENV === 'production' // Only send over HTTPS in production
+    expires: new Date(0)
   });
+  res.json({ message: 'Logged out successfully' });
+};
 
-  res.status(200).json({
-    success: true,
-    message: 'Logged out successfully'
-  });
-});
+const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
 
-// @desc    Get current logged in user
-// @route   GET /api/auth/me
-// @access  Private
-export const getMe = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
-  res.status(200).json({
-    success: true,
-    user: user
-  });
-});
+    if (user.role !== 'traveler') {
+      const taxiProfile = await Taxi.findOne({ providerId: user._id });
+      const hotelProfile = await Hotel.findOne({ providerId: user._id });
+      const rentProfile = await RentalVehicle.findOne({ providerId: user._id });
+      const guideProfile = await Guide.findOne({ providerId: user._id });
 
-// @desc    Update user details
-// @route   PUT /api/auth/updatedetails
-// @access  Private
-export const updateDetails = asyncHandler(async (req, res) => {
-  const fieldsToUpdate = {
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone
-  };
+      let serviceProfile = null;
+      let serviceType = null;
 
-  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
-    new: true,
-    runValidators: true
-  });
+      if (taxiProfile) {
+        serviceProfile = taxiProfile;
+        serviceType = 'taxi';
+      } else if (hotelProfile) {
+        serviceProfile = hotelProfile;
+        serviceType = 'hotel';
+      } else if (rentProfile) {
+        serviceProfile = rentProfile;
+        serviceType = 'rental';
+      } else if (guideProfile) {
+        serviceProfile = guideProfile;
+        serviceType = 'guide';
+      }
 
-  res.status(200).json({
-    success: true,
-    data: user
-  });
-});
-
-// @desc    Update password
-// @route   PUT /api/auth/updatepassword
-// @access  Private
-export const updatePassword = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id).select('+password');
-
-  // Check current password
-  if (!(await user.matchPassword(req.body.currentPassword))) {
-    res.status(401);
-    throw new Error('Password is incorrect');
+      return res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profilePic: user.profilePic,
+        providerStatus: user.providerStatus,
+        lastLogin: user.lastLogin,
+        loginCount: user.loginCount,
+        createdAt: user.createdAt,
+        serviceProfile: serviceProfile,
+        serviceType: serviceType
+      });
+    } else {
+      return res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profilePic: user.profilePic,
+        lastLogin: user.lastLogin,
+        loginCount: user.loginCount,
+        createdAt: user.createdAt
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
   }
+};
 
-  user.password = req.body.newPassword;
-  await user.save();
+// New controller function for the Google OAuth callback route
+const googleCallback = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Google authentication failed' });
+    }
 
-  const token = user.getSignedJwtToken();
-  res.status(200).json({
-    success: true,
-    token
-  });
-});
+    const user = req.user;
+
+    // Update login details
+    user.lastLogin = new Date();
+    user.loginCount = (user.loginCount || 0) + 1;
+    await user.save();
+
+    const token = generateToken(user._id);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 60 * 1000
+    });
+
+    // Redirect user to frontend dashboard/home
+    const redirectUrl = `${process.env.FRONTEND_URL}/`;
+    res.redirect(redirectUrl);
+
+  } catch (error) {
+    console.error("Google Callback Error:", error);
+    res.cookie('token', '', { httpOnly: true, expires: new Date(0) });
+    // Redirect to frontend error page or let frontend handle error status
+    const redirectUrl = `${process.env.FRONTEND_URL || (process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : 'http://localhost:3000')}/login?error=google_signin_failed`;
+    res.redirect(redirectUrl);
+  }
+};
+
+export { registerUser, loginUser, logoutUser, getMe, googleCallback };

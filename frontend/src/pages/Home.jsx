@@ -1,40 +1,64 @@
+// src/pages/Home.jsx
 import { asserts } from '../assets/assets';
 import VisitCard from '../components/VisitCard';
 import TestimonialCard from '../components/TestimonialCard';
 import ProvinceCard from '../components/ProvinceCard';
-import { useAppStore } from '../store/app-store';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/auth-store';
-import { useReviewStore } from '../store/review-store';
 import { useEffect, useState } from 'react';
-import { LogOut } from 'lucide-react';
+import { LogOut, Hotel, Car, MapPin } from 'lucide-react';
+import useAuthStore from '../store/authStore'; // Import the Zustand store
 
-
-function Home() {
-
-    const user = useAuthStore((state) => state.user);
-    const logout = useAuthStore((state) => state.logout);
-    const setReviewBelongsTo = useAppStore((state) => state.setReviewBelongsTo);
-    const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
-    const getPlatformReviews = useReviewStore((state) => state.getPlatformReviews);
-
-    const [reviews, setReviews] = useState([]);
-
+function Home({ setReviewFor, setShowReviewBox }) {
     const navigate = useNavigate();
 
-    const fetchAllReviews = async () => {
-        try {
-            const data = await getPlatformReviews();
-            console.log(data)
-            setReviews(data);
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
+    // --- Zustand Integration ---
+    // Get user state and logout action from the store
+    const { user, isAuthenticated, logout } = useAuthStore();
+
+    // Dummy reviews (remains the same)
+    const [reviews, setReviews] = useState([]);
+
+    // Fetch dummy reviews (remains the same)
+    const fetchAllReviews = () => {
+        const dummyReviews = [
+            {
+                user: { name: "Alice", image: "https://i.pravatar.cc/101" },
+                comment: "Amazing service and beautiful places!",
+                rating: 5
+            },
+            {
+                user: { name: "Bob", image: "https://i.pravatar.cc/102" },
+                comment: "Great booking experience. Highly recommend.",
+                rating: 4
+            },
+            {
+                user: { name: "Charlie", image: "https://i.pravatar.cc/103" },
+                comment: "Taxi service was excellent!",
+                rating: 5
+            }
+        ];
+        setReviews(dummyReviews);
+    };
 
     useEffect(() => {
         fetchAllReviews();
-    }, [fetchAllReviews])
+    }, []);
+
+    // --- Updated Logout Handler ---
+    const handleLogout = async () => {
+        try {
+            await logout(); // Call the logout action from the store
+            // Optional: Add a success toast message here if desired
+            // toast.success("You have been logged out.");
+             // Navigate to login or home page after logout
+            navigate('/login'); // Or navigate('/')
+        } catch (err) {
+            console.error("Logout error:", err);
+            // Optional: Add an error toast message here
+            // toast.error("Logout failed. Please try again.");
+        }
+    };
+    // --- End Updated Logout Handler ---
 
     return (
         <>
@@ -72,28 +96,43 @@ function Home() {
                     {/** Hero section navigation bar */}
                     <div className="flex flex-col md:flex-row justify-between items-center w-full gap-6 text-lg mt-6">
                         <div className="flex justify-center gap-6 items-center">
-                            <button onClick={() => navigate("/stays", scrollTo(0, 0))}
-                                className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
-                                <img src={asserts.stays} alt="Stays" />
-                                Stays
+                            <button
+                                onClick={() => { navigate("/stays"); scrollTo(0, 0); }}
+                                className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition"
+                            >
+                                <Hotel size={20} /> Stays
                             </button>
-                            <button onClick={() => navigate("/taxi", scrollTo(0, 0))}
-                                className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
-                                <img src={asserts.taxiAlert} alt="Taxi" />
-                                Taxi
+
+                            <button
+                                onClick={() => { navigate("/taxi"); scrollTo(0, 0); }}
+                                className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition"
+                            >
+                                <Car size={20} /> Taxi
                             </button>
-                            <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
-                                <img src={asserts.shareLocation} alt="Tour Guides" />
-                                Tour Guides
+
+                            <button // Update this if you have a specific route for guides
+                                onClick={() => { /* navigate("/guides"); scrollTo(0, 0); */ }}
+                                className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition"
+                            >
+                                <MapPin size={20} /> Tour Guides
                             </button>
                         </div>
 
-                        {user ? (
+                        {/* --- Updated User Authentication Display --- */}
+                        {isAuthenticated && user ? ( // Check both isAuthenticated and user object
                             <div className='flex gap-6 items-center'>
-                                <img onClick={()=>navigate("/user-profile",scrollTo(0,0))} 
-                                src={user?.image} alt="" className='size-10 rounded-full' />
-                                <button className='flex gap-1 items-center cursor-pointer hover:text-red-600' onClick={() => logout()}>
-                                    <LogOut /> Logout
+                                {/* Link user image to profile if you have a profile route */}
+                                <img
+                                    onClick={() => { navigate("/user-profile"); scrollTo(0, 0); }}
+                                    src={user?.profilePic}
+                                    alt={user.name || "User"}
+                                    className='size-10 rounded-full cursor-pointer'
+                                />
+                                <button
+                                    className='flex gap-1 items-center cursor-pointer hover:text-red-600 transition'
+                                    onClick={handleLogout} // Use the updated logout handler
+                                >
+                                    <LogOut size={20} /> Logout
                                 </button>
                             </div>
                         ) : (
@@ -101,20 +140,18 @@ function Home() {
                                 <Link to={"/login"}>
                                     <button className="cursor-pointer hover:text-green-300 transition">Login</button>
                                 </Link>
-                                <Link to={"/signup"}>
+                                <Link to={"/login"}> {/* Often, Sign Up is on the same page or redirects */}
                                     <button className="py-2 px-4 rounded-md cursor-pointer bg-white text-black hover:bg-green-200 transition">
                                         Sign Up
                                     </button>
                                 </Link>
                             </div>
                         )}
-
-
+                        {/* --- End Updated User Authentication Display --- */}
                     </div>
                 </div>
 
-
-                {/* Trip Planning Section */}
+                {/* Trip Planning Section (remains largely the same) */}
                 <div className='mt-20 grid lg:grid-cols-[2.5fr_2fr] gap-4 grid-cols-1'>
                     <div className='p-4 flex flex-col justify-center items-start'>
                         <h2 className='text-5xl font-semibold uppercase'>Plan your Perfect trip</h2>
@@ -122,7 +159,10 @@ function Home() {
                         <p className='text-xl mt-6 text-black/70'>
                             Where we make your journeys seamless and exciting! Our platform helps you find the best destinations, book hassle-free trips, and discover must-visit places with ease. Whether you're planning your next adventure or need assistance with vehicle rentals, route navigation, or nearby facilities, we've got you covered.
                         </p>
-                        <button className='px-4 py-2.5 bg-green-300 font-semibold rounded-md mt-12 cursor-pointer'>
+                        <button
+                             onClick={() => { navigate("/explore"); scrollTo(0, 0); }} // Add an explore route if needed
+                             className='px-4 py-2.5 bg-green-300 font-semibold rounded-md mt-12 cursor-pointer'
+                        >
                             Explore Sri Lanka
                         </button>
                     </div>
@@ -131,7 +171,7 @@ function Home() {
                     </div>
                 </div>
 
-                {/* Booking Section */}
+                {/* Booking Section (remains largely the same) */}
                 <div className='mt-20 grid lg:grid-cols-[2.5fr_2fr] gap-4 grid-cols-1 bg-white rounded-4xl overflow-hidden border border-gray-200'>
                     <div className='w-full h-full p-4 text-center flex flex-col gap-12 justify-center items-center'>
                         <div>
@@ -150,7 +190,7 @@ function Home() {
                     </div>
                 </div>
 
-                {/* Testimonial Section */}
+                {/* Testimonial Section (remains largely the same) */}
                 <div className='mt-12'>
                     <div className='p-4 w-full'>
                         <h3 className='text-4xl font-semibold'>What People Say About Us</h3>
@@ -171,32 +211,26 @@ function Home() {
                         </div>
 
                         <div className='flex justify-end items-center'>
-                            <button onClick={() => {
-                                toggleReviewOpen();
-                                setReviewBelongsTo('platform')
-
-                            }}
+                            <button
+                                onClick={() => setShowReviewBox(true)}
                                 className='px-4 py-2 rounded-md border-2 border-green-300 cursor-pointer'>
                                 Add Review
                             </button>
                         </div>
-
                     </div>
                 </div>
 
-                {/** Registration & Instructions */}
+                {/* Registration & Instructions (remains largely the same) */}
                 <div className='mt-12 bg-green-300 rounded-4xl border border-gray-200 px-4 pt-8 pb-4'>
-
                     <div className='grid lg:grid-cols-[1fr_1.5fr] grid-cols-1 gap-4'>
                         <div className='flex lg:justify-end justify-center order-2 lg:order-1'>
                             <img src={asserts.womenWithHand} alt="" className='max-h-[300px] w-auto' />
                         </div>
                         <div className='order-1 lg:order-2 flex justify-center items-center'>
                             <span className='md:text-4xl text-2xl font-medium text-center max-w-[600px] md:leading-12 leading-8 lg:mt-0 mt-12'>
-                                "Why wait? If you own a hotel, rent vehicles, or offer tour guide, list with us today!"
+                                "Why wait? If you own a hotel, rent vehicles, or offer tour guide, list with us today!"
                             </span>
                         </div>
-
                     </div>
 
                     <div className='bg-white p-4 rounded-4xl'>
@@ -229,17 +263,19 @@ function Home() {
                         </div>
 
                         <div className='mt-8'>
-                            <button className='px-4 py-2 bg-green-600 rounded-full w-full text-xl font-medium cursor-pointer text-white'>
+                            {/* Link the Register button to the login/signup page or a dedicated provider registration page */}
+                            <button
+                                onClick={() => { navigate('/login'); /* or '/provider-register' */ scrollTo(0,0); }}
+                                className='px-4 py-2 bg-green-600 rounded-full w-full text-xl font-medium cursor-pointer text-white'
+                            >
                                 Register Now! It is Free
                             </button>
                         </div>
-
                     </div>
                 </div>
-
             </div>
 
-            {/** locations */}
+            {/* Locations (remains the same) */}
             <div style={{ backgroundImage: `url(${asserts.Bt_bg})` }} className='md:px-14 px-7 py-14 pb-28 mt-12'>
                 <h2 className='text-4xl font-semibold text-white'>We Cover all</h2>
                 <p className='text-xl mt-2 text-white'>We cover all the Provinces in Sri Lanka</p>

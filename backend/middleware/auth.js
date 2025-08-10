@@ -1,36 +1,26 @@
+// middleware/authMiddleware.js
 import jwt from 'jsonwebtoken';
-import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 
-// Protect routes
-export const protect = asyncHandler(async (req, res, next) => {
-  
-  const token = req.cookies.token;
+const protect = async (req, res, next) => {
+  let token;
 
-  // Make sure token exists
-  if (!token) {
-    res.status(401);
-    throw new Error('Not authorized to access this route');
-  }
-
-  try {
-    // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id);
-    next();
-  } catch (err) {
-    res.status(401);
-    throw new Error('Not authorized to access this route');
-  }
-});
-
-// Grant access to specific roles
-export const authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      res.status(403);
-      throw new Error(`User role ${req.user.role} is not authorized to access this route`);
+  if (req.cookies.token) {
+    try {
+      token = req.cookies.token;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select('-password');
+      if (!req.user) {
+         return res.status(401).json({ message: 'Not authorized, user not found' });
+      }
+      next();
+    } catch (err) {
+      console.error("JWT Verification Error:", err.message);
+      return res.status(401).json({ message: 'Not authorized, token failed' });
     }
-    next();
-  };
+  } else {
+    return res.status(401).json({ message: 'Not authorized, no token' });
+  }
 };
+
+export { protect };

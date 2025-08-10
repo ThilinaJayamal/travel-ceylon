@@ -1,175 +1,101 @@
 import Taxi from '../models/Taxi.js';
-import User from '../models/User.js';
-import asyncHandler from 'express-async-handler';
+import Hotel from '../models/Hotel.js';
+import Guide from '../models/Guide.js';
+import RentalVehicle from '../models/RentalVehicle.js';
 
-// @desc    Get all taxis
-// @route   GET /api/taxis
-// @access  Public
-export const getTaxis = asyncHandler(async (req, res) => {
-  const taxis = await Taxi.find({ isActive: true }).populate('ownerId', 'name email');
-  res.status(200).json({
-    success: true,
-    count: taxis.length,
-    data: taxis
-  });
-});
+const createTaxi = async (req, res) => {
+  const { vehicleType, brandModel, capacity, driverName, licensePlate, baseLocation, perKmRate, perHourRate } = req.body;
 
-// @desc    Get single taxi
-// @route   GET /api/taxis/:id
-// @access  Public
-export const getTaxi = asyncHandler(async (req, res) => {
-  const taxi = await Taxi.findById(req.params.id).populate('ownerId', 'name email');
+  try {
+    // Check if user already has ANY service
+    const existingTaxi = await Taxi.findOne({ providerId: req.user._id });
+    const existingHotel = await Hotel.findOne({ providerId: req.user._id });
+    const existingGuide = await Guide.findOne({ providerId: req.user._id });
+    const existingRental = await RentalVehicle.findOne({ providerId: req.user._id });
+    
+    if (existingTaxi || existingHotel || existingGuide || existingRental) {
+      return res.status(400).json({ message: 'You already have a service. Each user can only create one service.' });
+    }
 
-  if (!taxi || !taxi.isActive) {
-    res.status(404);
-    throw new Error('Taxi not found');
+    const taxi = await Taxi.create({
+      vehicleType,
+      brandModel,
+      capacity,
+      driverName,
+      licensePlate,
+      baseLocation,
+      perKmRate,
+      perHourRate,
+      providerId: req.user._id,
+    });
+    res.status(201).json(taxi);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
+};
 
-  res.status(200).json({
-    success: true,
-    data: taxi
-  });
-});
-
-// @desc    Create new taxi
-// @route   POST /api/taxis
-// @access  Private
-export const createTaxi = asyncHandler(async (req, res) => {
-  // Check if user already has a taxi profile
-  const existingTaxi = await Taxi.findOne({ ownerId: req.user.id });
-  if (existingTaxi) {
-    res.status(400);
-    throw new Error('You already have a taxi profile');
+const getTaxis = async (req, res) => {
+  try {
+    const taxis = await Taxi.find({ status: 'active' });
+    res.json(taxis);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
 
-  const userRole = await User.findById(req.user.id).role;
-  if (userRole !== 'user') {
-    res.status(400);
-    throw new Error("You're not allowed to create more than 1 service account");
+const getTaxiById = async (req, res) => {
+  try {
+    const taxi = await Taxi.findById(req.params.id);
+    if (taxi) {
+      res.json(taxi);
+    } else {
+      res.status(404).json({ message: 'Taxi not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
 
-  req.body.ownerId = req.user.id;
-  const taxi = await Taxi.create(req.body);
-
-  // Update user with taxi profile reference
-  await User.findByIdAndUpdate(req.user.id, {
-    taxiProfile: taxi._id,
-    role: 'taxi_owner' // Update role to taxi_owner
-  });
-
-  res.status(201).json({
-    success: true,
-    data: taxi
-  });
-});
-
-// @desc    Update taxi
-// @route   PUT /api/taxis/:id
-// @access  Private/Taxi Owner
-export const updateTaxi = asyncHandler(async (req, res) => {
-  let taxi = await Taxi.findById(req.params.id);
-
-  if (!taxi) {
-    res.status(404);
-    throw new Error('Taxi not found');
+const updateTaxi = async (req, res) => {
+  const { vehicleType, brandModel, capacity, driverName, licensePlate, baseLocation, perKmRate, perHourRate, status } = req.body;
+  
+  try {
+    const taxi = await Taxi.findOne({ providerId: req.user._id });
+    
+    if (taxi) {
+      taxi.vehicleType = vehicleType || taxi.vehicleType;
+      taxi.brandModel = brandModel || taxi.brandModel;
+      taxi.capacity = capacity || taxi.capacity;
+      taxi.driverName = driverName || taxi.driverName;
+      taxi.licensePlate = licensePlate || taxi.licensePlate;
+      taxi.baseLocation = baseLocation || taxi.baseLocation;
+      taxi.perKmRate = perKmRate || taxi.perKmRate;
+      taxi.perHourRate = perHourRate || taxi.perHourRate;
+      taxi.status = status || taxi.status;
+      
+      const updatedTaxi = await taxi.save();
+      res.json(updatedTaxi);
+    } else {
+      res.status(404).json({ message: 'Taxi not found' });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
+};
 
-  // Make sure user is taxi owner
-  if (taxi.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to update this taxi');
+const deleteTaxi = async (req, res) => {
+  try {
+    const taxi = await Taxi.findOne({ providerId: req.user._id });
+    
+    if (taxi) {
+      await taxi.remove();
+      res.json({ message: 'Taxi removed' });
+    } else {
+      res.status(404).json({ message: 'Taxi not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
+};
 
-  taxi = await Taxi.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
-
-  res.status(200).json({
-    success: true,
-    data: taxi
-  });
-});
-
-// @desc    Delete taxi
-// @route   DELETE /api/taxis/:id
-// @access  Private/Taxi Owner
-export const deleteTaxi = asyncHandler(async (req, res) => {
-  const taxi = await Taxi.findById(req.params.id);
-
-  if (!taxi) {
-    res.status(404);
-    throw new Error('Taxi not found');
-  }
-
-  // Make sure user is taxi owner
-  if (taxi.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to delete this taxi');
-  }
-
-  await taxi.remove();
-
-  // Remove taxi profile reference from user
-  await User.findByIdAndUpdate(req.user.id, {
-    $unset: { taxiProfile: "" },
-    role: 'user' // Reset role to user
-  });
-
-  res.status(200).json({
-    success: true,
-    data: {}
-  });
-});
-
-// @desc    Add package to taxi
-// @route   POST /api/taxis/:id/packages
-// @access  Private/Taxi Owner
-export const addPackage = asyncHandler(async (req, res) => {
-  const taxi = await Taxi.findById(req.params.id);
-
-  if (!taxi) {
-    res.status(404);
-    throw new Error('Taxi not found');
-  }
-
-  // Make sure user is taxi owner
-  if (taxi.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to update this taxi');
-  }
-
-  taxi.packages.push(req.body);
-  await taxi.save();
-
-  res.status(200).json({
-    success: true,
-    data: taxi
-  });
-});
-
-// @desc    Remove package from taxi
-// @route   DELETE /api/taxis/:id/packages/:packageId
-// @access  Private/Taxi Owner
-export const removePackage = asyncHandler(async (req, res) => {
-  const taxi = await Taxi.findById(req.params.id);
-
-  if (!taxi) {
-    res.status(404);
-    throw new Error('Taxi not found');
-  }
-
-  // Make sure user is taxi owner
-  if (taxi.ownerId.toString() !== req.user.id && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not authorized to update this taxi');
-  }
-
-  taxi.packages = taxi.packages.filter(pkg => pkg._id.toString() !== req.params.packageId);
-  await taxi.save();
-
-  res.status(200).json({
-    success: true,
-    data: taxi
-  });
-});
+export { createTaxi, getTaxis, getTaxiById, updateTaxi, deleteTaxi };
