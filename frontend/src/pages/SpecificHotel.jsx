@@ -22,7 +22,7 @@ const SpecificHotel = () => {
             <p className="text-lg font-semibold">
               ${hotelData.pricePerNight}/night
             </p>
-            <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+            <button className="bg-emerald-400 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg">
               Book Now
             </button>
           </div>
@@ -50,7 +50,7 @@ const SpecificHotel = () => {
         {/* Reviews */}
         <section className="mb-8">
           <div className=" w-full">
-            <h3 className="text-2xl font-semibold">What People Say About Us</h3>
+            <h3 className="text-xl font-semibold">What People Say About Us</h3>
             <p className=" text-black/">
               What people say about our facilities and services
             </p>
@@ -154,7 +154,7 @@ const SpecificHotel = () => {
                     <td className="py-2 px-4 border-b">{room.maxGuest}</td>
                     <td className="py-2 px-4 border-b">{room.bed}</td>
                     <td className="py-2 px-4 border-b">
-                      <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                      <button className="bg-emerald-400 hover:bg-emerald-700 text-white px-3 py-1 rounded">
                         Book Now
                       </button>
                     </td>
