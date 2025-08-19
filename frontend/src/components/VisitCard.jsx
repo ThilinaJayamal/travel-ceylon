@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 function VisitCard({ item }) {
     return (
@@ -9,7 +10,7 @@ function VisitCard({ item }) {
                 {item.desc}
             </p>
             <button className='px-4 py-2 cursor-pointer bg-white rounded-md mt-8'>
-                Visit Now
+                {item.title=="Guides" ? <Link to="/guides"> Visit Now </Link> : "Visit Now"}
             </button>
         </div>
     )
