@@ -1,20 +1,22 @@
 
 import React, { useState, useEffect } from 'react'
+import ReviewBox from "./components/ReviewBox";
+import { useAppStore } from "./store/app-store";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { useAuthStore } from "./store/auth-store";
+import { Toaster } from "react-hot-toast";
+
 import Home from './pages/Home'
 import Footer from './components/Footer'
-import ReviewBox from './components/ReviewBox';
-import { useAppStore } from './store/app-store';
-import { Route, Routes, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
 import Navbar from './components/Navbar';
 import StaysAdmin from './pages/StaysAdmin';
-import { useAuthStore } from './store/auth-store';
-import { Toaster } from 'react-hot-toast';
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
 import NotFound from './pages/NotFound';
 import Taxi from './pages/Taxi';
+import Guides from './pages/Guides';
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -52,6 +54,7 @@ function App() {
         <Route path='/stays-admin' element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
+        <Route path="/guides" element={<Guides />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 
