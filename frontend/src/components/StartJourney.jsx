@@ -27,75 +27,81 @@ export default function StartJourney({ vehicle }) {
 
         {/* Form Content - takes full width on mobile, 60% on larger screens */}
         <div className="w-full md:w-3/5 p-6 md:p-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-10">
             {/* Pickup */}
-            <div className="flex flex-col">
-              <label className="text-xs sm:text-sm text-gray-600 mb-1 text-left">
+            <div className="relative w-full">
+              <select
+                id="pickup"
+                className="w-full border border-gray-400 rounded-md p-3 text-xs sm:text-sm outline-none appearance-none"
+                value={pickup}
+                onChange={(e) => setPickup(e.target.value)}
+              >
+                <option value="">Select Pickup</option>
+                <option>Tissamaharama</option>
+                <option>Colombo</option>
+                <option>Ella</option>
+              </select>
+              <label
+                htmlFor="pickup"
+                className="absolute -top-2 left-2 bg-white px-1 text-xs sm:text-sm text-gray-600"
+              >
                 Pickup
               </label>
-              <div className="flex items-center border rounded-md p-2">
-                <ArrowUpRight className="text-gray-500 mr-2 h-5 w-5" />
-                <select
-                  className="w-full outline-none bg-transparent text-xs sm:text-sm"
-                  value={pickup}
-                  onChange={(e) => setPickup(e.target.value)}
-                >
-                  <option>Tissamaharama</option>
-                  <option>Colombo</option>
-                  <option>Ella</option>
-                </select>
-              </div>
             </div>
 
             {/* Drop */}
-            <div className="flex flex-col mb-2">
-              <label className="text-xs sm:text-sm text-gray-600 mb-1 text-left">
+            <div className="relative w-full">
+              <select
+                id="drop"
+                className="w-full border border-gray-400 rounded-md p-3 text-xs sm:text-sm outline-none appearance-none"
+                value={drop}
+                onChange={(e) => setDrop(e.target.value)}
+              >
+                <option value="">Select Drop</option>
+                <option>Mirissa</option>
+                <option>Kandy</option>
+                <option>Galle</option>
+              </select>
+              <label
+                htmlFor="drop"
+                className="absolute -top-2 left-2 bg-white px-1 text-xs sm:text-sm text-gray-600"
+              >
                 Drop
               </label>
-              <div className="flex items-center border rounded-md p-2">
-                <ArrowDownLeft className="text-gray-500 mr-2 h-5 w-5" />
-                <select
-                  className="w-full outline-none bg-transparent text-xs sm:text-sm"
-                  value={drop}
-                  onChange={(e) => setDrop(e.target.value)}
-                >
-                  <option>Mirissa</option>
-                  <option>Kandy</option>
-                  <option>Galle</option>
-                </select>
-              </div>
             </div>
 
             {/* Date */}
-            <div className="flex flex-col">
-              <label className="text-xs sm:text-sm text-gray-600 mb-1 text-left">
+            <div className="relative w-full">
+              <input
+                type="date"
+                id="date"
+                className="w-full border border-gray-400 rounded-md p-3 text-xs sm:text-sm outline-none"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+              <label
+                htmlFor="date"
+                className="absolute -top-2 left-2 bg-white px-1 text-xs sm:text-sm text-gray-600"
+              >
                 Date
               </label>
-              <div className="flex items-center border rounded-md p-2">
-                <CalendarDays className="text-gray-500 mr-2 h-5 w-5" />
-                <input
-                  type="text"
-                  className="w-full outline-none text-xs sm:text-sm"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </div>
             </div>
 
             {/* Time */}
-            <div className="flex flex-col">
-              <label className="text-xs sm:text-sm text-gray-600 mb-1 text-left">
+            <div className="relative w-full">
+              <input
+                type="time"
+                id="time"
+                className="w-full border border-gray-400 rounded-md p-3 text-xs sm:text-sm outline-none"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+              <label
+                htmlFor="time"
+                className="absolute -top-2 left-2 bg-white px-1 text-xs sm:text-sm text-gray-600"
+              >
                 Time
               </label>
-              <div className="flex items-center border rounded-md p-2">
-                <Clock className="text-gray-500 mr-2 h-5 w-5" />
-                <input
-                  type="text"
-                  className="w-full outline-none text-xs sm:text-sm"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                />
-              </div>
             </div>
           </div>
 
