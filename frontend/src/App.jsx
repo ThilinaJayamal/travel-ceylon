@@ -15,6 +15,7 @@ import StaysFilter from "./pages/StaysFilter";
 import NotFound from "./pages/NotFound";
 import Taxi from "./pages/Taxi";
 import TaxiBookings from "./pages/TaxiBookings.jsx";
+import SpecificTaxi from "./pages/SpecificTaxi.jsx";
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -49,6 +50,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/taxi" element={<Taxi />} />
         <Route path="/taxi-bookings" element={<TaxiBookings />} />
+        <Route path="/specific-taxi" element={<SpecificTaxi />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/stays-admin" element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
