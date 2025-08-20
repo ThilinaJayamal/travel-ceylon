@@ -64,7 +64,7 @@ const TaxiBookings = () => {
         <div className="md:hidden mb-4">
           <button
             onClick={toggleFilter}
-            className="w-full py-2 bg-[#8DD3BB] text-black font-semibold rounded-md flex items-center justify-center"
+            className="w-full py-2 bg-green-200 hover:bg-green-300 text-black font-semibold rounded-md flex items-center justify-center"
           >
             {showFilter ? "Hide Filters" : "Show Filters"}
             <svg
@@ -158,7 +158,7 @@ const TaxiBookings = () => {
                               <h3 className="text-gray-600 font-semibold text-sm">
                                 Starting from
                               </h3>
-                              <p className="font-semibold text-[#8DD3BB] text-xl">
+                              <p className="font-semibold text-green-600 text-xl">
                                 ${vehicle.feePerKm}/km
                               </p>
                             </div>
@@ -172,7 +172,7 @@ const TaxiBookings = () => {
                           <div className="mt-2 mb-0 sm:mt-auto">
                             <button
                               onClick={() => viewVehicle(vehicle)}
-                              className="w-full bg-[#8DD3BB] text-black py-2 rounded-xl font-bold hover:bg-opacity-80 transition"
+                              className="w-full bg-green-200 hover:bg-green-300  text-black py-2 rounded-xl font-bold hover:bg-opacity-80 transition"
                             >
                               View Vehicle
                             </button>
