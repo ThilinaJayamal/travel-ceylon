@@ -17,7 +17,8 @@ const TaxiBookings = () => {
       const initialResults = taxiVehicles.filter(
         (v) =>
           v.location === formData.pickup &&
-          v.vehicleType === formData.medium.toLowerCase()
+          v.vehicleType === formData.medium.toLowerCase() &&
+          v.services?.includes("hire")
       );
       setInitialVehicles(initialResults);
       setFilteredVehicles(initialResults);
