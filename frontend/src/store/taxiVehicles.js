@@ -52,6 +52,7 @@ const taxiVehicles = [
     ],
     intro:
       "Hello, I'm Kamal Perera — your reliable driver based in Tissamaharama. With years of driving experience and a focus on safety and customer comfort, I’m here to make your journey pleasant and worry-free. Whether you're a tourist or a local traveler, I look forward to being part of your trip!",
+    services: ["hire", "rental"],
   },
 
   {
@@ -85,6 +86,7 @@ const taxiVehicles = [
       },
     ],
     intro: "Hello, I'm Nimal Fernando! ...",
+    services: ["hire"],
   },
   {
     id: 3,
@@ -119,6 +121,7 @@ const taxiVehicles = [
       },
     ],
     intro: "Hello, I'm Sunil Rathnayake! ...",
+    services: ["rent"],
   },
   {
     id: 4,
@@ -139,6 +142,7 @@ const taxiVehicles = [
       { name: "Compact Size", caption: "Fits narrow streets", icon: "Car" },
     ],
     intro: "Hello, I'm Amal Silva! ...",
+    services: ["hire", "rental"],
   },
   {
     id: 5,
@@ -167,6 +171,7 @@ const taxiVehicles = [
       },
     ],
     intro: "Hello, I'm Rajitha Gamage! ...",
+    services: ["rent"],
   },
   {
     id: 6,
@@ -195,6 +200,7 @@ const taxiVehicles = [
       },
     ],
     intro: "Hello, I'm Saman Kumara! ...",
+    services: ["hire"],
   },
   {
     id: 7,
@@ -215,6 +221,7 @@ const taxiVehicles = [
       { name: "Economical", caption: "Low fuel use", icon: "Leaf" },
     ],
     intro: "Hello, I'm Priyantha Jayasuriya! ...",
+    services: ["rent"],
   },
   {
     id: 8,
@@ -235,6 +242,7 @@ const taxiVehicles = [
       { name: "Open Air Ride", caption: "Enjoy fresh breeze", icon: "Sun" },
     ],
     intro: "Hello, I'm Lalith Weerasinghe! ...",
+    services: ["hire", "rental"],
   },
   {
     id: 9,
@@ -259,6 +267,7 @@ const taxiVehicles = [
       },
     ],
     intro: "Hello, I'm Dinesh Chandimal! ...",
+    services: ["hire"],
   },
 ];
 
