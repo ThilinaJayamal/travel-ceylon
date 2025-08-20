@@ -134,7 +134,7 @@ const SpecificTaxi = () => {
               {vehicle.features.map((feature, index) => (
                 <div
                   key={index}
-                  className="bg-green-200 p-2 sm:p-4 rounded-lg border border-gray-200 items-center justify-center h-20 w-20 sm:h-48 sm:w-48 flex flex-shrink-0"
+                  className="bg-green-200 p-2  sm:p-4 rounded-lg border border-gray-200 items-center justify-center h-20 w-20 sm:h-48 sm:w-48 flex flex-shrink-0"
                 >
                   <div>
                     <h3 className="font-bold text-gray-900 text-xs sm:text-2xl text-center">
