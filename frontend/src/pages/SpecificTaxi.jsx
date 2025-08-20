@@ -162,7 +162,7 @@ const SpecificTaxi = () => {
               text={item.comment}
               rating={item.rating}
               img={item.user.image}
-              star={star}
+              star={asserts.star}
             />
           ))}
         </div>
