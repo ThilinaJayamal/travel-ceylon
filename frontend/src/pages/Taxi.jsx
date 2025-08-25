@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { asserts } from "../assets/assets";
 import TaxiSearch from "../components/TaxiSearch";
+import { useNavigate } from "react-router-dom";
+
 import {
   Car,
   ShieldCheck,
@@ -97,6 +99,24 @@ const Taxi = () => {
     fetchReviews();
   }, []); // Empty dependency array
 
+  const navigate = useNavigate();
+  const rentVehicle = (item) => {
+    // Create proper formData with the correct medium value based on vehicle type
+    const initialFormData = {
+      pickup: "All of Sri Lanka", // Default location
+      medium: item.name.slice(0, -1).toLowerCase(), // Convert "Cars" to "car", etc.
+      pickupDate: "",
+      returnDate: "",
+    };
+
+    navigate("/rent-taxi", {
+      state: {
+        vehicle: item,
+        state: initialFormData, // Pass the properly initialized formData
+      },
+    });
+  };
+
   return (
     <div className="w-full">
       {/* Hero Section */}
@@ -154,7 +174,10 @@ const Taxi = () => {
                   <p className="text-base">{item.name} starting from</p>
                   <p className="font-bold text-xl">{item.start}</p>
                 </div>
-                <button className="bg-green-200 rounded-full text-black text-lg px-2 py-1 mt-2 hover:bg-green-300 cursor-pointer">
+                <button
+                  onClick={() => rentVehicle(item)}
+                  className="bg-green-200 rounded-full text-black text-lg px-2 py-1 mt-2 hover:bg-green-300 cursor-pointer"
+                >
                   Book Now
                 </button>
               </div>
