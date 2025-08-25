@@ -2,6 +2,11 @@ import hotelImage from "./HotelImageThissa.png";
 import reviewUser1 from "./user1.jpg";
 import reviewUser2 from "./user2.jpg";
 import reviewUser3 from "./user3.jpg";
+import breakfast from "./breakfast.png";
+import poolIcon from './swim.png';
+import busIcon from './bus.png';
+import parking from './parking.png';
+import wifi from './wifi.png';
 
 export const hotelData = {
   name: "Cinnamon Wild Yala",
@@ -33,11 +38,11 @@ export const hotelData = {
     ]
   },
   facilities: [
-    { icon: "🍳", title: "Breakfast", desc: "Everyday good Breakfast" },
-    { icon: "🏊", title: "Swimming pool", desc: "Outdoor swimming pool" },
-    { icon: "🚐", title: "Shuttle", desc: "Airport shuttle service" },
-    { icon: "🅿️", title: "Parking", desc: "Free parking area" },
-    { icon: "📶", title: "Free Wifi", desc: "24/7 free Wifi" }
+    { icon: breakfast, title: "Breakfast", desc: "Everyday good Breakfast" },
+    { icon: poolIcon, title: "Swimming pool", desc: "Outdoor swimming pool" },
+    { icon: busIcon, title: "Shuttle", desc: "Airport shuttle service" },
+    { icon: parking, title: "Parking", desc: "Free parking area" },
+    { icon: wifi, title: "Free Wifi", desc: "24/7 free Wifi" }
   ],
   rooms: [
     { type: "Standard Double Room", price: 25, maxGuest: 2, bed: "1 King Bed" },

@@ -3,6 +3,7 @@ import { hotelData } from "../assets/dummyHotelData";
 import TestimonialCard from "../components/TestimonialCard";
 import { useAppStore } from "../store/app-store";
 import { asserts } from "../assets/assets";
+import { MdLocationOn } from "react-icons/md";
 const SpecificHotel = () => {
   const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
   return (
@@ -13,8 +14,9 @@ const SpecificHotel = () => {
           <div>
             <h1 className="text-2xl font-bold">{hotelData.name}</h1>
             <p className="text-gray-500">{hotelData.location}</p>
-            <p className="flex items-center text-sm text-gray-600">
-              📍 {hotelData.address}
+            <p className="flex items-center text-sm text-gray-600 mt-3">
+              <MdLocationOn />
+              {hotelData.address}
             </p>
           </div>
           <div className="mt-4 md:mt-0 flex items-center space-x-4">
@@ -37,7 +39,7 @@ const SpecificHotel = () => {
         </div>
 
         {/* Snapshot */}
-        <section className="mb-8">
+        <section className="mb-12">
           <h2 className="text-xl font-semibold mb-3">Snapshot</h2>
           <div className="space-y-4 text-gray-700">
             {hotelData.description.map((para, idx) => (
@@ -47,7 +49,7 @@ const SpecificHotel = () => {
         </section>
 
         {/* Reviews */}
-        <section className="mb-8">
+        <section className="mb-12">
           <div className=" w-full">
             <h3 className="text-xl font-semibold">What People Say About Us</h3>
             <p className=" text-black/">
@@ -80,7 +82,7 @@ const SpecificHotel = () => {
         </section>
 
         {/* Surroundings */}
-        <section className="mb-8">
+        <section className="mb-12">
           <h2 className="text-xl font-semibold mb-4">Hotel surroundings</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-700">
             <div>
@@ -111,7 +113,7 @@ const SpecificHotel = () => {
         </section>
 
         {/* Facilities */}
-        <section className="mb-8">
+        <section className="mb-12">
           <h2 className="text-xl font-semibold mb-4">
             Most popular facilities
           </h2>
@@ -121,7 +123,14 @@ const SpecificHotel = () => {
                 key={idx}
                 className="bg-white shadow rounded-lg p-4 flex flex-col items-center text-center"
               >
-                <div className="text-3xl">{facility.icon}</div>
+                <div className="text-3xl">
+                  {" "}
+                  <img
+                    src={facility.icon}
+                    alt={facility.title}
+                    className="w-8 h-8 mb-2"
+                  />
+                </div>
                 <p className="font-semibold">{facility.title}</p>
                 <p className="text-sm text-gray-500">{facility.desc}</p>
               </div>
@@ -130,29 +139,29 @@ const SpecificHotel = () => {
         </section>
 
         {/* Rooms */}
-        <section className="mb-8">
+        <section className="mb-12">
           <h2 className="text-xl font-semibold mb-4">Available Rooms</h2>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+            <table className="min-w-full bg-white rounded-lg border-none">
               <thead>
-                <tr className="bg-gray-100 text-left">
-                  <th className="py-2 px-4 border-b">Room Type</th>
-                  <th className="py-2 px-4 border-b">Base Price</th>
-                  <th className="py-2 px-4 border-b">Max Guest</th>
-                  <th className="py-2 px-4 border-b">Bed Options</th>
-                  <th className="py-2 px-4 border-b"></th>
+                <tr className="text-left  border-b">
+                  <th className="py-5 px-4">Room Type</th>
+                  <th className="px-4 ">Base Price</th>
+                  <th className="px-4 ">Max Guest</th>
+                  <th className="px-4 ">Bed Options</th>
+                  <th className="px-4"></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="space-y-4">
                 {hotelData.rooms.map((room, idx) => (
-                  <tr key={idx}>
-                    <td className="py-2 px-4 border-b">{room.type}</td>
-                    <td className="py-2 px-4 border-b">
+                  <tr className="py-5" key={idx}>
+                    <td className="py-5 px-4 border-none">{room.type}</td>
+                    <td className="py-2 px-4 border-none">
                       ${room.price.toFixed(2)}
                     </td>
-                    <td className="py-2 px-4 border-b">{room.maxGuest}</td>
-                    <td className="py-2 px-4 border-b">{room.bed}</td>
-                    <td className="py-2 px-4 border-b">
+                    <td className="py-2 px-4 border-none">{room.maxGuest}</td>
+                    <td className="py-2 px-4 border-none">{room.bed}</td>
+                    <td className="py-2 px-4 border-none">
                       <button className="bg-emerald-400 hover:bg-emerald-700 text-white px-3 py-1 rounded">
                         Book Now
                       </button>

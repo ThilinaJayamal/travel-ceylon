@@ -62,6 +62,11 @@ import hotel2 from '../assets/hotel2.jpg';
 import hotel3 from '../assets/hotel3.jpg';
 import taxiBg from '../assets/taxiBg.jpg';
 
+import breakfastIcon from '../assets/breakfastIcon.png';
+import poolIcon from '../assets/poolIcon.png';
+import busIcon from '../assets/busIcon.png';
+import parkingIcon from '../assets/parkingIcon.png';
+
 const visitCardList = [
     {
         title: "Stays",
@@ -305,5 +310,9 @@ export const asserts = {
     staysOffers,
     businessman,
     locations,
-    taxiTypeCard
+    taxiTypeCard,
+    breakfastIcon,
+    poolIcon,   
+    busIcon,
+    parkingIcon
 }
