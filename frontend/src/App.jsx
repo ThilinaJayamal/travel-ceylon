@@ -17,6 +17,7 @@ import StaysFilter from "./pages/StaysFilter";
 import NotFound from './pages/NotFound';
 import Taxi from './pages/Taxi';
 import Guides from './pages/Guides';
+import GuideSearchResults from './pages/GuideSearchResults';
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -36,7 +37,7 @@ function App() {
   };
 
   const showNavbar = () => {
-    if (path === "/login" || path === "/") {
+    if (path === "/login" || path === "/" || path === "/guides/search") {
       return false;
     }
     return true;
@@ -55,6 +56,7 @@ function App() {
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
         <Route path="/guides" element={<Guides />} />
+        <Route path="/guides/search" element={<GuideSearchResults />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 

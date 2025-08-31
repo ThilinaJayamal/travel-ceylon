@@ -10,7 +10,7 @@ function Navbar() {
     const navItems = [
         { icon: <BedDouble className="size-5" />, label: 'Stays', to: "/stays" },
         { icon: <CarTaxiFront className="size-5" />, label: 'Taxi',to:"/taxi" },
-        { icon: <MapPinned className="size-5" />, label: 'Tour Guides' }
+        { icon: <MapPinned className="size-5" />, label: 'Tour Guides', to: "/guides" },
     ];
 
     const navigate = useNavigate();

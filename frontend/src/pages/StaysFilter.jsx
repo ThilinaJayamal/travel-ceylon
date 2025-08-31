@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import DestinationFilter from "../components/DestinationFilter";
 import { useLocation } from "react-router-dom";
+
 import staysData from "../store/staysData";
 import FilterSidebar from "../components/FilterSidebar";
 

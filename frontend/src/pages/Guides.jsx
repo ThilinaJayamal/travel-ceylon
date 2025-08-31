@@ -1,10 +1,13 @@
 import { div } from "framer-motion/client";
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import { asserts } from "../assets/assets";
 import MustVisitSlider from "../components/MustVisitSlider";
 import GuideGallary from "../components/GuideGallary";
+import GuideSearchBar from "../components/GuideSearchBar";
 
 const cards = [
   {
@@ -26,8 +29,17 @@ const cards = [
 ];
 
 function Guides() {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/guides/search?q=${encodeURIComponent(query)}`);
+  };
+
   return (
     <>
+    
       {/* // Hero Section */}
       <div
         className="h-[90vh] w-full bg-cover bg-center bg-no-repeat flex items-center"
@@ -43,7 +55,7 @@ function Guides() {
         </div>
       </div>
 
-      {/* // Search Bar */}
+      {/* Search Bar */}
       <div className="relative -top-16 max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
         <label
           htmlFor="search"
@@ -51,11 +63,13 @@ function Guides() {
         >
           Search your Local Guide
         </label>
-        <form className="flex gap-4">
+        <form className="flex gap-4" onSubmit={handleSubmit}>
           <input
             type="text"
             id="search"
             placeholder="Search the area"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             className="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-300"
           />
           <button
@@ -118,12 +132,12 @@ function Guides() {
         </div>
       </div>
 
-      { /* places Slider */ }
-      <MustVisitSlider />;
-
+      {/* places Slider */}
+      <MustVisitSlider />
       <GuideGallary />
+
     </>
   );
-}
+};
 
 export default Guides;

@@ -51,7 +51,7 @@ const GuideGallery = () => {
   const toggleExpanded = () => setExpanded((prev) => !prev);
 
   return (
-    <section className="py-10 rounded-2xl max-w-[88%] mx-auto mb-10">
+    <section className="py-10 rounded-2xl max-w-[88%] mx-auto">
       <h2 className="text-2xl md:text-3xl font-bold mb-6">Tour Gallery</h2>
 
       <div className="flex overflow-x-auto space-x-6 scrollbar-hide">
@@ -72,7 +72,7 @@ const GuideGallery = () => {
               </div>
             </div>
 
-            <p className="text-sm text-gray-700 px-2">
+            <p className="text-sm text-gray-700 px-2 mt-4">
               <div
                 className={`transition-all duration-500 ease-in-out overflow-hidden ${
                   expanded ? "max-h-[1000px]" : "max-h-16"
