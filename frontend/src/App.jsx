@@ -15,6 +15,7 @@ import UserProfile from "./pages/UserProfile";
 import StaysAdmin from "./pages/StaysAdmin";
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
+
 import Taxi from "./pages/Taxi";
 import TaxiBookings from "./pages/TaxiBookings.jsx";
 import SpecificTaxi from "./pages/SpecificTaxi.jsx";
@@ -25,6 +26,7 @@ import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard.jsx";
 import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount.jsx";
 
 import Guides from "./pages/Guides";
+import Guide from "./pages/Guide";
 import GuideSearchResults from "./pages/GuideSearchResults";
 
 import Registration from "./pages/Registration/Registration";
@@ -44,7 +46,7 @@ function App() {
 
   const path = useLocation().pathname;
 
-  // Check if current page is any registration page
+  // Registration pages
   const isRegistrationPage = [
     "/registration",
     "/registration/hotel",
@@ -54,7 +56,13 @@ function App() {
 
   // Show Navbar conditionally
   const showNavbar = () => {
-    if (path === "/login" || path === "/" || path === "/guides/search" || isRegistrationPage) {
+    if (
+      path === "/login" ||
+      path === "/" ||
+      path === "/guides/search" ||
+      path.startsWith("/guide/") ||
+      isRegistrationPage
+    ) {
       return false;
     }
     return true;
@@ -75,7 +83,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        
+
         {/* Taxi routes */}
         <Route path="/taxi" element={<Taxi />} />
         <Route path="/taxi-bookings" element={<TaxiBookings />} />
@@ -85,13 +93,13 @@ function App() {
         <Route path="/taxi-admin-bookings" element={<TaxiAdminViewBookings />} />
         <Route path="/taxi-admin-dashboard" element={<TaxiAdminViewDashboard />} />
         <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
-        
+
         {/* User & stays */}
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/stays-admin" element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
-        
+
         {/* Registration routes */}
         <Route path="/registration" element={<Registration />} />
         <Route path="/registration/hotel" element={<HotelRegistration />} />
@@ -101,6 +109,7 @@ function App() {
         {/* Guide routes */}
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
+        <Route path="/guide/:id" element={<Guide />} />
 
         {/* Not Found */}
         <Route path="*" element={<NotFound />} />
