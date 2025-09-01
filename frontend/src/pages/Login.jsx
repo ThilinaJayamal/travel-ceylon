@@ -1,69 +1,42 @@
-import React, { useEffect, useState } from 'react'
-import { asserts } from '../assets/assets'
-import CustomInput from '../components/CustomInput'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useAuthStore } from '../store/auth-store'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { asserts } from '../assets/assets';
+import CustomInput from '../components/CustomInput';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuthStore } from '../store/authStore';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-    const login = useAuthStore((state) => state.login);
-    const register = useAuthStore((state) => state.register);
-    const user = useAuthStore((state) => state.user);
-
+    const { user, loading, error, login, register } = useAuthStore();
     const navigate = useNavigate();
 
     const [formType, setFormType] = useState("Login");
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (e) => {
+    // Navigate if already logged in
+    useEffect(() => {
+        if (user) navigate("/");
+    }, [user, navigate]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
-        setLoading(true);
 
-        const result = await login({ email, password });
-        if (!result.success) {
-            setError(result.error || "Login failed");
-        }
-        else {
-            navigate('/');
+        if (formType === "Login") {
+            await login({ email, password });
+        } else {
+            await register({ name, email, password });
         }
 
-        setLoading(false);
-    };
-
-    const handleRegister = async (e) => {
-        e.preventDefault();
-        setError("");
-        setLoading(true);
-
-        const result = await register({ name, email, password });
-        if (!result.success) {
-            setError(result.error || "Registration failed");
-        }
-        else {
-            navigate('/')
-        }
-
-        setLoading(false);
+        // Clear password field after submission
+        setPassword("");
     };
 
     const clearForm = () => {
         setName("");
         setEmail("");
         setPassword("");
-        setError("");
     };
-
-    // If there is a user, navigate to homepage
-    useEffect(() => {
-        if (user) {
-            navigate("/");
-        }
-    }, [user])
 
     return (
         <div className='min-h-screen w-full grid lg:grid-cols-2 grid-cols-1 gap-6 bg-gray-50'>
@@ -86,7 +59,6 @@ function Login() {
             {/* Right side form */}
             <div className='flex flex-col justify-center items-center'>
                 <AnimatePresence mode="wait">
-
                     <motion.div
                         key={formType}
                         initial={{ opacity: 0, y: 20 }}
@@ -95,9 +67,11 @@ function Login() {
                         transition={{ duration: 0.4, ease: "easeInOut" }}
                         className="flex flex-col gap-4 md:min-w-md min-w-full px-6 md:px-0 mt-12"
                     >
-                        <h1 className='text-4xl font-bold mb-12 text-center'>Travel <span className='text-green-300'>Ceylon</span></h1>
+                        <h1 className='text-4xl font-bold mb-12 text-center'>
+                            Travel <span className='text-green-300'>Ceylon</span>
+                        </h1>
 
-                        <form onSubmit={formType === "Login" ? handleLogin : handleRegister} className='grid grid-cols-1 gap-2'>
+                        <form onSubmit={handleSubmit} className='grid grid-cols-1 gap-2'>
                             {formType !== "Login" && (
                                 <CustomInput
                                     label={"Name"}
@@ -117,13 +91,15 @@ function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
 
+                            {error && <p className="text-red-500">{error}</p>}
+
                             <div className='flex items-center justify-start w-full'>
                                 <button
                                     type="submit"
                                     className='px-8 py-2 mt-2 bg-green-300 rounded-full cursor-pointer disabled:opacity-50'
                                     disabled={loading}
                                 >
-                                    {loading ? "wait..." : formType}
+                                    {loading ? "Please wait..." : formType}
                                 </button>
                             </div>
                         </form>
@@ -134,10 +110,7 @@ function Login() {
                                     Don’t have an account?{' '}
                                     <span
                                         className='text-green-400 cursor-pointer font-semibold'
-                                        onClick={() => {
-                                            setFormType("Sign Up");
-                                            clearForm();
-                                        }}
+                                        onClick={() => { setFormType("Sign Up"); clearForm(); }}
                                     >
                                         Create one
                                     </span>
@@ -147,10 +120,7 @@ function Login() {
                                     Already have an account?{' '}
                                     <span
                                         className='text-green-400 cursor-pointer font-semibold'
-                                        onClick={() => {
-                                            setFormType("Login");
-                                            clearForm();
-                                        }}
+                                        onClick={() => { setFormType("Login"); clearForm(); }}
                                     >
                                         Log in
                                     </span>
@@ -177,4 +147,4 @@ function Login() {
     )
 }
 
-export default Login
+export default Login;
