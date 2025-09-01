@@ -111,7 +111,7 @@ const RentTaxi = () => {
   };
 
   const viewRentVehicle = (vehicle) => {
-    navigate("/rented-vehicle-details", { state: { vehicle } });
+    navigate("/view-renting-vehicle", { state: { vehicle } });
   };
 
   // Toggle filter visibility on mobile
