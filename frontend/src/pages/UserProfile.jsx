@@ -4,9 +4,10 @@ import BookingCard from '../components/BookingCard';
 import { SquarePen } from 'lucide-react';
 import BillViwer from '../components/BillViewer';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useAuthStore } from '../store/auth-store';
+import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { redirect, useNavigate } from 'react-router-dom';
 
 
 const billData = [{
@@ -72,6 +73,9 @@ const billData = [{
 function UserProfile() {
     const user = useAuthStore((state) => state.user);
     const [activeTab, setActiveTab] = useState('Bookings');
+
+    const navigate = useNavigate();
+
     const tabs = ['Bookings', 'Account'];
 
     const [name, setName] = useState('');
@@ -100,7 +104,11 @@ function UserProfile() {
         }
     };
 
-    if (!user) return <div className="text-center py-10">Loading user data...</div>;
+    useEffect(() => {
+        if (!user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
 
     return (
         <div className="pb-24">
@@ -121,13 +129,12 @@ function UserProfile() {
             {/* Profile Image and Info */}
             <div className="relative z-20 md:ml-8 -mt-20 flex md:flex-row flex-col gap-1 md:items-center w-fit mx-auto">
                 <img
-                    src={user.image}
+                    src={user?.profilePic}
                     className="size-44 object-center object-cover rounded-full border-4 border-white bg-white"
                     alt="User"
                 />
                 <div className="md:mt-22 md:text-left mt-1 text-center">
-                    <h2 className="text-2xl font-semibold">{user.name}</h2>
-                    <p className="text-lg text-black/70">Germany</p>
+                    <h2 className="text-2xl font-semibold">{user?.name}</h2>
                 </div>
             </div>
 
