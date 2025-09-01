@@ -1,0 +1,538 @@
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Main wrapper */
+.hotel-wrapper {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.hotel-entry-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #8dd3bb;
+  background-image: url('/assets/backgroundill.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-top: 0;
+  padding-bottom: 40px; /* Add padding to bottom for spacing */
+  z-index: 1;
+}
+
+.hotel-top-spacer {
+  height: 0;
+}
+
+.hotel-progressbar {
+  width: 100%;
+  max-width: 600px;
+  padding: 10px;
+  margin-top: 0;
+}
+
+/* Common container styles */
+.hotel-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  background-color: white;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 10px;
+}
+
+/* Common input styles */
+.hotel-entryarea {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.hotel-labelline {
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  background-color: white;
+  padding: 0 6px;
+  font-size: 12px;
+  color: #333;
+  z-index: 1;
+}
+
+input {
+  width: 100%;
+  padding: 14px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  background: transparent;
+  z-index: 0;
+}
+
+.hotel-tag-line {
+  font-size: 14px;
+  text-align: left;
+  margin-bottom: 12px;
+  color: #212121;
+}
+
+.hotel-note {
+  font-size: 10px;
+  margin-bottom: 30px;
+  margin-top: 8px;
+  text-align: left;
+  opacity: 50%;
+}
+
+/* Step 2 specific styles */
+.hotel-phone-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.hotel-phone-row .hotel-entryarea {
+  flex: 1;
+  position: relative;
+}
+
+/* Step 3 specific styles */
+.hotel-facilities-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.hotel-checkbox-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 30px; /* Add margin bottom for button spacing */
+}
+
+.hotel-left-column,
+.hotel-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+/* Hide default checkbox */
+.hotel-checkbox {
+  display: none;
+}
+
+/* Custom checkbox design */
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  position: relative;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.hotel-checkbox:checked + .custom-checkbox {
+  background-color: #8DD3BB;
+  border-color: #8DD3BB;
+}
+
+.hotel-checkbox:checked + .custom-checkbox::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.hotel-checkbox-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.hotel-label-text {
+  font-size: 12px;
+}
+
+/* Step 4 specific styles */
+.hotel-select {
+  height: 45px;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+  font-size: 14px;
+  margin-bottom: 30px;
+  outline: none;
+  appearance: menulist;
+  background-color: white;
+  text-align: left;
+  padding: 10px;
+}
+
+.hotel-number-container2 {
+  width: 150px;
+  margin-bottom: 30px;
+}
+
+.hotel-number-input2 {
+  width: 100%;
+  padding: 14px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  background: transparent;
+}
+
+.hotel-number-input2[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.hotel-bed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.hotel-bed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hotel-bed-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hotel-bed-icon {
+  width: 60px;
+  height: 60px;
+  filter: grayscale(1);
+  opacity: 0.9;
+}
+
+.hotel-bed-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hotel-bed-name {
+  font-weight: 500;
+  font-size: 14px;
+  color: #212121;
+}
+
+.hotel-bed-size {
+  font-size: 12px;
+  color: #757575;
+}
+
+.hotel-bed-controls {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  height: 40px;
+  padding: 0 4px;
+  background-color: #fff;
+}
+
+.hotel-control-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  margin-top: 0 !important;
+}
+
+.hotel-control-btn img {
+  width: 14px;
+  height: 14px;
+}
+
+.hotel-bed-count {
+  width: 30px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Step 5 specific styles */
+.hotel-upload-box {
+  border: 1px solid #ddd;
+  padding: 30px;
+  border-radius: 5px;
+  margin-top: 14px;
+  margin-bottom: 20px; /* Add margin bottom for spacing */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.hotel-upload-icon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+  opacity: 70%;
+}
+
+.hotel-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.hotel-upload-box .main-line {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.hotel-upload-box .second-line {
+  font-size: 10px;
+  text-align: center;
+  color: #757575;
+  margin-top: 0;
+}
+
+.hotel-preview-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 30px; /* Add margin bottom for button spacing */
+}
+
+.hotel-preview-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.hotel-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hotel-remove-btn {
+  position: absolute;
+  top: -15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  color: #212121;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  margin-top: 0 !important;
+}
+
+/* Step 6 specific styles */
+.hotel-description-box {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  resize: vertical;
+  min-height: 120px;
+  outline: none;
+  margin-bottom: 20px; /* Add margin bottom */
+}
+
+.hotel-terms {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 30px; /* Increase margin bottom for button spacing */
+}
+
+.hotel-terms-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.hotel-terms-checkbox-label {
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.hotel-terms-checkbox-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 2px;
+}
+
+.hotel-terms-checkbox:checked + .hotel-terms-checkbox-label::before {
+  background-color: #8DD3BB;
+}
+
+.hotel-terms-checkbox:checked + .hotel-terms-checkbox-label::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-70%) rotate(45deg);
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+}
+
+.hotel-terms-checkbox:focus + .hotel-terms-checkbox-label::before {
+  box-shadow: 0 0 0 2px rgba(141, 211, 187, 0.3);
+}
+
+/* Updated button styles - now inside the form */
+.hotel-button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px; /* Reduced margin since buttons are now inside form */
+  padding-top: 20px; /* Add some padding to separate from content above */
+  border-top: 1px solid #f0f0f0; /* Optional: add subtle separator line */
+}
+
+.hotel-back-btn,
+.hotel-next-btn {
+  background-color: #8dd3bb;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+}
+
+.hotel-back-btn {
+  margin-right: 30px;
+}
+
+.hotel-back-btn:hover,
+.hotel-next-btn:hover {
+  opacity: 70%;
+}
+
+.hotel-next-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .hotel-container {
+    padding: 24px;
+  }
+  
+  .hotel-checkbox-container {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .hotel-left-column,
+  .hotel-right-column {
+    width: 100%;
+    align-items: flex-start;
+  }
+  
+  .hotel-bed-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .hotel-bed-controls {
+    align-self: flex-start;
+    margin-left: 60px;
+  }
+  
+  .hotel-preview-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Responsive button styles */
+  .hotel-button-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .hotel-back-btn {
+    margin-right: 0;
+  }
+  
+  .hotel-back-btn,
+  .hotel-next-btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}

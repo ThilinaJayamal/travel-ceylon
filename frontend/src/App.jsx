@@ -16,6 +16,12 @@ import StaysFilter from "./pages/StaysFilter";
 import NotFound from './pages/NotFound';
 import Taxi from './pages/Taxi';
 
+import HotelRegistration from './pages/Registration/HotelRegistration';
+import TaxiRegistration from './pages/Registration/TaxiRegistration';
+import GuideRegistration from './pages/Registration/GuideRegistration';
+import Registration from './pages/Registration/Registration';
+
+
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
   const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus);
@@ -26,19 +32,24 @@ function App() {
 
   const path = useLocation().pathname;
 
-  const showFooter = () => {
-    if (path === "/login") {
-      return false;
-    }
-    return true;
-  };
+ const isRegistrationPage = path === "/registration" || 
+                          path === "/registration/hotel" || 
+                          path === "/registration/taxi" || 
+                          path === "/registration/guide";
 
-  const showNavbar = () => {
-    if (path === "/login" || path === "/") {
-      return false;
-    }
-    return true;
-  };
+const showFooter = () => {
+  if (path === "/login" || isRegistrationPage) {
+    return false;
+  }
+  return true;
+};
+
+const showNavbar = () => {
+  if (path === "/login" || path === "/" || isRegistrationPage) {
+    return false;
+  }
+  return true;
+};
 
   return (
     <>
@@ -51,7 +62,16 @@ function App() {
         <Route path='/user-profile' element={<UserProfile />} />
         <Route path='/stays-admin' element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
+
         <Route path="/stays/filter" element={<StaysFilter />} />
+
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/registration/hotel" element={<HotelRegistration />} />
+        <Route path="/registration/taxi" element={<TaxiRegistration />} />
+        <Route path="/registration/guide" element={<GuideRegistration />} />
+
+        
+
         <Route path='*' element={<NotFound />} />
       </Routes>
 
