@@ -73,7 +73,7 @@ function TaxiRegistration() {
 
   const goBack = () => {
     if (currentStep === 1) {
-      navigate("../Registration");
+      navigate("/registration");
     } else {
       prevStep();
     }
