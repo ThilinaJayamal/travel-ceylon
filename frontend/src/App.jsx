@@ -24,14 +24,18 @@ import Registration from './pages/Registration/Registration';
 import HotelRegistration from './pages/Registration/HotelRegistration';
 import TaxiRegistration from './pages/Registration/TaxiRegistration';
 import GuideRegistration from './pages/Registration/GuideRegistration';
+import ServiceProviderLogin from './pages/ServiceproviderLogin';
+import { useServiceAuthStore } from './store/serviceAuthStrore';
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
-  
+
   const loadUser = useAuthStore((state) => state.loadUser);
+  const loadProvider = useServiceAuthStore((state) => state.loadUser)
 
   useEffect(() => {
     loadUser();
+    loadProvider();
   }, [])
 
   const path = useLocation().pathname;
@@ -67,6 +71,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
+
         <Route path='/taxi' element={<Taxi />} />
         <Route path='/user-profile' element={<UserProfile />} />
         <Route path='/stays-admin' element={<StaysAdmin />} />
@@ -82,6 +87,8 @@ function App() {
         {/* Guide routes */}
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
+
+        <Route path='/service-provider/login' element={<ServiceProviderLogin />} />
 
         <Route path='*' element={<NotFound />} />
       </Routes>

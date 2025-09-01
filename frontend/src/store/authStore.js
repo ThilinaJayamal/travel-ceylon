@@ -11,14 +11,11 @@ export const useAuthStore = create((set) => ({
     set({ loading: true, error: null });
     try {
       const { data } = await api.post("/user/login", credentials);
-      console.log(data);
-
       if (data?.data) {
         set({ user: data?.data, loading: false });
       } else {
         set({ user: null, loading: false });
       }
-
     } catch (err) {
       set({ user: null, error: err.response?.data?.message || err.message, loading: false });
     }
@@ -44,7 +41,6 @@ export const useAuthStore = create((set) => ({
   // LOGOUT
   logout: async () => {
     try {
-      console.log("ddfd")
       const { data } = await api.post("/user/logout");
       console.log(data)
       set({ user: null, loading: false });
@@ -74,7 +70,7 @@ export const useAuthStore = create((set) => ({
       }
 
     } catch (err) {
-      set({ user: null, error: err.response?.data?.message || err.message, loading: false });
+      return null
     }
   },
 }));
