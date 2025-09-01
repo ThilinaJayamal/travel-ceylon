@@ -18,8 +18,8 @@ import StaysFilter from "./pages/StaysFilter";
 import Taxi from './pages/Taxi';
 import Guides from './pages/Guides';
 import Guide from './pages/Guide';
-import Guide from './pages/Guide';
 import GuideSearchResults from './pages/GuideSearchResults';
+import GuideBooking from './pages/GuideBooking';
 import NotFound from './pages/NotFound';
 
 import Registration from './pages/Registration/Registration';
@@ -54,6 +54,8 @@ function App() {
     return true;
   };
 
+  // Show Footer conditionally
+  const showFooter = () => {
     if (path === "/login" || path === "/" || path === "/guides/search") {
       return false;
     }
@@ -83,7 +85,7 @@ function App() {
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
         <Route path="/guide/:id" element={<Guide />} />
-        <Route path="/guide/:id" element={<Guide />} />
+        <Route path="/guide/:id/book" element={<GuideBooking />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 
@@ -94,5 +96,6 @@ function App() {
       <Toaster />
     </>
   );
+}
 
 export default App;
