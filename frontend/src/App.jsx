@@ -17,6 +17,7 @@ import StaysFilter from "./pages/StaysFilter";
 import NotFound from './pages/NotFound';
 import Taxi from './pages/Taxi';
 import Guides from './pages/Guides';
+import Guide from './pages/Guide';
 import GuideSearchResults from './pages/GuideSearchResults';
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
   };
 
   const showNavbar = () => {
-    if (path === "/login" || path === "/" || path === "/guides/search") {
+    if (path === "/login" || path === "/" || path === "/guides/search" || path.startsWith("/guide/")) {
       return false;
     }
     return true;
@@ -57,6 +58,7 @@ function App() {
         <Route path="/stays/filter" element={<StaysFilter />} />
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
+        <Route path="/guide/:id" element={<Guide />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 
