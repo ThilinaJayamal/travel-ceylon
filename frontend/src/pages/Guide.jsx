@@ -7,7 +7,6 @@ import NavbarBlack from "../components/NavbarBlack";
 
 const Guide = () => {
   const getGuideIdFromUrl = () => {
-    // For demo purposes, we'll simulate guide ID 3
     const { id } = useParams();
     return id;
   };

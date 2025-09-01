@@ -19,6 +19,7 @@ import Taxi from './pages/Taxi';
 import Guides from './pages/Guides';
 import Guide from './pages/Guide';
 import GuideSearchResults from './pages/GuideSearchResults';
+import GuideAdmin from './pages/GuideAdmin';
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -49,30 +50,29 @@ function App() {
       {showNavbar() && <Navbar />}
 
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/taxi' element={<Taxi />} />
-        <Route path='/user-profile' element={<UserProfile />} />
-        <Route path='/stays-admin' element={<StaysAdmin />} />
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/taxi' element={<Taxi />} />
-        <Route path='/user-profile' element={<UserProfile />} />
-        <Route path='/stays-admin' element={<StaysAdmin />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/taxi" element={<Taxi />} />
+        <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/stays-admin" element={<StaysAdmin />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/taxi" element={<Taxi />} />
+        <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/stays-admin" element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
         <Route path="/guide/:id" element={<Guide />} />
-        <Route path='*' element={<NotFound />} />
-        <Route path='*' element={<NotFound />} />
+        <Route path="/guide/:id/admin" element={<GuideAdmin />} />
+        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {showFooter() && <Footer />}
 
-      {
-        reviewOpen && <ReviewBox />
-      }
+      {reviewOpen && <ReviewBox />}
 
       <Toaster />
     </>
