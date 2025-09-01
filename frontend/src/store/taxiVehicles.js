@@ -102,7 +102,7 @@ const taxiVehicles = [
     location: "Tissamaharama",
     image: axio,
     driverImage: jenny,
-    bio: "This sedan is a comfortable choice...",
+    bio: "This sedan is a comfortable choice for everyone who is willing to do a trip along southcost to up country in Sri Lanka.Economical 2500cc engine with full options vehicle considered as the best vehicle to travel litely.",
     features: [
       {
         name: "Fuel Efficient",
