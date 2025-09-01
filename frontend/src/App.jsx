@@ -17,6 +17,10 @@ import Taxi from "./pages/Taxi";
 import TaxiBookings from "./pages/TaxiBookings.jsx";
 import SpecificTaxi from "./pages/SpecificTaxi.jsx";
 import RentTaxi from "./pages/RentTaxi.jsx";
+import RentedVehicleDetails from "./pages/RentedVehicleDetails.jsx";
+import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings.jsx";
+import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard.jsx";
+import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount.jsx";
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -53,6 +57,19 @@ function App() {
         <Route path="/taxi-bookings" element={<TaxiBookings />} />
         <Route path="/specific-taxi" element={<SpecificTaxi />} />
         <Route path="/rent-taxi" element={<RentTaxi />} />
+        <Route
+          path="/view-renting-vehicle"
+          element={<RentedVehicleDetails />}
+        />
+        <Route
+          path="/taxi-admin-bookings"
+          element={<TaxiAdminViewBookings />}
+        />
+        <Route
+          path="taxi-admin-dashboard"
+          element={<TaxiAdminViewDashboard />}
+        />
+        <Route path="taxi-admin-account" element={<TaxiAdminViewAccount />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/stays-admin" element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
