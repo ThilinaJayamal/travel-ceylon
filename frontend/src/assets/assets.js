@@ -264,6 +264,26 @@ const staysOffers = [
     }
 ];
 
+const hotelData = [
+  {
+    id: "hotel-1",
+    name: "Hotel Paradise",
+    location: "Colombo",
+    rooms: [
+      { id: "room-1", type: "Standard Double Room", price: 120 },
+      { id: "room-2", type: "Standard Twin Room", price: 150 },
+    ],
+  },
+  {
+    id: "hotel-2",
+    name: "Ocean View Resort",
+    location: "Galle",
+    rooms: [
+      { id: "room-3", type: "Standard Double Room", price: 100 },
+      { id: "room-4", type: "Standard Twin Room", price: 140 },
+    ],
+  },
+];
 export const asserts = {
     heroBg,
     shareLocation,
@@ -314,5 +334,6 @@ export const asserts = {
     breakfastIcon,
     poolIcon,   
     busIcon,
-    parkingIcon
+    parkingIcon,
+    hotelData
 }

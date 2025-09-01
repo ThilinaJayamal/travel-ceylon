@@ -48,5 +48,20 @@ export const hotelData = {
     { type: "Standard Double Room", price: 25, maxGuest: 2, bed: "1 King Bed" },
     { type: "Standard Twin Room", price: 30, maxGuest: 4, bed: "2 Twin Bed" },
     { type: "Standard Triple Room", price: 38, maxGuest: 5, bed: "2 Queen Bed" }
-  ]
+  ],
+    booking: {
+    roomType: "Standard Double Room",
+    rooms: 1,
+    people: 2,
+    checkIn: "06 March 2025",
+    checkOut: "09 March 2025",
+    nights: 3,
+  },
+  payment: {
+    baseFee: 75.0,
+    discount: 0,
+    taxes: 0,
+    serviceFee: 0,
+    total: 75.0,
+  },
 };

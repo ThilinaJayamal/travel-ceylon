@@ -13,6 +13,7 @@ import { Toaster } from "react-hot-toast";
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
 import SpecificHotel from "./pages/SpecificHotel";
+import HotelPayment from "./pages/HotelPayment";
 import NotFound from "./pages/NotFound";
 import Taxi from "./pages/Taxi";
 
@@ -52,6 +53,7 @@ function App() {
         <Route path="/stays-admin" element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/specific-hotel" element={<SpecificHotel />} />
+        <Route path="/stays/payment" element={<HotelPayment />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

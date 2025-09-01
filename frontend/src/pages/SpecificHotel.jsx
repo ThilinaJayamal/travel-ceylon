@@ -7,7 +7,7 @@ import { MdLocationOn } from "react-icons/md";
 const SpecificHotel = () => {
   const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col min-h-screen  ">
       <div className=" w-[90vw] mx-auto py-6 flex-grow mt-25">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
