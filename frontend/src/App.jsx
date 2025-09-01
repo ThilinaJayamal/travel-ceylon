@@ -1,26 +1,29 @@
+import React, { useEffect } from 'react';
+import { Route, Routes, useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
-import React, { useState, useEffect } from 'react'
-import Home from './pages/Home'
-import Footer from './components/Footer'
-import ReviewBox from './components/ReviewBox';
-import { useAppStore } from './store/app-store';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { useAppStore } from "./store/app-store";
+import { useAuthStore } from "./store/auth-store";
+
+import ReviewBox from "./components/ReviewBox";
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
+import Home from './pages/Home';
 import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
-import Navbar from './components/Navbar';
 import StaysAdmin from './pages/StaysAdmin';
-import { useAuthStore } from './store/auth-store';
-import { Toaster } from 'react-hot-toast';
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
-import NotFound from './pages/NotFound';
 import Taxi from './pages/Taxi';
+import Guides from './pages/Guides';
+import GuideSearchResults from './pages/GuideSearchResults';
+import NotFound from './pages/NotFound';
 
+import Registration from './pages/Registration/Registration';
 import HotelRegistration from './pages/Registration/HotelRegistration';
 import TaxiRegistration from './pages/Registration/TaxiRegistration';
 import GuideRegistration from './pages/Registration/GuideRegistration';
-import Registration from './pages/Registration/Registration';
-
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
@@ -32,24 +35,29 @@ function App() {
 
   const path = useLocation().pathname;
 
- const isRegistrationPage = path === "/registration" || 
-                          path === "/registration/hotel" || 
-                          path === "/registration/taxi" || 
-                          path === "/registration/guide";
+  // Check if current page is any registration page
+  const isRegistrationPage = [
+    "/registration",
+    "/registration/hotel",
+    "/registration/taxi",
+    "/registration/guide"
+  ].includes(path);
 
-const showFooter = () => {
-  if (path === "/login" || isRegistrationPage) {
-    return false;
-  }
-  return true;
-};
+  // Show Navbar conditionally
+  const showNavbar = () => {
+    if (path === "/login" || path === "/" || path === "/guides/search" || isRegistrationPage) {
+      return false;
+    }
+    return true;
+  };
 
-const showNavbar = () => {
-  if (path === "/login" || path === "/" || isRegistrationPage) {
-    return false;
-  }
-  return true;
-};
+  // Show Footer conditionally
+  const showFooter = () => {
+    if (path === "/login" || isRegistrationPage) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <>
@@ -62,24 +70,24 @@ const showNavbar = () => {
         <Route path='/user-profile' element={<UserProfile />} />
         <Route path='/stays-admin' element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
-
         <Route path="/stays/filter" element={<StaysFilter />} />
 
+        {/* Registration routes */}
         <Route path="/registration" element={<Registration />} />
         <Route path="/registration/hotel" element={<HotelRegistration />} />
         <Route path="/registration/taxi" element={<TaxiRegistration />} />
         <Route path="/registration/guide" element={<GuideRegistration />} />
 
-        
+        {/* Guide routes */}
+        <Route path="/guides" element={<Guides />} />
+        <Route path="/guides/search" element={<GuideSearchResults />} />
 
         <Route path='*' element={<NotFound />} />
       </Routes>
 
       {showFooter() && <Footer />}
 
-      {
-        reviewOpen && <ReviewBox />
-      }
+      {reviewOpen && <ReviewBox />}
 
       <Toaster />
     </>

@@ -84,7 +84,7 @@ function Home() {
                             </button>
                             <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
                                 <img src={asserts.shareLocation} alt="Tour Guides" />
-                                Tour Guides
+                                <Link to="/guides">Tour Guides</Link>
                             </button>
                         </div>
 

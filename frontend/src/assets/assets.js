@@ -62,6 +62,20 @@ import hotel2 from '../assets/hotel2.jpg';
 import hotel3 from '../assets/hotel3.jpg';
 import taxiBg from '../assets/taxiBg.jpg';
 
+// guide assets.
+import guide_cover from "../assets/guide_cover.jpg";
+import guide1 from "../assets/guide1.svg";
+import guide2 from "../assets/guide2.svg";
+import guide3 from "../assets/guide3.svg";
+import guide4 from "../assets/guide4.svg";
+import guider from "../assets/guider.png";
+import kandy from "../assets/places/Kandy.png";
+import ella from "../assets/places/Ella.png";
+import yala from "../assets/places/Yala.png";
+import tissa from "../assets/places/Tissa.png";
+import jaffna from "../assets/places/Jaffna.png";
+import galle from "../assets/places/Galle.png";
+
 const visitCardList = [
     {
         title: "Stays",
@@ -305,5 +319,17 @@ export const asserts = {
     staysOffers,
     businessman,
     locations,
-    taxiTypeCard
+    taxiTypeCard,
+    guide_cover,
+    guide1,
+    guide2,
+    guide3,
+    guide4,
+    guider,
+    kandy,
+    ella,
+    yala,
+    tissa,
+    jaffna,
+    galle
 }
