@@ -12,10 +12,15 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import UserProfile from "./pages/UserProfile";
+
+// Stays
 import StaysAdmin from "./pages/StaysAdmin";
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
+import SpecificHotel from "./pages/SpecificHotel";
+import HotelPayment from "./pages/HotelPayment";
 
+// Taxi
 import Taxi from "./pages/Taxi";
 import TaxiBookings from "./pages/TaxiBookings.jsx";
 import SpecificTaxi from "./pages/SpecificTaxi.jsx";
@@ -25,15 +30,18 @@ import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings.jsx";
 import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard.jsx";
 import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount.jsx";
 
+// Guides
 import Guides from "./pages/Guides";
 import Guide from "./pages/Guide";
 import GuideSearchResults from "./pages/GuideSearchResults";
 
+// Registration
 import Registration from "./pages/Registration/Registration";
 import HotelRegistration from "./pages/Registration/HotelRegistration";
 import TaxiRegistration from "./pages/Registration/TaxiRegistration";
 import GuideRegistration from "./pages/Registration/GuideRegistration";
 
+// Others
 import NotFound from "./pages/NotFound";
 
 function App() {
@@ -98,6 +106,8 @@ function App() {
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/stays-admin" element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
+        <Route path="/stays/specific-hotel" element={<SpecificHotel />} />
+        <Route path="/stays/payment" element={<HotelPayment />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
 
         {/* Registration routes */}

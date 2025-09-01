@@ -62,7 +62,13 @@ import hotel2 from '../assets/hotel2.jpg';
 import hotel3 from '../assets/hotel3.jpg';
 import taxiBg from '../assets/taxiBg.jpg';
 
-// guide assets.
+// Hotel facility icons
+import breakfastIcon from '../assets/breakfastIcon.png';
+import poolIcon from '../assets/poolIcon.png';
+import busIcon from '../assets/busIcon.png';
+import parkingIcon from '../assets/parkingIcon.png';
+
+// Guide assets
 import guide_cover from "../assets/guide_cover.jpg";
 import guide1 from "../assets/guide1.svg";
 import guide2 from "../assets/guide2.svg";
@@ -146,53 +152,16 @@ const testimonials = [
 ];
 
 const provinces = [
-    {
-        Image: Southern,
-        title: "Southern Province",
-        description: "Sun, Sand, and Serendipity"
-    },
-    {
-        Image: Estern,
-        title: "Eastern Province",
-        description: "Where the Island Breezes"
-    },
-    {
-        Image: Uva,
-        title: "Uva Province",
-        description: "Nature's Playgrounds"
-    },
-    {
-        Image: Western,
-        title: "Western Province",
-        description: "City Vibes, Coastal Charms"
-    },
-    {
-        Image: Northern,
-        title: "Nothern Province",
-        description: "Ancient Soul, Modern Vibe"
-    },
-    {
-        Image: Sabaragamuwa,
-        title: "Sabaragamuwa Province",
-        description: "Hidden Gems Awaitts"
-    },
-    {
-        Image: Central,
-        title: "Central Province",
-        description: "Hill Country Heartbeat"
-    },
-    {
-        Image: NorthWestern,
-        title: "North Western Province",
-        description: "History Untouched"
-    },
-    {
-        Image: North,
-        title: "North Central Province",
-        description: "Land of Legends"
-    }
+    { Image: Southern, title: "Southern Province", description: "Sun, Sand, and Serendipity" },
+    { Image: Estern, title: "Eastern Province", description: "Where the Island Breezes" },
+    { Image: Uva, title: "Uva Province", description: "Nature's Playgrounds" },
+    { Image: Western, title: "Western Province", description: "City Vibes, Coastal Charms" },
+    { Image: Northern, title: "Nothern Province", description: "Ancient Soul, Modern Vibe" },
+    { Image: Sabaragamuwa, title: "Sabaragamuwa Province", description: "Hidden Gems Awaitts" },
+    { Image: Central, title: "Central Province", description: "Hill Country Heartbeat" },
+    { Image: NorthWestern, title: "North Western Province", description: "History Untouched" },
+    { Image: North, title: "North Central Province", description: "Land of Legends" }
 ]
-
 
 const locations = [
     {
@@ -203,8 +172,7 @@ const locations = [
             { name: "Kataragama Dewalaya", distance: "17 km" },
             { name: "Sithulpawwa temple", distance: "23 km" }
         ]
-    }
-    ,
+    },
     {
         title: "Nature",
         items: [
@@ -216,8 +184,7 @@ const locations = [
             { name: "Kirinda Beach", distance: "15 km" },
             { name: "Andagala Beach", distance: "12 km" }
         ]
-    }
-    ,
+    },
     {
         title: "Practical Access",
         items: [
@@ -230,47 +197,37 @@ const locations = [
 ];
 
 const heroSlides = [
-    {
-        image: heroBg,
-        heading: "Dream it - Plan it",
-        subheading: "We’ll make it happen",
-        description: "Your travel dreams, our responsibility",
-    },
-    {
-        image: Bt_bg,
-        heading: "Explore - Experience",
-        subheading: "Live your adventure",
-        description: "Curated trips with local experts",
-    },
-    {
-        image: new_bg,
-        heading: "Relax - Rejuvenate",
-        subheading: "Your island escape",
-        description: "Luxury stays at your fingertips",
-    },
+    { image: heroBg, heading: "Dream it - Plan it", subheading: "We’ll make it happen", description: "Your travel dreams, our responsibility" },
+    { image: Bt_bg, heading: "Explore - Experience", subheading: "Live your adventure", description: "Curated trips with local experts" },
+    { image: new_bg, heading: "Relax - Rejuvenate", subheading: "Your island escape", description: "Luxury stays at your fingertips" },
 ];
 
 const staysOffers = [
-    {
-        image: StaysOffer1,
-        heading: "Early Check-in Privilege",
-        description: "Arriving before standard check-in time? We’ll do our best to get your room ready early so you can relax or freshen up right away."
-    },
-    {
-        image: StaysOffer2,
-        heading: "Special In-Room Amenities",
-        description: "From bathrobes and spa kits to curated snacks or welcome flowers, enjoy thoughtful touches that elevate your comfort"
-    },
-    {
-        image: StaysOffer3,
-        heading: "Secure Booking Guarantee",
-        description: "All bookings are protected with advanced encryption and instant confirmations, so you can plan with peace of mind."
-    },
-    {
-        image: StaysOffer4,
-        heading: "Complimentary Airport Pickup",
-        description: "Enjoy smooth airport-to-hotel transfers arranged by your host. It's free, punctual, and stress-free—no taxis or waiting in lines"
-    }
+    { image: StaysOffer1, heading: "Early Check-in Privilege", description: "Arriving before standard check-in time? We’ll do our best to get your room ready early so you can relax or freshen up right away." },
+    { image: StaysOffer2, heading: "Special In-Room Amenities", description: "From bathrobes and spa kits to curated snacks or welcome flowers, enjoy thoughtful touches that elevate your comfort" },
+    { image: StaysOffer3, heading: "Secure Booking Guarantee", description: "All bookings are protected with advanced encryption and instant confirmations, so you can plan with peace of mind." },
+    { image: StaysOffer4, heading: "Complimentary Airport Pickup", description: "Enjoy smooth airport-to-hotel transfers arranged by your host. It's free, punctual, and stress-free—no taxis or waiting in lines" }
+];
+
+const hotelData = [
+  {
+    id: "hotel-1",
+    name: "Hotel Paradise",
+    location: "Colombo",
+    rooms: [
+      { id: "room-1", type: "Standard Double Room", price: 120 },
+      { id: "room-2", type: "Standard Twin Room", price: 150 },
+    ],
+  },
+  {
+    id: "hotel-2",
+    name: "Ocean View Resort",
+    location: "Galle",
+    rooms: [
+      { id: "room-3", type: "Standard Double Room", price: 100 },
+      { id: "room-4", type: "Standard Twin Room", price: 140 },
+    ],
+  },
 ];
 
 export const asserts = {
@@ -320,6 +277,11 @@ export const asserts = {
     businessman,
     locations,
     taxiTypeCard,
+    breakfastIcon,
+    poolIcon,   
+    busIcon,
+    parkingIcon,
+    hotelData,
     guide_cover,
     guide1,
     guide2,
