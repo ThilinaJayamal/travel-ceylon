@@ -3,7 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import { useAppStore } from "./store/app-store";
-import { useAuthStore } from "./store/auth-store";
+import { useAuthStore } from "./store/authStore";
 import { useServiceAuthStore } from "./store/serviceAuthStrore";
 
 import ReviewBox from "./components/ReviewBox";
