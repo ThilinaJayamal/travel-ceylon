@@ -3,7 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import { useAppStore } from "./store/app-store";
-import { useAuthStore } from "./store/auth-store";
+import { useAuthStore } from "./store/authStore";
 
 import ReviewBox from "./components/ReviewBox";
 import Navbar from './components/Navbar';
@@ -27,11 +27,12 @@ import GuideRegistration from './pages/Registration/GuideRegistration';
 
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
-  const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus);
+  
+  const loadUser = useAuthStore((state) => state.loadUser);
 
   useEffect(() => {
-    checkAuthStatus();
-  }, [checkAuthStatus]);
+    loadUser();
+  }, [])
 
   const path = useLocation().pathname;
 
