@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Star, MapPin } from "lucide-react";
 
@@ -409,9 +409,11 @@ const GuideSearchResults = () => {
                             {guide.description}
                           </p>
 
-                          <button className="bg-green-300 hover:bg-green-600 hover:text-white text-black px-6 py-2 rounded font-medium transition-colors">
-                            Contact Now
-                          </button>
+                          <Link to={`/guide/${guide.id}`}>
+                            <button className="bg-green-300 hover:bg-green-600 hover:text-white text-black px-6 py-2 rounded font-medium transition-colors">
+                              Contact Now
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -429,7 +431,7 @@ const GuideSearchResults = () => {
 
                 {/* Show More Button */}
                 {filteredGuides.length > 0 && (
-                  <div className="text-center pt-4">
+                  <div className="text-center pt-4 mb-10">
                     <button className="w-full bg-green-300 hover:bg-green-600 hover:text-white py-3 rounded font-medium transition-colors">
                       Show more
                     </button>

@@ -1,114 +1,201 @@
-import React, { useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
-import { useAppStore } from "./store/app-store";
-import { useAuthStore } from "./store/auth-store";
+// Stores
+import { useAuthStore } from "./store/authStore";
+import { useServiceAuthStore } from "./store/serviceAuthStore";
 
-import ReviewBox from "./components/ReviewBox";
+// Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ReviewBox from "./components/ReviewBox";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+// Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import UserProfile from "./pages/UserProfile";
+import NotFound from "./pages/NotFound";
 import StaysAdmin from "./pages/StaysAdmin";
-import Stays from "./pages/Stays";
-import StaysFilter from "./pages/StaysFilter";
+import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard";
+import ServiceProviderLogin from "./pages/ServiceproviderLogin";
 import Taxi from "./pages/Taxi";
-import TaxiBookings from "./pages/TaxiBookings.jsx";
-import SpecificTaxi from "./pages/SpecificTaxi.jsx";
-import RentTaxi from "./pages/RentTaxi.jsx";
-import RentedVehicleDetails from "./pages/RentedVehicleDetails.jsx";
-import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings.jsx";
-import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard.jsx";
-import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount.jsx";
+import TaxiBookings from "./pages/TaxiBookings";
+import SpecificTaxi from "./pages/SpecificTaxi";
+import RentTaxi from "./pages/RentTaxi";
+import RentedVehicleDetails from "./pages/RentedVehicleDetails";
+import Stays from "./pages/Stays";
+import Guides from "./pages/Guides";
+import SpecificHotel from "./pages/SpecificHotel";
+import HotelPayment from "./pages/HotelPayment";
+import StaysFilter from "./pages/StaysFilter";
+import GuideSearchResults from "./pages/GuideSearchResults";
+import Guide from "./pages/Guide";
+import Registration from "./pages/Registration/Registration";
+import HotelRegistration from "./pages/Registration/HotelRegistration";
+import TaxiRegistration from "./pages/Registration/TaxiRegistration";
+import GuideRegistration from "./pages/Registration/GuideRegistration";
 
 function App() {
-  const reviewOpen = useAppStore((state) => state.reviewOpen);
-  const loadUser = useAuthStore((state) => state.loadUser);
+  const reviewOpen = false; // replace with your store state if needed
 
+  // Auth
+  const traveler = useAuthStore((state) => state.user);
+  const loadTraveler = useAuthStore((state) => state.loadUser);
+  const travelerError = useAuthStore((state) => state.error);
+  const travelerErrorClear = useAuthStore((state) => state.clearError);
+
+  const provider = useServiceAuthStore((state) => state.user);
+  const loadProvider = useServiceAuthStore((state) => state.loadUser);
+  const providerError = useServiceAuthStore((state) => state.error);
+  const providerErrorClear = useServiceAuthStore((state) => state.clearError);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
+
+  // Load users on app start
   useEffect(() => {
-    loadUser();
+    loadTraveler();
+    loadProvider();
   }, []);
 
-  const path = useLocation().pathname;
+  // Set currentUser
+  useEffect(() => {
+    if (traveler) setCurrentUser(traveler);
+    else if (provider) setCurrentUser(provider);
+    else setCurrentUser(null);
+  }, [traveler, provider]);
 
-  // Check if current page is any registration page
-  const isRegistrationPage = [
-    "/registration",
-    "/registration/hotel",
-    "/registration/taxi",
-    "/registration/guide",
-  ].includes(path);
+  // Redirect after login
+  useEffect(() => {
+    if (!currentUser) return;
 
-  // Show Navbar conditionally
-  const showNavbar = () => {
-    if (
-      path === "/login" ||
-      path === "/" ||
-      path === "/guides/search" ||
-      isRegistrationPage
-    ) {
-      return false;
+    if (["/", "/login", "/service/login"].includes(path)) {
+      const { role, serviceType } = currentUser;
+
+      if (role === "user") {
+        navigate("/user/profile");
+      } else if (role === "provider") {
+        if (!serviceType) return navigate("/registration");
+
+        const routes = {
+          Taxi: "/taxi/admin",
+          Rent: "/",
+          Guide: "/guides/admin",
+          Stays: "/stays/admin",
+        };
+        navigate(routes[serviceType] || "/");
+      }
     }
-    return true;
-  };
+  }, [currentUser, navigate, path]);
 
-  // Show Footer conditionally
-  const showFooter = () => {
-    if (path === "/login" || isRegistrationPage) {
-      return false;
+  // Handle errors
+  useEffect(() => {
+    if (travelerError) {
+      toast.error(travelerError);
+      travelerErrorClear();
     }
-    return true;
-  };
+    if (providerError) {
+      toast.error(providerError);
+      providerErrorClear();
+    }
+  }, [travelerError, providerError]);
+
+  // Navbar/Footer visibility
+  const showNavbar = !["/", "/login", "/service/login"].includes(path);
+  const showFooter = !["/login", "/service/login"].includes(path);
 
   return (
     <>
-      {showNavbar() && <Navbar />}
+      {showNavbar && <Navbar />}
 
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/service/login" element={<ServiceProviderLogin />} />
+        <Route path="/registration" element={<Registration />} />
 
-        {/* Taxi routes */}
+        {/* Taxi Routes */}
         <Route path="/taxi" element={<Taxi />} />
         <Route path="/taxi-bookings" element={<TaxiBookings />} />
         <Route path="/specific-taxi" element={<SpecificTaxi />} />
         <Route path="/rent-taxi" element={<RentTaxi />} />
-        <Route
-          path="/view-renting-vehicle"
-          element={<RentedVehicleDetails />}
-        />
-        <Route
-          path="/taxi-admin-bookings"
-          element={<TaxiAdminViewBookings />}
-        />
-        <Route
-          path="taxi-admin-dashboard"
-          element={<TaxiAdminViewDashboard />}
-        />
-        <Route path="taxi-admin-account" element={<TaxiAdminViewAccount />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/stays-admin" element={<StaysAdmin />} />
+        <Route path="/view-renting-vehicle" element={<RentedVehicleDetails />} />
+
+        {/* Stays Routes */}
         <Route path="/stays" element={<Stays />} />
+        <Route path="/stays/specific-hotel" element={<SpecificHotel />} />
+        <Route path="/stays/payment" element={<HotelPayment />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
 
-        {/* Registration routes */}
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/registration/hotel" element={<HotelRegistration />} />
-        <Route path="/registration/taxi" element={<TaxiRegistration />} />
-        <Route path="/registration/guide" element={<GuideRegistration />} />
-
-        {/* Guide routes */}
+        {/* Guides Routes */}
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
+        <Route path="/guide/:id" element={<Guide />} />
 
-        {/* Not Found */}
+        {/* User Protected */}
+        <Route
+          path="/user/profile"
+          element={
+            <ProtectedRoute allowedRoles={["user"]} currentUser={currentUser}>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Provider Protected */}
+        <Route
+          path="/registration/hotel"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <HotelRegistration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registration/taxi"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <TaxiRegistration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registration/guide"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <GuideRegistration />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/stays/admin"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <StaysAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/taxi/admin"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <TaxiAdminViewDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {showFooter() && <Footer />}
+      {showFooter && <Footer />}
       {reviewOpen && <ReviewBox />}
       <Toaster />
     </>
