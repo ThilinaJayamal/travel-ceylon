@@ -18,28 +18,22 @@ const GuideAdmin = () => {
       id: "1",
       name: "Saman Kumara",
       location: "Tissamaharama",
-      profileImage:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-      coverImage:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1000&h=400&fit=crop",
+      profileImage: "https://picsum.photos/150/150?random=1",
+      coverImage: "https://picsum.photos/1200/400?random=11",
     },
     2: {
       id: "2",
       name: "Priya Fernando",
       location: "Kandy",
-      profileImage:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b97c?w=150&h=150&fit=crop&crop=face",
-      coverImage:
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1000&h=400&fit=crop",
+      profileImage: "https://picsum.photos/150/150?random=2",
+      coverImage: "https://picsum.photos/1200/400?random=12",
     },
     3: {
       id: "3",
       name: "Ravi Silva",
       location: "Galle",
-      profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-      coverImage:
-        "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=400&fit=crop",
+      profileImage: "https://picsum.photos/150/150?random=3",
+      coverImage: "https://picsum.photos/1200/400?random=13",
     },
   };
 
@@ -56,6 +50,10 @@ const GuideAdmin = () => {
             src={dummyUsers[guideId].coverImage}
             alt="Cover"
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.src =
+                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400'%3E%3Crect fill='%234f46e5' width='1200' height='400'/%3E%3Ctext x='600' y='200' text-anchor='middle' dy='.3em' fill='white' font-size='24'%3ECover Image%3C/text%3E%3C/svg%3E";
+            }}
           />
           <div className="absolute inset-0 bg-black bg-opacity-20"></div>
 
@@ -74,6 +72,11 @@ const GuideAdmin = () => {
                   src={dummyUsers[guideId].profileImage}
                   alt="Admin"
                   className="w-8 h-8 rounded-full border border-white"
+                  onError={(e) => {
+                    e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%236b7280' width='32' height='32' rx='16'/%3E%3Ctext x='16' y='16' text-anchor='middle' dy='.3em' fill='white' font-size='14'%3E${dummyUsers[
+                      guideId
+                    ].name.charAt(0)}%3C/text%3E%3C/svg%3E`;
+                  }}
                 />
                 <span className="text-sm font-medium">taxiAdmin</span>
               </div>
@@ -100,6 +103,11 @@ const GuideAdmin = () => {
                   src={dummyUsers[guideId].profileImage}
                   alt={dummyUsers[guideId].name}
                   className="w-24 h-24 sm:w-32 sm:h-32 lg:w-36 lg:h-36 rounded-full border-4 border-white shadow-lg object-cover"
+                  onError={(e) => {
+                    e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 144 144'%3E%3Crect fill='%236b7280' width='144' height='144' rx='72'/%3E%3Ctext x='72' y='72' text-anchor='middle' dy='.3em' fill='white' font-size='48'%3E${dummyUsers[
+                      guideId
+                    ].name.charAt(0)}%3C/text%3E%3C/svg%3E`;
+                  }}
                 />
                 <div className="absolute inset-0 rounded-full ring-4 ring-white"></div>
               </div>

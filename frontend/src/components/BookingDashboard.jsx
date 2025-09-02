@@ -8,13 +8,18 @@ import {
   Phone,
   Mail,
   Globe,
+  X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 const BookingDashboard = () => {
   const [activeTab, setActiveTab] = useState("Bookings");
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [enlargedImage, setEnlargedImage] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // User dataset with real user information
+  // User dataset with real user information and their galleries
   const users = {
     1: {
       id: 1,
@@ -25,6 +30,33 @@ const BookingDashboard = () => {
       country: "United States",
       avatar:
         "https://images.unsplash.com/photo-1494790108755-2616b612b77c?w=150&h=150&fit=crop&crop=face",
+      gallery: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+          caption: "Mountain hiking adventure",
+        },
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=600&fit=crop",
+          caption: "Beach sunset experience",
+        },
+        {
+          id: 3,
+          url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=600&fit=crop",
+          caption: "Forest trail exploration",
+        },
+        {
+          id: 4,
+          url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
+          caption: "Wildlife photography",
+        },
+        {
+          id: 5,
+          url: "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=800&h=600&fit=crop",
+          caption: "Scenic valley views",
+        },
+      ],
     },
     2: {
       id: 2,
@@ -35,6 +67,23 @@ const BookingDashboard = () => {
       country: "Germany",
       avatar:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      gallery: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop",
+          caption: "City architecture tour",
+        },
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop",
+          caption: "Ocean adventure",
+        },
+        {
+          id: 3,
+          url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+          caption: "Mountain climbing",
+        },
+      ],
     },
     3: {
       id: 3,
@@ -45,6 +94,28 @@ const BookingDashboard = () => {
       country: "France",
       avatar:
         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      gallery: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1502780402662-acc01917949e?w=800&h=600&fit=crop",
+          caption: "Cultural heritage sites",
+        },
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=600&fit=crop",
+          caption: "Local cuisine experience",
+        },
+        {
+          id: 3,
+          url: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&h=600&fit=crop",
+          caption: "Lake adventures",
+        },
+        {
+          id: 4,
+          url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
+          caption: "Garden photography",
+        },
+      ],
     },
     4: {
       id: 4,
@@ -55,6 +126,18 @@ const BookingDashboard = () => {
       country: "United States",
       avatar:
         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      gallery: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+          caption: "Urban exploration",
+        },
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=600&fit=crop",
+          caption: "Sunset photography",
+        },
+      ],
     },
     5: {
       id: 5,
@@ -65,6 +148,38 @@ const BookingDashboard = () => {
       country: "Italy",
       avatar:
         "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      gallery: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop",
+          caption: "Historical monuments",
+        },
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop",
+          caption: "Coastal views",
+        },
+        {
+          id: 3,
+          url: "https://images.unsplash.com/photo-1502780402662-acc01917949e?w=800&h=600&fit=crop",
+          caption: "Art and culture",
+        },
+        {
+          id: 4,
+          url: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&h=600&fit=crop",
+          caption: "Romantic getaways",
+        },
+        {
+          id: 5,
+          url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=600&fit=crop",
+          caption: "Nature walks",
+        },
+        {
+          id: 6,
+          url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop",
+          caption: "Wildlife encounters",
+        },
+      ],
     },
     6: {
       id: 6,
@@ -75,10 +190,25 @@ const BookingDashboard = () => {
       country: "India",
       avatar:
         "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&crop=face",
+      gallery: [
+        {
+          id: 1,
+          url: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=800&h=600&fit=crop",
+          caption: "Street food tours",
+        },
+        {
+          id: 2,
+          url: "https://images.unsplash.com/photo-1502780402662-acc01917949e?w=800&h=600&fit=crop",
+          caption: "Temple visits",
+        },
+        {
+          id: 3,
+          url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+          caption: "Adventure sports",
+        },
+      ],
     },
   };
-
-  
 
   // Booking data with user references
   const [bookings, setBookings] = useState([
@@ -196,6 +326,40 @@ const BookingDashboard = () => {
       setSelectedBooking((prev) => ({ ...prev, status: "viewed" }));
     }
   };
+
+  const handleImageClick = (image, gallery) => {
+    const imageIndex = gallery.findIndex((img) => img.id === image.id);
+    setCurrentImageIndex(imageIndex);
+    setEnlargedImage({ image, gallery });
+  };
+
+  const closeEnlargedImage = () => {
+    setEnlargedImage(null);
+  };
+
+  const navigateImage = (direction) => {
+    if (!enlargedImage) return;
+
+    const gallery = enlargedImage.gallery;
+    let newIndex;
+
+    if (direction === "prev") {
+      newIndex =
+        currentImageIndex > 0 ? currentImageIndex - 1 : gallery.length - 1;
+    } else {
+      newIndex =
+        currentImageIndex < gallery.length - 1 ? currentImageIndex + 1 : 0;
+    }
+
+    setCurrentImageIndex(newIndex);
+    setEnlargedImage({
+      image: gallery[newIndex],
+      gallery: gallery,
+    });
+  };
+
+  // Get current user for Dashboard tab (using first user as default)
+  const currentUser = users[1];
 
   const BookingCard = ({ booking, section }) => (
     <div
@@ -331,9 +495,93 @@ const BookingDashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* User's Gallery Section in Booking Details */}
+        {booking.user.gallery && booking.user.gallery.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900 mb-3">
+              {booking.user.name}'s Photos
+            </h3>
+            <div className="grid grid-cols-3 gap-2">
+              {booking.user.gallery.slice(0, 6).map((image) => (
+                <div
+                  key={image.id}
+                  className="aspect-square rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={() => handleImageClick(image, booking.user.gallery)}
+                >
+                  <img
+                    src={image.url}
+                    alt={image.caption}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+              {booking.user.gallery.length > 6 && (
+                <div
+                  className="aspect-square rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 text-xs cursor-pointer hover:bg-gray-200 transition-colors"
+                  onClick={() =>
+                    handleImageClick(
+                      booking.user.gallery[6],
+                      booking.user.gallery
+                    )
+                  }
+                >
+                  +{booking.user.gallery.length - 6} more
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
+
+  // Image Modal Component
+  const ImageModal = ({ enlargedImage, onClose, onNavigate }) => {
+    if (!enlargedImage) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
+        <div className="relative max-w-4xl max-h-full">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {enlargedImage.gallery.length > 1 && (
+            <>
+              <button
+                onClick={() => onNavigate("prev")}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10"
+              >
+                <ChevronLeft className="w-8 h-8" />
+              </button>
+              <button
+                onClick={() => onNavigate("next")}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10"
+              >
+                <ChevronRight className="w-8 h-8" />
+              </button>
+            </>
+          )}
+
+          <img
+            src={enlargedImage.image.url}
+            alt={enlargedImage.image.caption}
+            className="max-w-full max-h-full object-contain"
+          />
+
+          {enlargedImage.image.caption && (
+            <div className="absolute bottom-4 left-4 right-4 text-white text-center bg-black bg-opacity-50 rounded p-2">
+              {enlargedImage.image.caption}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
@@ -430,51 +678,95 @@ const BookingDashboard = () => {
           <div className="bg-white rounded-b-lg p-6">
             <div className="max-w-4xl">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                Images
+                My Gallery
               </h2>
 
               {/* Image Gallery */}
               <div className="grid grid-cols-12 gap-3 mb-8">
-                {/* Large left image */}
-                <div className="col-span-12 md:col-span-7">
-                  <div className="bg-gradient-to-br from-green-200 to-blue-200 rounded-lg overflow-hidden h-64 md:h-80">
-                    <img
-                      src="l='%234ade80' width='400' height='300'/%3E%3Ctext x='200' y='150' text-anchor='middle' dy='.3em' fill='white' font-size='18'%3ETour Guide with Travelers%3C/text%3E%3C/svg%3E"
-                      alt="Tour guide with travelers"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-
-                {/* Right column images */}
-                <div className="col-span-12 md:col-span-5 grid grid-rows-2 gap-3">
-                  <div className="bg-gradient-to-br from-orange-200 to-red-200 rounded-lg overflow-hidden h-32 md:h-auto">
-                    <img
-                      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 150'%3E%3Crect fill='%23f97316' width='300' height='150'/%3E%3Ctext x='150' y='75' text-anchor='middle' dy='.3em' fill='white' font-size='14'%3EGroup Tour%3C/text%3E%3C/svg%3E"
-                      alt="Group tour"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-gradient-to-br from-gray-300 to-gray-400 rounded-lg overflow-hidden h-32 md:h-auto">
-                      <img
-                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'%3E%3Crect fill='%236b7280' width='150' height='150'/%3E%3Ctext x='75' y='75' text-anchor='middle' dy='.3em' fill='white' font-size='12'%3EAdventure%3C/text%3E%3C/svg%3E"
-                        alt="Adventure tour"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="relative bg-gradient-to-br from-green-300 to-green-400 rounded-lg overflow-hidden h-32 md:h-auto">
-                      <img
-                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'%3E%3Crect fill='%2316a34a' width='150' height='150'/%3E%3Ctext x='75' y='75' text-anchor='middle' dy='.3em' fill='white' font-size='12'%3ENature Tour%3C/text%3E%3C/svg%3E"
-                        alt="Nature tour"
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-                        +5
+                {currentUser.gallery.map((image, index) => {
+                  if (index === 0) {
+                    // Large left image
+                    return (
+                      <div key={image.id} className="col-span-12 md:col-span-7">
+                        <div
+                          className="rounded-lg overflow-hidden h-64 md:h-80 cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() =>
+                            handleImageClick(image, currentUser.gallery)
+                          }
+                        >
+                          <img
+                            src={image.url}
+                            alt={image.caption}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    );
+                  } else if (index === 1) {
+                    // Start right column
+                    return (
+                      <div
+                        key={image.id}
+                        className="col-span-12 md:col-span-5 grid grid-rows-2 gap-3"
+                      >
+                        <div
+                          className="rounded-lg overflow-hidden h-32 md:h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() =>
+                            handleImageClick(image, currentUser.gallery)
+                          }
+                        >
+                          <img
+                            src={image.url}
+                            alt={image.caption}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          {currentUser.gallery.slice(2, 4).map((img, idx) => (
+                            <div
+                              key={img.id}
+                              className="rounded-lg overflow-hidden h-32 md:h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                              onClick={() =>
+                                handleImageClick(img, currentUser.gallery)
+                              }
+                            >
+                              <img
+                                src={img.url}
+                                alt={img.caption}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ))}
+                          {currentUser.gallery.length > 4 && (
+                            <div
+                              className="relative rounded-lg overflow-hidden h-32 md:h-auto cursor-pointer hover:opacity-90 transition-opacity"
+                              onClick={() =>
+                                handleImageClick(
+                                  currentUser.gallery[4],
+                                  currentUser.gallery
+                                )
+                              }
+                            >
+                              <img
+                                src={currentUser.gallery[4].url}
+                                alt={currentUser.gallery[4].caption}
+                                className="w-full h-full object-cover"
+                              />
+                              {currentUser.gallery.length > 5 && (
+                                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                  <span className="text-white text-lg font-semibold">
+                                    +{currentUser.gallery.length - 5}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
               </div>
 
               {/* Description Section */}
@@ -524,10 +816,12 @@ const BookingDashboard = () => {
                   </div>
                   <div className="flex items-center space-x-4">
                     <span className="text-gray-600">sample User</span>
-                    <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors"
-                    onClick={() => {
+                    <button
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors"
+                      onClick={() => {
                         // Handle change name logic here for the backend
-                    }}>
+                      }}
+                    >
                       Change
                     </button>
                   </div>
@@ -542,9 +836,12 @@ const BookingDashboard = () => {
                   </div>
                   <div className="flex items-center space-x-4">
                     <span className="text-gray-600">sampleuser@gmail.com</span>
-                    <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors" onClick={() => {
+                    <button
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors"
+                      onClick={() => {
                         // Handle change email logic here for the backend
-                    }}>
+                      }}
+                    >
                       Change
                     </button>
                   </div>
@@ -559,9 +856,12 @@ const BookingDashboard = () => {
                   </div>
                   <div className="flex items-center space-x-4">
                     <span className="text-gray-600">•••••••</span>
-                    <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors" onClick={() => {
-                      // Handle change password logic here for the backend
-                    }}>
+                    <button
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors"
+                      onClick={() => {
+                        // Handle change password logic here for the backend
+                      }}
+                    >
                       Change
                     </button>
                   </div>
@@ -576,9 +876,12 @@ const BookingDashboard = () => {
                   </div>
                   <div className="flex items-center space-x-4">
                     <span className="text-gray-600">0774342348</span>
-                    <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors" onClick={() => {
-                      // Handle change phone number logic here for the backend
-                    }}>
+                    <button
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-1 rounded-md text-sm transition-colors"
+                      onClick={() => {
+                        // Handle change phone number logic here for the backend
+                      }}
+                    >
                       Change
                     </button>
                   </div>
@@ -588,6 +891,13 @@ const BookingDashboard = () => {
           </div>
         )}
       </div>
+
+      {/* Image Modal */}
+      <ImageModal
+        enlargedImage={enlargedImage}
+        onClose={closeEnlargedImage}
+        onNavigate={navigateImage}
+      />
 
       {/* Mobile Responsive Layout */}
       <style jsx>{`
