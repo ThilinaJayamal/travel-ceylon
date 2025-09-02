@@ -76,4 +76,8 @@ export const useServiceAuthStore = create((set) => ({
             return null;
         }
     },
+
+    clearError: () => {
+        set({ error: null })
+    }
 }));

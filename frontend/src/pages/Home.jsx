@@ -78,7 +78,7 @@ function Home() {
                             <div className='flex gap-6 items-center'>
                                 <img onClick={() => {
                                     if (user?.role === "user") {
-                                        navigate("/user-profile", scrollTo(0, 0))
+                                        navigate("/user/profile", scrollTo(0, 0))
                                     }
                                     else (
                                         navigate("/stays-admin", scrollTo(0, 0))

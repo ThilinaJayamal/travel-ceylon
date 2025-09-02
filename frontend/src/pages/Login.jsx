@@ -13,29 +13,56 @@ function Login() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [formErrors, setFormErrors] = useState({});
 
     // Navigate if already logged in
     useEffect(() => {
         if (user) navigate("/");
     }, [user, navigate]);
 
+    const validateForm = () => {
+        const errors = {};
+
+        if (formType !== "Login") {
+            if (!name.trim()) errors.name = "Name is required";
+            else if (name.trim().length < 3) errors.name = "Name must be at least 3 characters";
+        }
+
+        if (!email.trim()) errors.email = "Email is required";
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+            errors.email = "Email is not valid";
+
+        if (!password) errors.password = "Password is required";
+        else if (password.length < 6)
+            errors.password = "Password must be at least 6 characters";
+
+        setFormErrors(errors);
+
+        return Object.keys(errors).length === 0;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (formType === "Login") {
-            await login({ email, password });
-        } else {
-            await register({ name, email, password });
-        }
+        if (!validateForm()) return;
 
-        // Clear password field after submission
-        setPassword("");
+        try {
+            if (formType === "Login") {
+                await login({ email, password });
+            } else {
+                await register({ name, email, password });
+            }
+            setPassword(""); // Clear password after submission
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const clearForm = () => {
         setName("");
         setEmail("");
         setPassword("");
+        setFormErrors({});
     };
 
     return (
@@ -73,23 +100,34 @@ function Login() {
 
                         <form onSubmit={handleSubmit} className='grid grid-cols-1 gap-2'>
                             {formType !== "Login" && (
-                                <CustomInput
-                                    label={"Name"}
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                />
+                                <>
+                                    <CustomInput
+                                        label={"Name"}
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
+                                    {formErrors.name && (
+                                        <p className="text-red-500 text-sm">{formErrors.name}</p>
+                                    )}
+                                </>
                             )}
                             <CustomInput
                                 label={"Email"}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
+                            {formErrors.email && (
+                                <p className="text-red-500 text-sm">{formErrors.email}</p>
+                            )}
                             <CustomInput
                                 label={"Password"}
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+                            {formErrors.password && (
+                                <p className="text-red-500 text-sm">{formErrors.password}</p>
+                            )}
 
                             {error && <p className="text-red-500">{error}</p>}
 

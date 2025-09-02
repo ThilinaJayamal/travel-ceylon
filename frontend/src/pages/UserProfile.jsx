@@ -1,81 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { asserts } from '../assets/assets';
 import BookingCard from '../components/BookingCard';
-import { SquarePen } from 'lucide-react';
 import BillViwer from '../components/BillViewer';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
-import axios from 'axios';
-import { redirect, useNavigate } from 'react-router-dom';
-
-
-const billData = [{
-    image: asserts.Bt_bg,
-    title: 'Toyota Vitz CAX-0696',
-    subtitle: 'Kamal',
-    totalAmount: '$170.00',
-    location: "Galle",
-    date: '2 Mar 2025',
-    sections: [
-        {
-            heading: 'Journey Details',
-            items: [
-                { label: 'Pickup', value: 'Tissamaharama' },
-                { label: 'Drop', value: 'Ella' },
-                { label: 'Date', value: '2025-07-28' },
-            ]
-        },
-        {
-            heading: 'Payment Details',
-            items: [
-                { label: 'Base Fare', value: '$100' },
-                { label: 'Distance Charge', value: '$50' },
-                { label: 'Tax', value: '$20' },
-            ]
-        }
-    ]
-},
-{
-    image: asserts.heroBg,
-    title: 'Mahendra CAX-0696',
-    subtitle: 'Driver: Nimal Perera',
-    totalAmount: '$185.00',
-    location: "Matara",
-    date: '25 Feb 2025',
-    sections: [
-        {
-            heading: 'Journey Details',
-            items: [
-                { label: 'Pickup Location', value: 'Tissamaharama' },
-                { label: 'Drop Location', value: 'Ella' },
-                { label: 'Distance', value: '125 km' },
-                { label: 'Date', value: '2025-07-27' },
-                { label: 'Pickup Time', value: '08:30 AM' },
-                { label: 'Drop Time', value: '11:15 AM' },
-            ]
-        },
-        {
-            heading: 'Payment Breakdown',
-            items: [
-                { label: 'Base Fare', value: '$100.00' },
-                { label: 'Distance Charge', value: '$62.50' },
-                { label: 'Waiting Time Fee', value: '$12.50' },
-                { label: 'Tax (10%)', value: '$10.00' },
-            ]
-        }
-    ]
-}
-]
-
-
+import { useBookingsStore } from '../store/bookingsStore';
 
 function UserProfile() {
     const user = useAuthStore((state) => state.user);
+    const loading = useAuthStore((state) => state.loading);
+    const updateProfile = useAuthStore((state) => state.updateProfile);
+
     const [activeTab, setActiveTab] = useState('Bookings');
-
-    const navigate = useNavigate();
-
     const tabs = ['Bookings', 'Account'];
 
     const [name, setName] = useState('');
@@ -83,6 +20,9 @@ function UserProfile() {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [selectedBooking, setSelectedBooking] = useState(0);
+
+    const fetchBookings = useBookingsStore((state) => state.fetchBookings);
+    const billData = useBookingsStore((state) => state.billData);
 
     useEffect(() => {
         if (user) {
@@ -92,23 +32,30 @@ function UserProfile() {
         }
     }, [user]);
 
-    const handleChangeField = async (field, value) => {
+    const handleChangeField = async (key) => {
         try {
-            const response = await axios.put(`/api/user/update`, {
-                [field]: value,
-            });
-            toast.success(`${field} updated successfully`);
+            if (key === "name") await updateProfile({ name });
+            else if (key === "email") await updateProfile({ email });
+            else if (key === "password") await updateProfile({ password });
+            else await updateProfile({ phone });
+
+            toast.success("Successfully your profile updated!");
+
         } catch (error) {
-            console.error(error);
-            toast.error(`Failed to update ${field}`);
+            return null;
         }
     };
 
     useEffect(() => {
-        if (!user) {
-            navigate("/");
-        }
-    }, [user, navigate]);
+        const fetchData = async () => {
+            try {
+                await fetchBookings();
+            } catch (error) {
+                console.log(error?.message);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <div className="pb-24">
@@ -116,15 +63,13 @@ function UserProfile() {
             {/* Background header */}
             <div
                 style={{
-                    backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url(${asserts.userBg})`,
+                    backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3)), url(${asserts.userBg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
                 }}
                 className="relative h-80 z-10"
-            >
-
-            </div>
+            ></div>
 
             {/* Profile Image and Info */}
             <div className="relative z-20 md:ml-8 -mt-20 flex md:flex-row flex-col gap-1 md:items-center w-fit mx-auto">
@@ -170,19 +115,23 @@ function UserProfile() {
                             className="grid xl:grid-cols-[2fr_3fr] grid-cols-1 gap-24 mt-6"
                         >
                             <div className="flex flex-col gap-4 items-start justify-start">
-                                {
-                                    billData.map((item, index) => (
-                                        <BookingCard
-                                            image={item.image}
-                                            title={item.title}
-                                            date={item.date}
-                                            location={item.location}
-                                            onClick={setSelectedBooking}
-                                            index={index} />
-                                    ))
-                                }
+                                {billData.map((item, index) => (
+                                    <BookingCard
+                                        key={index}
+                                        image={item.image}
+                                        title={item.title}
+                                        date={item.date}
+                                        location={item.location}
+                                        onClick={(e) => {
+                                            e?.preventDefault();
+                                            setSelectedBooking(index);
+                                        }}
+                                    />
+                                ))}
                             </div>
-                            <BillViwer  {...billData[selectedBooking]} />
+                            {billData?.length > 0 && (
+                                <BillViwer {...billData[selectedBooking]} />
+                            )}
                         </motion.div>
                     ) : (
                         <motion.div
@@ -193,7 +142,7 @@ function UserProfile() {
                             transition={{ duration: 0.3 }}
                             className="bg-white border border-gray-200 mt-6 rounded-md px-4 py-8"
                         >
-                            <div className="space-y-4 mx-auto max-w-xl">
+                            <form onSubmit={(e) => e.preventDefault()} className="space-y-4 mx-auto max-w-xl">
 
                                 {/* Name */}
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
@@ -206,8 +155,10 @@ function UserProfile() {
                                         onChange={(e) => setName(e.target.value)}
                                     />
                                     <button
-                                        className="border border-green-300 px-4 py-1 rounded-md"
-                                        onClick={() => handleChangeField('name', name)}
+                                        type="button"
+                                        className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
+                                        onClick={() => handleChangeField('name')}
+                                        disabled={loading}
                                     >
                                         Change
                                     </button>
@@ -224,8 +175,10 @@ function UserProfile() {
                                         onChange={(e) => setEmail(e.target.value)}
                                     />
                                     <button
-                                        className="border border-green-300 px-4 py-1 rounded-md"
-                                        onClick={() => handleChangeField('email', email)}
+                                        type="button"
+                                        className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
+                                        onClick={() => handleChangeField('email')}
+                                        disabled={loading}
                                     >
                                         Change
                                     </button>
@@ -242,8 +195,10 @@ function UserProfile() {
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                     <button
-                                        className="border border-green-300 px-4 py-1 rounded-md"
-                                        onClick={() => handleChangeField('password', password)}
+                                        type="button"
+                                        className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
+                                        onClick={() => handleChangeField('password')}
+                                        disabled={loading}
                                     >
                                         Change
                                     </button>
@@ -260,13 +215,16 @@ function UserProfile() {
                                         onChange={(e) => setPhone(e.target.value)}
                                     />
                                     <button
-                                        className="border border-green-300 px-4 py-1 rounded-md"
-                                        onClick={() => handleChangeField('phone', phone)}
+                                        type="button"
+                                        className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
+                                        onClick={() => handleChangeField('phone')}
+                                        disabled={loading}
                                     >
                                         Change
                                     </button>
                                 </div>
-                            </div>
+
+                            </form>
                         </motion.div>
                     )}
                 </AnimatePresence>

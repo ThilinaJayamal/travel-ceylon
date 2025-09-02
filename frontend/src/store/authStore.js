@@ -73,4 +73,31 @@ export const useAuthStore = create((set) => ({
       return null
     }
   },
+
+  // UPDATE PROFILE
+  updateProfile: async (updates) => {
+    set({ loading: true, error: null });
+    try {
+      const { data } = await api.put("/user/me", updates);
+      if (data?.data) {
+        const tempObj = data?.data;
+        tempObj.role = "user";
+
+        set({ user: tempObj, loading: false });
+      } else {
+        set({ user: null, loading: false });
+      }
+    } catch (err) {
+      set({
+        user: null,
+        error: err.response?.data?.message || err.message,
+        loading: false,
+      });
+    }
+  },
+
+  clearError: () => {
+    set({ error: null })
+  }
+
 }));

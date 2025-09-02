@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BedDouble, CarTaxiFront, MapPinned, Menu, X } from 'lucide-react';
-import { useAuthStore } from '../store/auth-store';
+import { useAuthStore } from '../store/authStore';
 
 function Navbar() {
     const user = useAuthStore((state) => state.user);
@@ -40,7 +40,7 @@ function Navbar() {
                 <div className="flex items-center gap-4">
                     <Link to={"/user-profile"}>
                         <img
-                            src={user?.image}
+                            src={user?.profilePic}
                             alt="User Avatar"
                             className="size-10 md:size-12 rounded-full object-cover border border-gray-300"
                         />
