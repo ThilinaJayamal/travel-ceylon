@@ -4,7 +4,7 @@ import TestimonialCard from '../components/TestimonialCard';
 import ProvinceCard from '../components/ProvinceCard';
 import { useAppStore } from '../store/app-store';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/auth-store';
+import { useAuthStore } from '../store/authStore';
 import { useReviewStore } from '../store/review-store';
 import { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
@@ -16,25 +16,11 @@ function Home() {
     const logout = useAuthStore((state) => state.logout);
     const setReviewBelongsTo = useAppStore((state) => state.setReviewBelongsTo);
     const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
-    const getPlatformReviews = useReviewStore((state) => state.getPlatformReviews);
-
     const [reviews, setReviews] = useState([]);
 
     const navigate = useNavigate();
 
-    const fetchAllReviews = async () => {
-        try {
-            const data = await getPlatformReviews();
-            console.log(data)
-            setReviews(data);
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-
-    useEffect(() => {
-        fetchAllReviews();
-    }, [fetchAllReviews])
+    console.log(user)
 
     return (
         <>
@@ -84,14 +70,21 @@ function Home() {
                             </button>
                             <button className="cursor-pointer flex gap-2 items-center hover:text-green-300 transition">
                                 <img src={asserts.shareLocation} alt="Tour Guides" />
-                                Tour Guides
+                                <Link to="/guides">Tour Guides</Link>
                             </button>
                         </div>
 
                         {user ? (
                             <div className='flex gap-6 items-center'>
-                                <img onClick={()=>navigate("/user-profile",scrollTo(0,0))} 
-                                src={user?.image} alt="" className='size-10 rounded-full' />
+                                <img onClick={() => {
+                                    if (user?.role === "user") {
+                                        navigate("/user-profile", scrollTo(0, 0))
+                                    }
+                                    else (
+                                        navigate("/stays-admin", scrollTo(0, 0))
+                                    )
+                                }}
+                                    src={user?.profilePic} alt="" className='size-10 rounded-full' />
                                 <button className='flex gap-1 items-center cursor-pointer hover:text-red-600' onClick={() => logout()}>
                                     <LogOut /> Logout
                                 </button>
