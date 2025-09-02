@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BedDouble, CarTaxiFront, MapPinned, Menu, X } from "lucide-react";
-import { useAuthStore } from "../store/auth-store";
+import { useAuthStore } from "../store/authStore";
 
 function NavbarBlack() {
   const user = useAuthStore((state) => state.user);

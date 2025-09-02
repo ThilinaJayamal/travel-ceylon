@@ -81,7 +81,7 @@ function Guides() {
       </div>
 
       {/* feature cards section */}
-      <section className="bg-white rounded-2xl p-6 md:p-10 max-w-[88%] mx-auto rounded-lg shadow-md">
+      <section className="bg-white rounded-2xl p-6 md:p-10 max-w-[88%] mx-auto shadow-md">
         <h2 className="text-2xl md:text-3xl font-bold mb-3">
           Discover Sri Lanka Through Local Eyes
         </h2>
@@ -109,7 +109,7 @@ function Guides() {
       {/* Additional Search Section */}
       <div
         className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-6 md:px-10 shadow-md
-          bg-white max-w-[88%] rounded-lg shadow-md m-auto max-h-auto mb-10 mt-14"
+          bg-white max-w-[88%] rounded-lg  m-auto max-h-auto mb-10 mt-14"
       >
         <div className="flex items-end h-full">
           <img src={asserts.guider} alt="Man with Binocular" />

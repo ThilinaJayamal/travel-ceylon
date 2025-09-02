@@ -1,79 +1,200 @@
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
-import React, { useState, useEffect } from 'react'
-import ReviewBox from "./components/ReviewBox";
+// Stores
+import { useAuthStore } from "./store/authStore";
+import { useServiceAuthStore } from "./store/serviceAuthStore";
 import { useAppStore } from "./store/app-store";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { useAuthStore } from "./store/auth-store";
-import { Toaster } from "react-hot-toast";
 
-import Home from './pages/Home'
-import Footer from './components/Footer'
-import Login from './pages/Login';
-import UserProfile from './pages/UserProfile';
-import Navbar from './components/Navbar';
-import StaysAdmin from './pages/StaysAdmin';
+// Components
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import ReviewBox from "./components/ReviewBox";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// Pages
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import UserProfile from "./pages/UserProfile";
+import NotFound from "./pages/NotFound";
+import StaysAdmin from "./pages/StaysAdmin";
+import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard";
+import ServiceProviderLogin from "./pages/ServiceproviderLogin";
+import Taxi from "./pages/Taxi";
+import TaxiBookings from "./pages/TaxiBookings";
+import SpecificTaxi from "./pages/SpecificTaxi";
+import RentTaxi from "./pages/RentTaxi";
+import RentedVehicleDetails from "./pages/RentedVehicleDetails";
 import Stays from "./pages/Stays";
 import StaysFilter from "./pages/StaysFilter";
-import NotFound from './pages/NotFound';
-import Taxi from './pages/Taxi';
-import Guides from './pages/Guides';
-import Guide from './pages/Guide';
-import GuideSearchResults from './pages/GuideSearchResults';
-import GuideAdmin from './pages/GuideAdmin';
+import Guides from "./pages/Guides";
+import GuideSearchResults from "./pages/GuideSearchResults";
+import Guide from "./pages/Guide";
+import Registration from "./pages/Registration/Registration";
+import HotelRegistration from "./pages/Registration/HotelRegistration";
+import TaxiRegistration from "./pages/Registration/TaxiRegistration";
+import GuideRegistration from "./pages/Registration/GuideRegistration";
 
 function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = location.pathname;
+
+  // App Store
   const reviewOpen = useAppStore((state) => state.reviewOpen);
-  const checkAuthStatus = useAuthStore((state) => state.checkAuthStatus);
 
+  // Traveler Auth
+  const traveler = useAuthStore((state) => state.user);
+  const loadTraveler = useAuthStore((state) => state.loadUser);
+  const travelerError = useAuthStore((state) => state.error);
+  const travelerErrorClear = useAuthStore((state) => state.clearError);
+
+  // Provider Auth
+  const provider = useServiceAuthStore((state) => state.user);
+  const loadProvider = useServiceAuthStore((state) => state.loadUser);
+  const providerError = useServiceAuthStore((state) => state.error);
+  const providerErrorClear = useServiceAuthStore((state) => state.clearError);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // Load users on app start
   useEffect(() => {
-    checkAuthStatus();
-  }, [checkAuthStatus]);
+    loadTraveler();
+    loadProvider();
+  }, []);
 
-  const path = useLocation().pathname;
+  // Set currentUser
+  useEffect(() => {
+    if (traveler) setCurrentUser(traveler);
+    else if (provider) setCurrentUser(provider);
+    else setCurrentUser(null);
+  }, [traveler, provider]);
 
-  const showFooter = () => {
-    if (path === "/login") {
-      return false;
+  // Redirect after login
+  useEffect(() => {
+    if (!currentUser) return;
+
+    if (["/", "/login", "/service/login"].includes(path)) {
+      const { role, serviceType } = currentUser;
+
+      if (role === "user") {
+        navigate("/user/profile");
+      } else if (role === "provider") {
+        if (!serviceType) return navigate("/registration");
+
+        const routes = {
+          Taxi: "/taxi/admin",
+          Rent: "/",
+          Guide: "/guides/admin",
+          Stays: "/stays/admin",
+        };
+        navigate(routes[serviceType] || "/");
+      }
     }
-    return true;
-  };
+  }, [currentUser, navigate, path]);
 
-  const showNavbar = () => {
-    if (path === "/login" || path === "/" || path === "/guides/search" || path.startsWith("/guide/")) {
-      return false;
+  // Handle errors
+  useEffect(() => {
+    if (travelerError) {
+      toast.error(travelerError);
+      travelerErrorClear();
     }
-    return true;
-  };
+    if (providerError) {
+      toast.error(providerError);
+      providerErrorClear();
+    }
+  }, [travelerError, providerError]);
+
+  // Navbar/Footer visibility
+  const showNavbar = !["/", "/login", "/service/login"].includes(path);
+  const showFooter = !["/login", "/service/login"].includes(path);
 
   return (
     <>
-      {showNavbar() && <Navbar />}
+      {showNavbar && <Navbar />}
 
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/service/login" element={<ServiceProviderLogin />} />
+        <Route path="/registration" element={<Registration />} />
+
+        {/* Taxi Routes */}
         <Route path="/taxi" element={<Taxi />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/stays-admin" element={<StaysAdmin />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/taxi" element={<Taxi />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/stays-admin" element={<StaysAdmin />} />
+        <Route path="/taxi-bookings" element={<TaxiBookings />} />
+        <Route path="/specific-taxi" element={<SpecificTaxi />} />
+        <Route path="/rent-taxi" element={<RentTaxi />} />
+        <Route path="/view-renting-vehicle" element={<RentedVehicleDetails />} />
+
+        {/* Stays Routes */}
         <Route path="/stays" element={<Stays />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
+
+        {/* Guides Routes */}
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
         <Route path="/guide/:id" element={<Guide />} />
-        <Route path="/guide/:id/admin" element={<GuideAdmin />} />
-        <Route path="*" element={<NotFound />} />
+
+        {/* User Protected */}
+        <Route
+          path="/user/profile"
+          element={
+            <ProtectedRoute allowedRoles={["user"]} currentUser={currentUser}>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Provider Protected */}
+        <Route
+          path="/registration/hotel"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <HotelRegistration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registration/taxi"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <TaxiRegistration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registration/guide"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <GuideRegistration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stays/admin"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <StaysAdmin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/taxi/admin"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <TaxiAdminViewDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {showFooter() && <Footer />}
-
+      {showFooter && <Footer />}
       {reviewOpen && <ReviewBox />}
-
       <Toaster />
     </>
   );

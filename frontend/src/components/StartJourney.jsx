@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { CalendarDays, Clock, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function StartJourney({ vehicle }) {
   const [pickup, setPickup] = useState("Tissamaharama");
   const [drop, setDrop] = useState("Mirissa");
   const [date, setDate] = useState("2025-02-04");
   const [time, setTime] = useState("10:00");
+
+  const navigate = useNavigate();
 
   return (
     <div className="mx-auto">
@@ -107,7 +110,12 @@ export default function StartJourney({ vehicle }) {
 
           {/* Button - right aligned on desktop, centered on mobile */}
           <div className="flex justify-center md:justify-end mt-6">
-            <button className="bg-green-200 hover:bg-green-300 text-black font-semibold py-2 px-8 rounded-md">
+            <button
+              onClick={() => {
+                navigate("/taxi-booking-payment");
+              }}
+              className="bg-green-200 hover:bg-green-300 text-black font-semibold py-2 px-8 rounded-md"
+            >
               Select
             </button>
           </div>
