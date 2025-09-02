@@ -108,8 +108,8 @@ function App() {
   }, [travelerError, providerError]);
 
   // Navbar/Footer visibility
-  const showNavbar = !["/", "/login", "/service/login"].includes(path);
-  const showFooter = !["/login", "/service/login"].includes(path);
+  const showNavbar = !["/", "/login", "/service/login","/registration/guide"].includes(path);
+  const showFooter = !["/login", "/service/login","/registration/guide"].includes(path);
 
   return (
     <>
