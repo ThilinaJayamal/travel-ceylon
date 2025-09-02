@@ -1,0 +1,42 @@
+import express from 'express'
+import dotenv from 'dotenv'
+import { connectDB } from './config/db.js'
+import cookieParser from 'cookie-parser'
+import cors from "cors"
+import userRouter from "./routes/userRoute.js"
+import serviceProviderRouter from './routes/serviceProviderRoute.js'
+import taxiRouter from './routes/taxiRoute.js'
+import staysRouter from './routes/staysRoute.js'
+import guideRouter from './routes/guideRoute.js'
+import rentRouter from './routes/rentRoute.js'
+import reviewRouter from './routes/reviewRoute.js'
+import uploadRoutes from './routes/uploadRoutes.js';
+
+dotenv.config()
+connectDB();
+
+const app = express();
+app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173', 
+    credentials: true,      
+}));
+app.use(express.json());
+app.use(cookieParser());
+
+app.use('/api/upload', uploadRoutes);
+
+app.use("/api/user", userRouter);
+
+app.use("/api/service-provider", serviceProviderRouter);
+app.use("/api/service/taxi", taxiRouter)
+app.use("/api/service/stays", staysRouter)
+app.use("/api/service/guide", guideRouter)
+app.use("/api/service/rent", rentRouter)
+app.use("/api/reviews", reviewRouter)
+
+const port = process.env.PORT || 4000;
+
+app.listen(port, () => {
+    console.log("Server is running on PORT", port);
+})
