@@ -32,24 +32,31 @@ function Login() {
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
             errors.email = "Email is not valid";
 
-        if (!password) errors.password = "Password is required";
-        else if (password.length < 6)
-            errors.password = "Password must be at least 6 characters";
+        if (!password) {
+            errors.password = "Password is required";
+        } else {
+            // Strong password regex: at least 1 lowercase, 1 uppercase, 1 digit, 1 special char, min 6 chars
+            const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+            if (!strongPasswordRegex.test(password)) {
+                errors.password = "Password must contain at least 6 characters, including uppercase, lowercase, digit, and special character";
+            }
+        }
 
         setFormErrors(errors);
-
         return Object.keys(errors).length === 0;
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validateForm()) return;
+        //if (!validateForm()) return;
 
         try {
             if (formType === "Login") {
                 await login({ email, password });
             } else {
+                if (!validateForm()) return;
                 await register({ name, email, password });
             }
             setPassword(""); // Clear password after submission
@@ -126,7 +133,7 @@ function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             {formErrors.password && (
-                                <p className="text-red-500 text-sm">{formErrors.password}</p>
+                                <p className="text-red-500 text-sm max-w-[400px]">{formErrors.password}</p>
                             )}
 
                             {error && <p className="text-red-500">{error}</p>}

@@ -21,6 +21,8 @@ function UserProfile() {
     const [phone, setPhone] = useState('');
     const [selectedBooking, setSelectedBooking] = useState(0);
 
+    const [errors, setErrors] = useState({});
+
     const fetchBookings = useBookingsStore((state) => state.fetchBookings);
     const billData = useBookingsStore((state) => state.billData);
 
@@ -32,17 +34,40 @@ function UserProfile() {
         }
     }, [user]);
 
+    const validateField = (key, value) => {
+        let error = '';
+
+        if (key === 'name') {
+            if (!value.trim()) error = 'Name is required';
+            else if (value.trim().length < 2) error = 'Name must be at least 2 characters';
+        }
+        if (key === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!value.trim()) error = 'Email is required';
+            else if (!emailRegex.test(value)) error = 'Invalid email format';
+        }
+        if (key === 'password') {
+            if (value && value.length < 6) error = 'Password must be at least 6 characters';
+        }
+        if (key === 'phone') {
+            const phoneRegex = /^[0-9]{7,15}$/;
+            if (value && !phoneRegex.test(value)) error = 'Phone must be 7-15 digits';
+        }
+
+        setErrors((prev) => ({ ...prev, [key]: error }));
+        return error === '';
+    };
+
     const handleChangeField = async (key) => {
+        const value = { name, email, password, phone }[key];
+        if (!validateField(key, value)) return;
+
         try {
-            if (key === "name") await updateProfile({ name });
-            else if (key === "email") await updateProfile({ email });
-            else if (key === "password") await updateProfile({ password });
-            else await updateProfile({ phone });
-
-            toast.success("Successfully your profile updated!");
-
+            await updateProfile({ [key]: value });
+            toast.success('Profile updated successfully!');
+            if (key === 'password') setPassword('');
         } catch (error) {
-            return null;
+            toast.error('Failed to update profile');
         }
     };
 
@@ -59,7 +84,6 @@ function UserProfile() {
 
     return (
         <div className="pb-24">
-
             {/* Background header */}
             <div
                 style={{
@@ -143,82 +167,93 @@ function UserProfile() {
                             className="bg-white border border-gray-200 mt-6 rounded-md px-4 py-8"
                         >
                             <form onSubmit={(e) => e.preventDefault()} className="space-y-4 mx-auto max-w-xl">
-
-                                {/* Name */}
+                                {/** Name */}
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                                     <p className="sm:w-20 font-medium">Name</p>
-                                    <input
-                                        type="text"
-                                        placeholder="Name"
-                                        className="flex-1 border border-gray-300 rounded-md px-3 py-2"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
+                                    <div className="flex-1 flex flex-col">
+                                        <input
+                                            type="text"
+                                            placeholder="Name"
+                                            className="border border-gray-300 rounded-md px-3 py-2"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                        />
+                                        {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
+                                    </div>
                                     <button
                                         type="button"
                                         className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
                                         onClick={() => handleChangeField('name')}
-                                        disabled={loading}
+                                        disabled={loading || !!errors.name}
                                     >
                                         Change
                                     </button>
                                 </div>
 
-                                {/* Email */}
+                                {/** Email */}
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                                     <p className="sm:w-20 font-medium">Email</p>
-                                    <input
-                                        type="email"
-                                        placeholder="Email"
-                                        className="flex-1 border border-gray-300 rounded-md px-3 py-2"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
+                                    <div className="flex-1 flex flex-col">
+                                        <input
+                                            type="email"
+                                            placeholder="Email"
+                                            className="border border-gray-300 rounded-md px-3 py-2"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                        {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
+                                    </div>
                                     <button
                                         type="button"
                                         className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
                                         onClick={() => handleChangeField('email')}
-                                        disabled={loading}
+                                        disabled={loading || !!errors.email}
                                     >
                                         Change
                                     </button>
                                 </div>
 
-                                {/* Password */}
+                                {/** Password */}
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                                     <p className="sm:w-20 font-medium">Password</p>
-                                    <input
-                                        type="password"
-                                        placeholder="New Password"
-                                        className="flex-1 border border-gray-300 rounded-md px-3 py-2"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
+                                    <div className="flex-1 flex flex-col">
+                                        <input
+                                            type="password"
+                                            placeholder="New Password"
+                                            className="border border-gray-300 rounded-md px-3 py-2"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                        {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
+                                    </div>
                                     <button
                                         type="button"
                                         className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
                                         onClick={() => handleChangeField('password')}
-                                        disabled={loading}
+                                        disabled={loading || !!errors.password}
                                     >
                                         Change
                                     </button>
                                 </div>
 
-                                {/* Phone */}
+                                {/** Phone */}
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                                     <p className="sm:w-20 font-medium">Phone</p>
-                                    <input
-                                        type="text"
-                                        placeholder="Phone"
-                                        className="flex-1 border border-gray-300 rounded-md px-3 py-2"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                    />
+                                    <div className="flex-1 flex flex-col">
+                                        <input
+                                            type="text"
+                                            placeholder="Phone"
+                                            className="border border-gray-300 rounded-md px-3 py-2"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                        />
+                                        {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
+                                    </div>
                                     <button
                                         type="button"
                                         className="border border-green-300 px-4 py-1 rounded-md hover:bg-green-100 transition"
                                         onClick={() => handleChangeField('phone')}
-                                        disabled={loading}
+                                        disabled={loading || !!errors.phone}
                                     >
                                         Change
                                     </button>
