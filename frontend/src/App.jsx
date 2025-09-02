@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 // Stores
 import { useAuthStore } from "./store/authStore";
 import { useServiceAuthStore } from "./store/serviceAuthStore";
+import { useAppStore } from "./store/app-store";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -26,10 +27,8 @@ import SpecificTaxi from "./pages/SpecificTaxi";
 import RentTaxi from "./pages/RentTaxi";
 import RentedVehicleDetails from "./pages/RentedVehicleDetails";
 import Stays from "./pages/Stays";
-import Guides from "./pages/Guides";
-import SpecificHotel from "./pages/SpecificHotel";
-import HotelPayment from "./pages/HotelPayment";
 import StaysFilter from "./pages/StaysFilter";
+import Guides from "./pages/Guides";
 import GuideSearchResults from "./pages/GuideSearchResults";
 import Guide from "./pages/Guide";
 import Registration from "./pages/Registration/Registration";
@@ -38,24 +37,26 @@ import TaxiRegistration from "./pages/Registration/TaxiRegistration";
 import GuideRegistration from "./pages/Registration/GuideRegistration";
 
 function App() {
-  const reviewOpen = false; // replace with your store state if needed
+  const location = useLocation();
+  const navigate = useNavigate();
+  const path = location.pathname;
 
-  // Auth
+  // App Store
+  const reviewOpen = useAppStore((state) => state.reviewOpen);
+
+  // Traveler Auth
   const traveler = useAuthStore((state) => state.user);
   const loadTraveler = useAuthStore((state) => state.loadUser);
   const travelerError = useAuthStore((state) => state.error);
   const travelerErrorClear = useAuthStore((state) => state.clearError);
 
+  // Provider Auth
   const provider = useServiceAuthStore((state) => state.user);
   const loadProvider = useServiceAuthStore((state) => state.loadUser);
   const providerError = useServiceAuthStore((state) => state.error);
   const providerErrorClear = useServiceAuthStore((state) => state.clearError);
 
   const [currentUser, setCurrentUser] = useState(null);
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const path = location.pathname;
 
   // Load users on app start
   useEffect(() => {
@@ -129,8 +130,6 @@ function App() {
 
         {/* Stays Routes */}
         <Route path="/stays" element={<Stays />} />
-        <Route path="/stays/specific-hotel" element={<SpecificHotel />} />
-        <Route path="/stays/payment" element={<HotelPayment />} />
         <Route path="/stays/filter" element={<StaysFilter />} />
 
         {/* Guides Routes */}
@@ -173,7 +172,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/stays/admin"
           element={
