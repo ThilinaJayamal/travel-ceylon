@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bed, Minus, Plus, Upload } from "lucide-react";
 import Progressbar from "../../components/progressbar.jsx";
-
+import toast from "react-hot-toast";
 function HotelRegistration() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -158,13 +158,13 @@ function HotelRegistration() {
       });
       const data = await res.json();
       if (res.ok) {
-        alert("Hotel registered successfully!");
+        toast.success("Hotel registered successfully!");
         navigate("/stays/admin");
       } else {
         alert(data.message || "Registration failed");
       }
     } catch (err) {
-      alert("Network error");
+      toast.error("Network error");
       console.log(err);
     }
   };

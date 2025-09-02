@@ -5,6 +5,8 @@ import staysBookingModel from "../models/Bookings/StaysBooking.js";
 
 // ------------------------- Stays -------------------------
 
+// ...existing code...
+
 export const registerStays = async (req, res) => {
   try {
     if (!req.body) return res.status(400).json({ success: false, message: "No form data received" });
@@ -20,50 +22,37 @@ export const registerStays = async (req, res) => {
       }
     }
     facilitiesRaw = Array.isArray(facilitiesRaw) ? facilitiesRaw : [facilitiesRaw];
-
-    // validate against schema enum if available
     const schemaEnum = staysModel.schema.path("facilities")?.enumValues || null;
-    const facilities = schemaEnum
-      ? facilitiesRaw.filter(f => schemaEnum.includes(f))
-      : facilitiesRaw;
+    const facilities = schemaEnum ? facilitiesRaw.filter(f => schemaEnum.includes(f)) : facilitiesRaw;
 
-    // ----- parse/normalize rooms -----
+    // ----- parse/normalize rooms (embed subdocuments) -----
     let roomsPayload = req.body.rooms || [];
     if (typeof roomsPayload === "string") {
       try {
         roomsPayload = JSON.parse(roomsPayload);
       } catch {
-        // fallback: try CSV -> not ideal but prevents crash
         roomsPayload = roomsPayload.split(",").map(s => s.trim()).filter(Boolean);
       }
     }
-
-    // If roomsPayload contains room objects, create Room docs and collect their ids.
-    let roomIds = [];
-    if (Array.isArray(roomsPayload) && roomsPayload.length > 0 && typeof roomsPayload[0] === "object") {
-      // map to the roomModel fields you expect
-      const roomsToCreate = roomsPayload.map(r => ({
-        roomType: r.type || r.roomType,
-        price: r.price ?? r.basePrice ?? 0,
-        maxGuest: r.maxGuest ?? 1,
-        bedType: r.beds || r.bedType || {},
-        features: r.features || r.features || [],
-        images: r.images || []
-      }));
-      const createdRooms = await roomModel.insertMany(roomsToCreate);
-      roomIds = createdRooms.map(r => r._id);
-    } else if (Array.isArray(roomsPayload)) {
-      // assume it's already an array of ids (strings)
-      roomIds = roomsPayload;
-    }
+    // Ensure roomsPayload is an array of plain objects
+    const normalizedRooms = Array.isArray(roomsPayload)
+      ? roomsPayload.map(r => ({
+          roomType: r.type || r.roomType || "Standard",
+          price: parseFloat(r.price) || 0,
+          count: r.count ?? 1,
+          maxGuest: r.maxGuest ?? 1,
+          beds: typeof r.beds === "object" ? r.beds : (r.beds ? JSON.parse(r.beds) : {}),
+          features: Array.isArray(r.features) ? r.features : (r.features ? r.features.split(",").map(s => s.trim()) : []),
+          images: Array.isArray(r.images) ? r.images : (r.images ? r.images.split(",").map(s => s.trim()) : [])
+        }))
+      : [];
 
     // files available in req.files when using upload.fields
     const imagesFiles = req.files?.images || [];
     const profilePicFile = req.files?.profilePic?.[0];
-
-    // TODO: upload files to Cloudinary and fill images/profilePic URLs
-    const images = []; // fill with uploaded URLs
-    const profilePic = ""; // set uploaded profilePic URL if uploaded
+    // TODO: upload image files and set URLs
+    const images = []; // set uploaded image URLs here
+    const profilePic = ""; // set uploaded profile pic URL if uploaded
 
     const newStay = await staysModel.create({
       name: req.body.name,
@@ -71,7 +60,7 @@ export const registerStays = async (req, res) => {
       contact: req.body.contact,
       website: req.body.website || "",
       facilities,
-      rooms: roomIds,               // store room ObjectIds
+      rooms: normalizedRooms, // embed room subdocuments
       images,
       description: req.body.description || "",
       profilePic,
@@ -83,6 +72,8 @@ export const registerStays = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
+
+
 
 export const updateStays = async (req, res) => {
   try {
