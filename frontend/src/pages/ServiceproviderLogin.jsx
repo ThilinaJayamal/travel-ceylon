@@ -51,16 +51,16 @@ export default function ServiceProviderAuth() {
             if (user?.serviceType) {
                 switch (user.serviceType) {
                     case "Taxi":
-                        navigate("/taxi-admin-account")
+                        navigate("/taxi/admin")
                         break;
                     case "Rent":
                         navigate("/")
                         break;
                     case "Guide":
-                        navigate("/guides")
+                        navigate("/guides/admin")
                         break;
                     case "Stays":
-                        navigate("/stays-admin")
+                        navigate("/stays/admin")
                         break;
                     default:
                         break;

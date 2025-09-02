@@ -55,17 +55,16 @@ export const useServiceAuthStore = create((set) => ({
     // LOAD USER (on app start)
     loadUser: async () => {
         try {
-            const { data } = await api.get("/user/me");
-
+            const { data } = await api.get("/service-provider/me");
+            console.log(data)
             if (data?.data) {
                 const tempObj = {};
 
                 tempObj._id = data?.data.profile._id;
-                tempObj.name = data?.data.profile.name;
                 tempObj.email = data?.data.profile.email;
                 tempObj.role = data?.data.role;
-                tempObj.profilePic = data?.data.profile?.profilePic || "";
-                tempObj.phone = data?.data.profile?.phone || "";
+                tempObj.serviceType = data?.data.profile?.serviceType || "";
+                tempObj.serviceId = data?.data.profile?.serviceId || "";
 
                 set({ user: tempObj, loading: false });
             } else {

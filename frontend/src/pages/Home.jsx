@@ -5,7 +5,6 @@ import ProvinceCard from '../components/ProvinceCard';
 import { useAppStore } from '../store/app-store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { useReviewStore } from '../store/review-store';
 import { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
 
@@ -20,7 +19,6 @@ function Home() {
 
     const navigate = useNavigate();
 
-    console.log(user)
 
     return (
         <>
@@ -222,7 +220,9 @@ function Home() {
                         </div>
 
                         <div className='mt-8'>
-                            <button className='px-4 py-2 bg-green-600 rounded-full w-full text-xl font-medium cursor-pointer text-white'>
+                            <button onClick={() => navigate("/service/login")}
+                                className='px-4 py-2 hover:bg-green-600 bg-green-500 rounded-full w-full text-xl 
+                                font-medium cursor-pointer text-white'>
                                 Register Now! It is Free
                             </button>
                         </div>
