@@ -101,7 +101,7 @@ export default function ServiceProviderAuth() {
                     {!isLogin && (
                         <>
                             <input
-                                type="text"
+                                type="password"
                                 name="rePassword"
                                 placeholder="Re-enter your password"
                                 value={formData.serviceType}

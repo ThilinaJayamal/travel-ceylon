@@ -19,7 +19,7 @@ import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 import StaysAdmin from "./pages/StaysAdmin";
 import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard";
-import ServiceProviderLogin from "./pages/ServiceProviderLogin";
+import ServiceProviderLogin from "./pages/ServiceproviderLogin";
 import Taxi from "./pages/Taxi";
 import TaxiBookings from "./pages/TaxiBookings";
 import SpecificTaxi from "./pages/SpecificTaxi";
@@ -33,6 +33,10 @@ import HotelPayment from "./pages/HotelPayment";
 import StaysFilter from "./pages/StaysFilter";
 import GuideSearchResults from "./pages/GuideSearchResults";
 import Guide from "./pages/Guide";
+import Registration from "./pages/Registration/Registration"
+import HotelRegistration from "./pages/Registration/HotelRegistration"
+import TaxiRegistration from "./pages/Registration/TaxiRegistration"
+import GuideRegistration from "./pages/Registration/GuideRegistration"
 
 function App() {
   const reviewOpen = false; // example, replace with your store state
@@ -116,6 +120,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/service/login" element={<ServiceProviderLogin />} />
+        <Route path="/registration" element={<Registration />} />
 
         {/* Taxi routes */}
         <Route path="/taxi" element={<Taxi />} />
@@ -140,6 +145,31 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["user"]} currentUser={currentUser}>
               <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/registration/hotel"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <HotelRegistration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registration/taxi"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <TaxiRegistration />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/registration/guide"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <GuideRegistration />
             </ProtectedRoute>
           }
         />
