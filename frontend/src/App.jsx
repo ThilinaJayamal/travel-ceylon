@@ -24,6 +24,18 @@ import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings.jsx";
 import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard.jsx";
 import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount.jsx";
 
+import Guides from "./pages/Guides";
+import GuideSearchResults from "./pages/GuideSearchResults";
+
+import Registration from "./pages/Registration/Registration";
+import HotelRegistration from "./pages/Registration/HotelRegistration";
+import TaxiRegistration from "./pages/Registration/TaxiRegistration";
+import GuideRegistration from "./pages/Registration/GuideRegistration";
+
+import NotFound from "./pages/NotFound";
+import TaxiBookingPayment from "./pages/TaxiBookingPayment.jsx";
+import TaxiRentingPayment from "./pages/TaxiRentingPayment.jsx";
+
 function App() {
   const reviewOpen = useAppStore((state) => state.reviewOpen);
   const loadUser = useAuthStore((state) => state.loadUser);
@@ -85,10 +97,27 @@ function App() {
           element={<TaxiAdminViewBookings />}
         />
         <Route
+          path="/taxi-admin-dashboard"
+          element={<TaxiAdminViewDashboard />}
+        />
+        <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
+
+        {/* User & stays */}
+        <Route
+          path="/view-renting-vehicle"
+          element={<RentedVehicleDetails />}
+        />
+        <Route
+          path="/taxi-admin-bookings"
+          element={<TaxiAdminViewBookings />}
+        />
+        <Route
           path="taxi-admin-dashboard"
           element={<TaxiAdminViewDashboard />}
         />
+        <Route path="taxi-renting-payment" element={<TaxiRentingPayment />} />
         <Route path="taxi-admin-account" element={<TaxiAdminViewAccount />} />
+        <Route path="taxi-booking-payment" element={<TaxiBookingPayment />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/stays-admin" element={<StaysAdmin />} />
         <Route path="/stays" element={<Stays />} />
