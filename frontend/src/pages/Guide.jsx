@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Calendar, Clock } from "lucide-react";
@@ -7,7 +7,6 @@ import NavbarBlack from "../components/NavbarBlack";
 
 const Guide = () => {
   const getGuideIdFromUrl = () => {
-    // For demo purposes, we'll simulate guide ID 3
     const { id } = useParams();
     return id;
   };
@@ -124,6 +123,12 @@ const Guide = () => {
     }));
   };
 
+  const bookingSectionRef = useRef(null);
+
+  const handleScroll = () => {
+    bookingSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
       <NavbarBlack />
@@ -172,7 +177,10 @@ const Guide = () => {
 
         {/* Book Now Button */}
         <div className="flex justify-end">
-          <button className="bg-green-300 hover:bg-green-700 hover:text-white text-black px-8 py-3 rounded-lg font-medium transition-colors duration-200 shadow-sm hover:shadow-md">
+          <button
+            onClick={handleScroll}
+            className="bg-green-300 hover:bg-green-700 hover:text-white text-black px-8 py-3 rounded-lg font-medium transition-colors duration-200 shadow-sm hover:shadow-md"
+          >
             Book Now
           </button>
         </div>
@@ -229,7 +237,10 @@ const Guide = () => {
       </div>
 
       {/* Booking Form */}
-      <div className="flex items-center justify-center bg-gray-50 p-4 mb-16">
+      <div
+        ref={bookingSectionRef}
+        className="flex items-center justify-center bg-gray-50 p-4 mb-16"
+      >
         {/* Booking Form Container - 80% width, centered */}
         <div className="w-[80%] bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
           {/* Form Heading */}

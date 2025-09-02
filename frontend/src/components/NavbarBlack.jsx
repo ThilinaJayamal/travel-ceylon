@@ -20,7 +20,7 @@ function NavbarBlack() {
   const navigate = useNavigate();
   return (
     <nav className=" top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between h-20 px-4 md:px-8">
+      <div className="relative flex items-center justify-between h-20 px-4 md:px-8">
         {/* Left Nav (Desktop) */}
         <div className="hidden md:flex items-center gap-6">
           {navItems.map((item, index) => (
@@ -36,7 +36,7 @@ function NavbarBlack() {
         </div>
 
         {/* Logo */}
-        <Link to="/" className="text-xl md:text-2xl font-bold text-black">
+        <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 text-xl md:text-2xl font-bold text-black ">
           Travel <span className="text-green-500">Ceylon</span>
         </Link>
 
