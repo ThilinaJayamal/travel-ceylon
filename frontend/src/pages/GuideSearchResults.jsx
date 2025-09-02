@@ -36,8 +36,8 @@ const GuideSearchResults = () => {
   const allGuides = [
     {
       id: 1,
-      name: "Rajesh Perera",
-      location: "Tissamaharama",
+      name: "Priya Nanayakkara",
+      location: "Kandy",
       rating: 4.8,
       reviews: 346,
       price: 25,
@@ -46,49 +46,49 @@ const GuideSearchResults = () => {
       languages: ["English", "Hindi"],
       specializations: ["History and Ancient things", "Wildlife safaris"],
       description:
-        "Hi I'm a passionate local tour guide with years of experience showing travelers the hidden gems of Sri Lanka. I speak English and Sinhala fluently, and I love sharing stories, culture, and unforgettable adventures. Let me help make your journey truly special!",
+        "I'm knowledgeable, patient, and deeply connected to the history and traditions of Kandy. If you're looking for someone to guide you through centuries of Sri Lankan culture with authenticity, respect, and engaging storytelling — I'd be honored to be part of your cultural exploration in Sri Lanka.",
     },
     {
       id: 2,
-      name: "Priya Fernando",
-      location: "Tissamaharama",
+      name: "Dilshan Fernando",
+      location: "Ella",
       rating: 4.2,
       reviews: 189,
-      price: 18,
+      price: 30,
       image:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
       languages: ["English", "French"],
       specializations: ["Eco-Adventure Guides"],
       description:
-        "Hi I'm a passionate local tour guide with years of experience showing travelers the hidden gems of Sri Lanka. I speak English and Sinhala fluently, and I love sharing stories, culture, and unforgettable adventures. Let me help make your journey truly special!",
+        "I'm energetic, safety-focused, and fully committed to showing you the natural wonders that make Ella special. If you're looking for someone to guide you through thrilling hikes with stunning views, local insights, and unforgettable experiences — I'd be honored to be part of your mountain adventure in Sri Lanka.",
     },
     {
       id: 3,
-      name: "Kumar Silva",
-      location: "Yala National Park",
+      name: "Saman Kumara",
+      location: "Tissamaharama",
       rating: 4.6,
       reviews: 275,
-      price: 22,
+      price: 20,
       image:
         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
       languages: ["English", "German"],
       specializations: ["Wildlife safaris"],
       description:
-        "Hi I'm a passionate local tour guide with years of experience showing travelers the hidden gems of Sri Lanka. I speak English and Sinhala fluently, and I love sharing stories, culture, and unforgettable adventures. Let me help make your journey truly special!",
+        "I'm friendly, reliable, and fully committed to making sure you feel safe, informed, and inspired throughout your journey. If you're looking for someone to guide you with passion, knowledge, and a personal touch — I'd be honored to be part of your adventure in Sri Lanka.",
     },
     {
       id: 4,
-      name: "Anura Jayasinghe",
-      location: "Colombo",
+      name: "Nimal Perera",
+      location: "Galle",
       rating: 3.9,
       reviews: 124,
-      price: 15,
+      price: 35,
       image:
         "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face",
       languages: ["English"],
       specializations: ["History and Ancient things"],
       description:
-        "Hi I'm a passionate local tour guide with years of experience showing travelers the hidden gems of Sri Lanka. I speak English and Sinhala fluently, and I love sharing stories, culture, and unforgettable adventures. Let me help make your journey truly special!",
+        "I'm detail-oriented, historically knowledgeable, and passionate about sharing the stories that shaped this beautiful coastline. If you're looking for someone to guide you through maritime history, local traditions, and stunning ocean vistas — I'd be honored to be part of your coastal discovery in Sri Lanka.",
     },
     {
       id: 5,

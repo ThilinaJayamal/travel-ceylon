@@ -221,8 +221,8 @@ function Home() {
 
                         <div className='mt-8'>
                             <button onClick={() => navigate("/service/login")}
-                                className='px-4 py-2 hover:bg-green-600 bg-green-500 rounded-full w-full text-xl 
-                                font-medium cursor-pointer text-white'>
+                                className='px-4 py-2 hover:bg-green-700 bg-green-300 rounded-full w-full text-xl 
+                                font-medium cursor-pointer text-black hover:text-white'>
                                 Register Now! It is Free
                             </button>
                         </div>

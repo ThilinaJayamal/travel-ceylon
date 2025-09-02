@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 // Stores
 import { useAuthStore } from "./store/authStore";
-import { useServiceAuthStore } from "./store/serviceAuthStore";
+import { useServiceAuthStore } from "./store/serviceAuthStrore";
 import { useAppStore } from "./store/app-store";
 
 // Components
@@ -35,6 +35,8 @@ import Registration from "./pages/Registration/Registration";
 import HotelRegistration from "./pages/Registration/HotelRegistration";
 import TaxiRegistration from "./pages/Registration/TaxiRegistration";
 import GuideRegistration from "./pages/Registration/GuideRegistration";
+import GuideAdmin from "./pages/GuideAdmin";
+import GuidePayment from "./pages/GuidePayment";
 
 function App() {
   const location = useLocation();
@@ -136,6 +138,8 @@ function App() {
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
         <Route path="/guide/:id" element={<Guide />} />
+        <Route path="/guide/:id/admin" element={<GuideAdmin />} />
+        <Route path="/guide/:id/payment" element={<GuidePayment />} />
 
         {/* User Protected */}
         <Route
