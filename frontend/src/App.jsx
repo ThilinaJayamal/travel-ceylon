@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 // Stores
 import { useAuthStore } from "./store/authStore";
-import { useServiceAuthStore } from "./store/serviceAuthStore";
+import { useServiceAuthStore } from "./store/serviceAuthStrore";
 import { useAppStore } from "./store/app-store";
 
 // Components
@@ -35,6 +35,7 @@ import Registration from "./pages/Registration/Registration";
 import HotelRegistration from "./pages/Registration/HotelRegistration";
 import TaxiRegistration from "./pages/Registration/TaxiRegistration";
 import GuideRegistration from "./pages/Registration/GuideRegistration";
+import GuideAdmin from "./pages/GuideAdmin";
 
 function App() {
   const location = useLocation();
@@ -107,8 +108,8 @@ function App() {
   }, [travelerError, providerError]);
 
   // Navbar/Footer visibility
-  const showNavbar = !["/", "/login", "/service/login","/registration/guide"].includes(path);
-  const showFooter = !["/login", "/service/login","/registration/guide"].includes(path);
+  const showNavbar = !["/", "/login", "/service/login", "/registration/guide","/registration/taxi"].includes(path);
+  const showFooter = !["/login", "/service/login", "/registration/guide","/registration/taxi"].includes(path);
 
   return (
     <>
@@ -185,6 +186,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
               <TaxiAdminViewDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guides/admin"
+          element={
+            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+              <GuideAdmin />
             </ProtectedRoute>
           }
         />
