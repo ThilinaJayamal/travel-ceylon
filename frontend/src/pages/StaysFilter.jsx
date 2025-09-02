@@ -40,7 +40,7 @@ const StaysFilter = () => {
       setError(null);
 
       try {
-        const base = "http://localhost:5000/api/service/stays/";
+        const base = "http://localhost:5000/api/service/stays";
         let url;
 
         // If both dates provided, use availability endpoint
