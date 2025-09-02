@@ -4,7 +4,6 @@ import { Toaster } from "react-hot-toast";
 
 import { useAppStore } from "./store/app-store";
 import { useAuthStore } from "./store/auth-store";
-
 import ReviewBox from "./components/ReviewBox";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -50,7 +49,7 @@ function App() {
 
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [loadUser]);
 
   const path = useLocation().pathname;
 
@@ -97,9 +96,18 @@ function App() {
         <Route path="/taxi-bookings" element={<TaxiBookings />} />
         <Route path="/specific-taxi" element={<SpecificTaxi />} />
         <Route path="/rent-taxi" element={<RentTaxi />} />
-        <Route path="/view-renting-vehicle" element={<RentedVehicleDetails />} />
-        <Route path="/taxi-admin-bookings" element={<TaxiAdminViewBookings />} />
-        <Route path="/taxi-admin-dashboard" element={<TaxiAdminViewDashboard />} />
+        <Route
+          path="/view-renting-vehicle"
+          element={<RentedVehicleDetails />}
+        />
+        <Route
+          path="/taxi-admin-bookings"
+          element={<TaxiAdminViewBookings />}
+        />
+        <Route
+          path="/taxi-admin-dashboard"
+          element={<TaxiAdminViewDashboard />}
+        />
         <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
 
         {/* User & stays */}
