@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Calendar, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import NavbarBlack from "../components/NavbarBlack";
 
@@ -13,9 +14,9 @@ const Guide = () => {
 
   const guideId = getGuideIdFromUrl() || 3;
 
-  // Dummy data for different guides
   const guideData = {
     1: {
+      id: "1",
       name: "Priya Nanayakkara",
       location: "Kandy",
       profileImage:
@@ -33,6 +34,7 @@ const Guide = () => {
       ],
     },
     2: {
+      id: "2",
       name: "Dilshan Fernando",
       location: "Ella",
       profileImage:
@@ -50,6 +52,7 @@ const Guide = () => {
       ],
     },
     3: {
+      id: "3", 
       name: "Saman Kumara",
       location: "Tissamaharama",
       profileImage:
@@ -67,6 +70,7 @@ const Guide = () => {
       ],
     },
     4: {
+      id: "4", 
       name: "Nimal Perera",
       location: "Galle",
       profileImage:
@@ -103,18 +107,12 @@ const Guide = () => {
     }
   };
 
-  //   Booking form
+  // Booking form
   const [formData, setFormData] = useState({
     message: "",
     date: "04 Feb 2025",
     time: "10:00 am",
   });
-
-  const handleSubmit = () => {
-    console.log("Booking submitted:", formData);
-    // Here you would typically send the data to your backend
-    alert("Booking submitted successfully!");
-  };
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -127,6 +125,24 @@ const Guide = () => {
 
   const handleScroll = () => {
     bookingSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const navigate = useNavigate();
+
+  // Fixed: Create a proper event handler function
+  const handleBookNow = () => {
+    const guideIdForBooking = currentGuide.id;
+    const bookingDate = formData.date;
+    const bookingTime = formData.time;
+    const description = formData.message;
+
+    navigate(
+      `/guide/${guideIdForBooking}/payment?date=${encodeURIComponent(
+        bookingDate
+      )}&time=${encodeURIComponent(
+        bookingTime
+      )}&description=${encodeURIComponent(description)}`
+    );
   };
 
   return (
@@ -300,9 +316,9 @@ const Guide = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
+              {/* Submit Button - Fixed: Now properly calls handleBookNow on click */}
               <button
-                onClick={handleSubmit}
+                onClick={handleBookNow}
                 className="bg-green-300 hover:bg-green-700 hover:text-white text-black font-medium px-8 py-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 Book Now
