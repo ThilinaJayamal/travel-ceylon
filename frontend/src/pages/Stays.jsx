@@ -23,10 +23,22 @@ const Stays = () => {
   const staysData = [
     { name: "The Grand Serenity", location: "Mirissa", imageUrl: Mirissa },
     { name: "Onyx Towers", location: "Hikkaduwa", imageUrl: Hikkaduwa },
-    { name: "The Celestia", location: "Hikkaduwa", imageUrl: HikkaduwaCelestia },
+    {
+      name: "The Celestia",
+      location: "Hikkaduwa",
+      imageUrl: HikkaduwaCelestia,
+    },
     { name: "AruGamBAY", location: "Arugambay", imageUrl: Arugambay },
-    { name: "Pearl Residences", location: "Katharagama", imageUrl: Katharagama },
-    { name: "Lake villa", location: "Thissamaharama", imageUrl: Thissamaharama },
+    {
+      name: "Pearl Residences",
+      location: "Katharagama",
+      imageUrl: Katharagama,
+    },
+    {
+      name: "Lake villa",
+      location: "Thissamaharama",
+      imageUrl: Thissamaharama,
+    },
   ];
 
   const scrollLeft = () =>
@@ -120,7 +132,10 @@ const Stays = () => {
             character, and convenience, so your getaway feels just right from
             the moment you check in.
           </p>
-          <button className="bg-emerald-400 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded shadow cursor-pointer">
+          <button
+            className="bg-emerald-400 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded shadow cursor-pointer"
+            onClick={() => navigate("/stays/filter")}
+          >
             Search Hotel
           </button>
         </div>
@@ -202,7 +217,10 @@ const Stays = () => {
             where Sri Lanka’s hospitality meets hassle-free planning.
           </p>
           <div className="w-full flex justify-center">
-            <button className="bg-emerald-400 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded shadow cursor-pointer">
+            <button
+              className="bg-emerald-400 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded shadow cursor-pointer"
+              onClick={() => navigate("/service/login")}
+            >
               List Your Hotel
             </button>
           </div>

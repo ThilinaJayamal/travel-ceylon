@@ -35,6 +35,8 @@ import Registration from "./pages/Registration/Registration";
 import HotelRegistration from "./pages/Registration/HotelRegistration";
 import TaxiRegistration from "./pages/Registration/TaxiRegistration";
 import GuideRegistration from "./pages/Registration/GuideRegistration";
+import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings";
+import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount";
 import GuideAdmin from "./pages/GuideAdmin";
 
 function App() {
@@ -108,8 +110,22 @@ function App() {
   }, [travelerError, providerError]);
 
   // Navbar/Footer visibility
-  const showNavbar = !["/", "/login", "/service/login", "/registration/guide","/registration/taxi"].includes(path);
-  const showFooter = !["/login", "/service/login", "/registration/guide","/registration/taxi"].includes(path);
+  const showNavbar = ![
+    "/",
+    "/login",
+    "/service/login",
+    "/registration",
+    "/registration/guide",
+    "/registration/taxi",
+  ].includes(path);
+
+  const showFooter = ![
+    "/login",
+    "/service/login",
+    "/registration",
+    "/registration/guide",
+    "/registration/taxi",
+  ].includes(path);
 
   return (
     <>
@@ -128,6 +144,9 @@ function App() {
         <Route path="/specific-taxi" element={<SpecificTaxi />} />
         <Route path="/rent-taxi" element={<RentTaxi />} />
         <Route path="/view-renting-vehicle" element={<RentedVehicleDetails />} />
+        <Route path="/taxi-admin-bookings" element={<TaxiAdminViewBookings />} />
+        <Route path="/taxi-admin-dashboard" element={<TaxiAdminViewDashboard />} />
+        <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
 
         {/* Stays Routes */}
         <Route path="/stays" element={<Stays />} />
@@ -152,7 +171,10 @@ function App() {
         <Route
           path="/registration/hotel"
           element={
-            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+            <ProtectedRoute
+              allowedRoles={["provider"]}
+              currentUser={currentUser}
+            >
               <HotelRegistration />
             </ProtectedRoute>
           }
@@ -160,7 +182,10 @@ function App() {
         <Route
           path="/registration/taxi"
           element={
-            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+            <ProtectedRoute
+              allowedRoles={["provider"]}
+              currentUser={currentUser}
+            >
               <TaxiRegistration />
             </ProtectedRoute>
           }
@@ -168,7 +193,10 @@ function App() {
         <Route
           path="/registration/guide"
           element={
-            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+            <ProtectedRoute
+              allowedRoles={["provider"]}
+              currentUser={currentUser}
+            >
               <GuideRegistration />
             </ProtectedRoute>
           }
@@ -176,7 +204,10 @@ function App() {
         <Route
           path="/stays/admin"
           element={
-            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+            <ProtectedRoute
+              allowedRoles={["provider"]}
+              currentUser={currentUser}
+            >
               <StaysAdmin />
             </ProtectedRoute>
           }
@@ -184,7 +215,10 @@ function App() {
         <Route
           path="/taxi/admin"
           element={
-            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+            <ProtectedRoute
+              allowedRoles={["provider"]}
+              currentUser={currentUser}
+            >
               <TaxiAdminViewDashboard />
             </ProtectedRoute>
           }

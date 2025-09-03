@@ -4,7 +4,9 @@ import TestimonialCard from "../components/TestimonialCard";
 import { useAppStore } from "../store/app-store";
 import { asserts } from "../assets/assets";
 import { MdLocationOn } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 const SpecificHotel = () => {
+  const navigate = useNavigate();
   const toggleReviewOpen = useAppStore((state) => state.toggleReviewOpen);
   return (
     <div className="flex flex-col min-h-screen  ">
@@ -162,7 +164,10 @@ const SpecificHotel = () => {
                     <td className="py-2 px-4 border-none">{room.maxGuest}</td>
                     <td className="py-2 px-4 border-none">{room.bed}</td>
                     <td className="py-2 px-4 border-none">
-                      <button className="bg-emerald-400 hover:bg-emerald-700 text-white px-3 py-1 rounded">
+                      <button
+                        className="bg-emerald-400 hover:bg-emerald-700 text-white px-3 py-1 rounded"
+                        onClick={() => navigate("/stays/payment")}
+                      >
                         Book Now
                       </button>
                     </td>

@@ -6,6 +6,11 @@ const destinations = [
   "Tissamaharama",
   "Nuwaraeliya",
   "Mirissa",
+  "Colombo",
+  "Negombo",
+  "Bentota",
+  "Hikkaduwa",
+  "Matara",
   "Ella",
   "Kandy",
   "Galle",
@@ -16,7 +21,9 @@ const destinations = [
 ];
 
 const DestinationFilter = ({ onSearch }) => {
-  const [selectedDestination, setSelectedDestination] = useState(destinations[0]);
+  const [selectedDestination, setSelectedDestination] = useState(
+    destinations[0]
+  );
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [rooms, setRooms] = useState(1);
@@ -36,7 +43,9 @@ const DestinationFilter = ({ onSearch }) => {
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-6xl mx-auto -mt-12">
-      <h2 className="text-lg font-semibold mb-4">Find your Perfect Destination</h2>
+      <h2 className="text-lg font-semibold mb-4">
+        Find your Perfect Destination
+      </h2>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-7">
         {/* Destination */}
         <div className="relative">
