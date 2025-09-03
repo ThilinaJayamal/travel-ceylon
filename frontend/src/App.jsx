@@ -115,7 +115,6 @@ function App() {
     "/",
     "/login",
     "/service/login",
-    "/registration",
     "/registration/guide",
     "/registration/taxi",
   ].includes(path);

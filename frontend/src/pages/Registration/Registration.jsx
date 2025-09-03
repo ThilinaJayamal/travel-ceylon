@@ -10,8 +10,7 @@ function Registration() {
       style={{ backgroundImage: "url('/assets/backgroundill.png')" }}
     >
       {/* Logo and intro */}
-      <div className="pt-20 px-5 text-center w-full max-w-6xl">
-        <img src="/assets/logo.svg" alt="logo" className="h-[50px] mx-auto mb-6" />
+      <div className="pt-28 px-5 text-center w-full max-w-6xl">
         <p className="text-sm text-white mb-10">
           Welcome! Please select your category to begin the registration process.
         </p>
@@ -56,10 +55,6 @@ function Registration() {
         </div>
       </div>
 
-      {/* Optional "Not now" button */}
-      <div className="mt-10 mb-10">
-        <button className="text-sm text-white hover:text-black">Not now</button>
-      </div>
     </div>
   );
 }
