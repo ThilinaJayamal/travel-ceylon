@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'https://travel-ceylon-backend.vercel.app'
+    'https://travel-ceylon-80bg5q3ka-thilina-jayamals-projects-f4c15415.vercel.app/'
 
   ],
   credentials: true,
