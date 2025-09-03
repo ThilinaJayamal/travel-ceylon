@@ -52,7 +52,8 @@ export const guideRegister = async (req, res) => {
       message: "Guide registered successfully.",
       data: newGuide,
     });
-  } catch {
+  } catch(err) {
+    console.log(err)
     res.status(500).json({
       success: false,
       message: "Something went wrong while registering the guide. Please try again later.",

@@ -1,45 +1,75 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { Home, Upload } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Upload, Home } from "lucide-react";
 import { useParams, Link } from "react-router-dom";
-
+import axios from "axios";
 import BookingDashboard from "../components/BookingDashboard";
 
 const GuideAdmin = () => {
-  const getGuideIdFromUrl = () => {
-    const { id } = useParams();
-    return id;
+  const { id } = useParams();
+  const guideId = id || "3";
+
+  const [guide, setGuide] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch guide data from API
+  const fetchGuide = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:5000/api/service/guide/profile`
+      );
+      setGuide(response.data.data); // use .data.data
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch guide data");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const guideId = getGuideIdFromUrl() || 3;
+  useEffect(() => {
+    fetchGuide();
+  }, [guideId]);
 
-  const dummyUsers = {
-    1: {
-      id: "1",
-      name: "Saman Kumara",
-      location: "Tissamaharama",
-      profileImage: "https://picsum.photos/150/150?random=1",
-      coverImage: "https://picsum.photos/1200/400?random=11",
-    },
-    2: {
-      id: "2",
-      name: "Priya Fernando",
-      location: "Kandy",
-      profileImage: "https://picsum.photos/150/150?random=2",
-      coverImage: "https://picsum.photos/1200/400?random=12",
-    },
-    3: {
-      id: "3",
-      name: "Ravi Silva",
-      location: "Galle",
-      profileImage: "https://picsum.photos/150/150?random=3",
-      coverImage: "https://picsum.photos/1200/400?random=13",
-    },
+  // Update guide profile API call
+  const updateProfile = async (data) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/service/guide/profile`,
+        data
+      );
+      setGuide(response.data.data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update profile");
+    }
   };
 
-  const handleCoverUpload = () => {
-    //    Contains logic to change the existing coverpage in the database
+  // Upload cover image API call
+  const handleCoverUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("coverImage", file);
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/service/guide/profile/cover`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      setGuide(response.data.data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload cover image");
+    }
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+  if (!guide) return <p>No guide data found.</p>;
 
   return (
     <>
@@ -47,7 +77,7 @@ const GuideAdmin = () => {
         {/* Cover Photo Section */}
         <div className="relative h-48 sm:h-64 lg:h-80 w-full">
           <img
-            src={dummyUsers[guideId].coverImage}
+            src={guide.coverImage || ""}
             alt="Cover"
             className="w-full h-full object-cover"
             onError={(e) => {
@@ -61,21 +91,17 @@ const GuideAdmin = () => {
           <div className="absolute top-0 right-0 left-0 p-4 sm:p-6">
             <div className="flex items-center justify-end">
               <Link to="/" className="flex items-center text-white">
-                <div className="w-6 h-6 fill-current">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-                  </svg>
-                </div>
+                <Home className="w-6 h-6" />
               </Link>
               <div className="flex items-center space-x-3 text-white mx-6">
                 <img
-                  src={dummyUsers[guideId].profileImage}
+                  src={guide.profileImage || ""}
                   alt="Admin"
                   className="w-8 h-8 rounded-full border border-white"
                   onError={(e) => {
-                    e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%236b7280' width='32' height='32' rx='16'/%3E%3Ctext x='16' y='16' text-anchor='middle' dy='.3em' fill='white' font-size='14'%3E${dummyUsers[
-                      guideId
-                    ].name.charAt(0)}%3C/text%3E%3C/svg%3E`;
+                    e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%236b7280' width='32' height='32' rx='16'/%3E%3Ctext x='16' y='16' text-anchor='middle' dy='.3em' fill='white' font-size='14'%3E${guide.name.charAt(
+                      0
+                    )}%3C/text%3E%3C/svg%3E`;
                   }}
                 />
                 <span className="text-sm font-medium">taxiAdmin</span>
@@ -83,14 +109,12 @@ const GuideAdmin = () => {
             </div>
           </div>
 
-          {/* Upload button */}
-          <button
-            onClick={handleCoverUpload}
-            className="absolute bottom-5 right-5 bg-green-300 hover:bg-green-700 hover:text-white text-black px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg"
-          >
+          {/* Upload Cover Button */}
+          <label className="absolute bottom-5 right-5 cursor-pointer bg-green-300 hover:bg-green-700 hover:text-white text-black px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg">
             <Upload className="w-4 h-4" />
             <span className="text-sm font-medium">Upload new cover</span>
-          </button>
+            <input type="file" className="hidden" onChange={handleCoverUpload} />
+          </label>
         </div>
 
         {/* Profile Section */}
@@ -100,13 +124,13 @@ const GuideAdmin = () => {
               {/* Profile Image */}
               <div className="relative">
                 <img
-                  src={dummyUsers[guideId].profileImage}
-                  alt={dummyUsers[guideId].name}
+                  src={guide.profileImage || ""}
+                  alt={guide.name}
                   className="w-24 h-24 sm:w-32 sm:h-32 lg:w-36 lg:h-36 rounded-full border-4 border-white shadow-lg object-cover"
                   onError={(e) => {
-                    e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 144 144'%3E%3Crect fill='%236b7280' width='144' height='144' rx='72'/%3E%3Ctext x='72' y='72' text-anchor='middle' dy='.3em' fill='white' font-size='48'%3E${dummyUsers[
-                      guideId
-                    ].name.charAt(0)}%3C/text%3E%3C/svg%3E`;
+                    e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 144 144'%3E%3Crect fill='%236b7280' width='144' height='144' rx='72'/%3E%3Ctext x='72' y='72' text-anchor='middle' dy='.3em' fill='white' font-size='48'%3E${guide.name.charAt(
+                      0
+                    )}%3C/text%3E%3C/svg%3E`;
                   }}
                 />
                 <div className="absolute inset-0 rounded-full ring-4 ring-white"></div>
@@ -114,18 +138,17 @@ const GuideAdmin = () => {
 
               {/* Profile Info */}
               <div className="pb-2 flex-1">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1">
-                  {dummyUsers[guideId].name}
-                </h1>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1">{guide.name}</h1>
                 <p className="text-lg sm:text-xl text-gray-600 font-medium">
-                  {dummyUsers[guideId].location}
+                  {`${guide.city || ""}, ${guide.district || ""}, ${guide.province || ""}`}
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <BookingDashboard />
+
+      <BookingDashboard guideId={guideId} />
     </>
   );
 };
