@@ -1,5 +1,6 @@
 import reviewModel from "../models/Review.js";
 import userModel from "../models/User.js";
+import PlatformReviewModel from "../models/PlatformReview.js" 
 
 export const addReview = async (req, res) => {
   try {
@@ -159,3 +160,15 @@ export const getAllReviews = async (req, res) => {
     });
   }
 };
+
+
+const addPlatformReview = async (req,res) => {
+  try {
+    const obj = req.body;
+    obj.user = req.user;
+    
+    await PlatformReviewModel.create(req.body)
+  } catch (error) {
+
+  }
+}

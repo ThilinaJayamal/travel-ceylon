@@ -69,7 +69,7 @@ function Navbar() {
                     {/* Avatar */}
                     <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                         <img
-                            src={traveler?.profilePic || provider?.profilePic || '/default-avatar.png'}
+                            src={traveler?.profilePic || provider?.profilePic || 'https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png'}
                             alt="User Avatar"
                             className="w-10 h-10 rounded-full object-cover border border-gray-300"
                         />
@@ -83,7 +83,7 @@ function Navbar() {
                             </div>
                             <button
                                 className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 transition"
-                                onClick={() => { navigate('/user-profile'); setIsDropdownOpen(false); }}
+                                onClick={() => { navigate('/'); setIsDropdownOpen(false); }}
                             >
                                 <User className="w-5 h-5" /> Profile
                             </button>
