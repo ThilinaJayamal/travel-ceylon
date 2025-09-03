@@ -1,5 +1,7 @@
 import express from "express";
 import { auth } from "../middleware/auth.js";
+import multer from "multer";
+const upload = multer({ storage: multer.memoryStorage() });
 import {
     bookRoom,
     changeBookingState,
@@ -14,11 +16,10 @@ import {
 import { addRoom } from "../controllers/staysController.js";
 
 const router = express.Router();
-
 router.route("/")
-    .post(auth, registerStays)
-    .put(auth, updateStays)
-    .get(getAllStays);
+  .post(auth, upload.fields([{ name: "images" }, { name: "profilePic", maxCount: 1 }]), registerStays)
+  .put(auth, updateStays)
+  .get(getAllStays);
 
 router.route("/profile").get(auth, getStaysProfile);
 
