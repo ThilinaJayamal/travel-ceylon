@@ -35,6 +35,7 @@ import Registration from "./pages/Registration/Registration";
 import HotelRegistration from "./pages/Registration/HotelRegistration";
 import TaxiRegistration from "./pages/Registration/TaxiRegistration";
 import GuideRegistration from "./pages/Registration/GuideRegistration";
+import GuidePayment from "./pages/GuidePayment";
 import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings";
 import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount";
 import GuideAdmin from "./pages/GuideAdmin";
@@ -156,6 +157,8 @@ function App() {
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
         <Route path="/guide/:id" element={<Guide />} />
+        <Route path="/guide/:id/admin" element={<GuideAdmin />} />
+        <Route path="/guide/:id/payment" element={<GuidePayment />} />
 
         {/* User Protected */}
         <Route
