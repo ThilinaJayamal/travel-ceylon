@@ -38,7 +38,6 @@ function Guides() {
 
   return (
     <>
-    
       {/* // Hero Section */}
       <div
         className="h-[90vh] w-full bg-cover bg-center bg-no-repeat flex items-center"
@@ -125,8 +124,7 @@ function Guides() {
             your knowledge and grow your business with our traveler community.
           </p>
           <button className="bg-emerald-400 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded shadow cursor-pointer">
-            Register as Guide
-            <Link to="/guides/register">Tour Guides</Link>
+            <Link to="/service/login">Register as Guide</Link>
           </button>
         </div>
       </div>
@@ -134,9 +132,8 @@ function Guides() {
       {/* places Slider */}
       <MustVisitSlider />
       <GuideGallary />
-
     </>
   );
-};
+}
 
 export default Guides;
