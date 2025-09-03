@@ -6,6 +6,6 @@ const reviewSchema = new mongoose.Schema({
     rating: { type: Number, min: 0, max: 5 },
 }, { timestamps: true });
 
-const review = mongoose.model("Review", reviewSchema);
+const review = mongoose.model("PlatformReview", reviewSchema);
 
 export default review;
