@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Calendar, MapPin } from "lucide-react";
 
@@ -25,6 +25,8 @@ const RentedVehicleDetails = () => {
   const [pickupDate, setPickupDate] = useState("2025-02-04");
   const [returnDate, setReturnDate] = useState("2025-02-09");
   const [area, setArea] = useState("Tissamaharama");
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -255,7 +257,12 @@ const RentedVehicleDetails = () => {
 
                 {/* Pay Now Button */}
                 <div className="flex items-end">
-                  <button className="w-full bg-green-200 hover:bg-green-300 text-black font-semibold py-3 md:py-4 px-6 rounded-lg transition duration-200 h-12 md:h-14 text-sm md:text-base">
+                  <button
+                    onClick={() => {
+                      navigate("/taxi-renting-payment");
+                    }}
+                    className="w-full bg-green-200 hover:bg-green-300 text-black font-semibold py-3 md:py-4 px-6 rounded-lg transition duration-200 h-12 md:h-14 text-sm md:text-base"
+                  >
                     Pay Now
                   </button>
                 </div>

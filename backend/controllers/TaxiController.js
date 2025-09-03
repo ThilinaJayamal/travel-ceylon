@@ -97,7 +97,7 @@ export const getAvailableTaxis = async (req, res) => {
     const filters = {
       _id: { $nin: bookedTaxiIds },
       vehicleType,
-      location: pickup?.toLowerCase()
+      location: pickup
     };
 
     if (minPrice || maxPrice) {

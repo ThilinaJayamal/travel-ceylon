@@ -7,7 +7,6 @@ import { useState } from "react";
 import { asserts } from "../assets/assets";
 import MustVisitSlider from "../components/MustVisitSlider";
 import GuideGallary from "../components/GuideGallary";
-import GuideSearchBar from "../components/GuideSearchBar";
 
 const cards = [
   {

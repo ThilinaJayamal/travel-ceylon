@@ -92,12 +92,14 @@ const visitCardList = [
     {
         title: "Rides",
         icon: localTaxi,
-        desc: "Comfortable and safe rides anytime"
+        desc: "Comfortable and safe rides anytime",
+        to:"/taxi"
     },
     {
         title: "Guides",
         icon: followSign,
-        desc: "Discover places with local experts"
+        desc: "Discover places with local experts",
+        to:"guides"
     }
 ]
 
