@@ -4,7 +4,7 @@ function Checkbox({ title, checked, onChange }) {
       <input
         type="checkbox"
         checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
+        onChange={onChange}
         className="size-6"
       />
       <span>{title}</span>

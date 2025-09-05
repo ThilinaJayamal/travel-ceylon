@@ -26,22 +26,7 @@ export const guideRegister = async (req, res) => {
       });
     }
 
-    const newGuide = await guideModel.create({
-      name: req.body.name,
-      nic: req.body.nic,
-      contact: req.body.contact,
-      profilePic: req.body.profilePic,
-      images: req.body.images || [],
-      specializeArea: req.body.specializeArea,
-      province: req.body.province,
-      district: req.body.district,
-      city: req.body.city,
-      languages: req.body.languages,
-      guideLicenceImg: req.body.guideLicenceImg,
-      nicImg: req.body.nicImg,
-      policeClearanceImg: req.body.policeClearanceImg,
-      price: req.body.price,
-    });
+    const newGuide = await guideModel.create(req.body);
 
     provider.serviceId = newGuide._id;
     provider.serviceType = "Guide";
@@ -52,7 +37,7 @@ export const guideRegister = async (req, res) => {
       message: "Guide registered successfully.",
       data: newGuide,
     });
-  } catch(err) {
+  } catch (err) {
     console.log(err)
     res.status(500).json({
       success: false,

@@ -4,16 +4,41 @@ const GuideSchema = new mongoose.Schema({
   name: { type: String, required: true },
   nic: { type: String, required: true },
   contact: { type: [String], required: true },
-  linkend:{type:String},
   profilePic: { type: String },
   images: { type: [String] },
-  specializeArea: { type: String, required: true },
+  email: { type: String },
+  specializeArea: {
+    histoy: {
+      type: Boolean
+    },
+    wildLife: {
+      type: Boolean
+    },
+    adventure: {
+      type: Boolean
+    }
+  },
   province: { type: String, required: true },
   district: { type: String, required: true },
   city: { type: String, required: true },
-  languages: { type: [String], required: true },
+  languages: {
+    sinhala: {
+      type: Boolean
+    },
+    english: {
+      type: Boolean
+    },
+    tamil: {
+      type: Boolean
+    },
+    german: {
+      type: Boolean
+    },
+    french: {
+      type: Boolean
+    }
+  },
   guideLicenceImg: { type: String },
-  nicImg: { type: String },
   policeClearanceImg: { type: String },
   price: { type: Number, required: true },
 });
