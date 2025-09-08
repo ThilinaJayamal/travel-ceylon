@@ -22,12 +22,10 @@ export const registerTaxi = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Service provider not found" });
     if (provider.serviceId)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Can't create multiple services using a single account",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Can't create multiple services using a single account",
+      });
 
     const {
       driverName,
@@ -67,13 +65,11 @@ export const registerTaxi = async (req, res) => {
     provider.serviceType = "Taxi";
     await provider.save();
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Taxi registered successfully",
-        data: taxiUser,
-      });
+    res.status(201).json({
+      success: true,
+      message: "Taxi registered successfully",
+      data: taxiUser,
+    });
   } catch (error) {
     console.error(error);
     res
@@ -143,13 +139,11 @@ export const updateTaxi = async (req, res) => {
     });
 
     await taxi.save();
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Taxi updated successfully",
-        data: taxi,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Taxi updated successfully",
+      data: taxi,
+    });
   } catch (error) {
     console.error(error);
     res
@@ -164,12 +158,10 @@ export const getAvailableTaxis = async (req, res) => {
   try {
     const { date, minPrice, maxPrice, vehicleType, pickup } = req.query;
     if (!date || !vehicleType || !pickup)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Please provide date, vehicleType and pickup location",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Please provide date, vehicleType and pickup location",
+      });
 
     const bookedTaxis = await taxiBookingModel
       .find({
@@ -183,11 +175,7 @@ export const getAvailableTaxis = async (req, res) => {
     const filters = {
       _id: { $nin: bookedTaxiIds },
       vehicleType,
-<<<<<<< HEAD
-      location: pickup
-=======
       location: pickup,
->>>>>>> db07a8f (Fixed endpoint typo in taxi)
     };
 
     if (minPrice || maxPrice) {
@@ -211,12 +199,10 @@ export const getAvailableTaxis = async (req, res) => {
 export const createTaxiBooking = async (req, res) => {
   try {
     if (req.role !== "user")
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "You are not allowed to book services",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "You are not allowed to book services",
+      });
 
     const { taxiId, pickup, dropup, date, time } = req.body;
     if (!taxiId || !pickup || !dropup || !date)
@@ -226,12 +212,10 @@ export const createTaxiBooking = async (req, res) => {
 
     const distance = await getDistanceORS(pickup, dropup);
     if (distance === -1)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Please check your pickup & dropup location names",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Please check your pickup & dropup location names",
+      });
 
     const existingBooking = await taxiBookingModel.findOne({
       status: { $in: ["pending", "confirmed"] },
@@ -239,12 +223,10 @@ export const createTaxiBooking = async (req, res) => {
       date: new Date(date),
     });
     if (existingBooking)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Taxi is already booked for this date",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Taxi is already booked for this date",
+      });
 
     const selectedTaxi = await taxiModel.findById(taxiId);
     const newBooking = await taxiBookingModel.create({
@@ -259,13 +241,11 @@ export const createTaxiBooking = async (req, res) => {
       status: "pending",
     });
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Taxi booked successfully",
-        data: newBooking,
-      });
+    res.status(201).json({
+      success: true,
+      message: "Taxi booked successfully",
+      data: newBooking,
+    });
   } catch (error) {
     console.error(error);
     res
@@ -295,12 +275,10 @@ export const changeBookingState = async (req, res) => {
       !booking ||
       booking.serviceId.toString() !== provider.serviceId.toString()
     )
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "Not authorized to update this booking",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to update this booking",
+      });
 
     const validStatuses = ["pending", "confirmed", "completed", "cancelled"];
     if (!validStatuses.includes(status))
@@ -311,13 +289,11 @@ export const changeBookingState = async (req, res) => {
     booking.status = status;
     await booking.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Booking status updated successfully",
-        data: booking,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Booking status updated successfully",
+      data: booking,
+    });
   } catch (error) {
     console.error(error);
     res
