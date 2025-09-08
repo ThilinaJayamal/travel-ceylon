@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {toast} from"react-hot-toast"
+import { toast } from "react-hot-toast";
 
 export default function TaxiForm() {
   const [formData, setFormData] = useState({
@@ -14,7 +14,7 @@ export default function TaxiForm() {
     province: "",
     vehicleType: "",
     perKm: "",
-    location: ""
+    location: "",
   });
 
   // Handle input change
@@ -39,10 +39,13 @@ export default function TaxiForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/service/taxi", formData);
+      const response = await axios.post(
+        "http://localhost:5000/api/service/taxi",
+        formData
+      );
       toast.success("Taxi added successfully!");
     } catch (error) {
-      toast.error(error?.response.data.message)
+      toast.error(error?.response.data.message);
     }
   };
 
