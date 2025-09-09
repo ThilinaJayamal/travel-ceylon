@@ -15,7 +15,7 @@ const TaxiSchema = new mongoose.Schema({
   province: String,
   vehicleType: { type: String, required: true },
   perKm: { type: Number, required: true },
-  location: { type: String, required: true }
+  location: { type: String, required: true },
 });
 
 const taxi = mongoose.model("Taxi", TaxiSchema);

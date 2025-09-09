@@ -143,9 +143,18 @@ function App() {
         <Route path="/taxi-bookings" element={<TaxiBookings />} />
         <Route path="/specific-taxi" element={<SpecificTaxi />} />
         <Route path="/rent-taxi" element={<RentTaxi />} />
-        <Route path="/view-renting-vehicle" element={<RentedVehicleDetails />} />
-        <Route path="/taxi-admin-bookings" element={<TaxiAdminViewBookings />} />
-        <Route path="/taxi-admin-dashboard" element={<TaxiAdminViewDashboard />} />
+        <Route
+          path="/view-renting-vehicle"
+          element={<RentedVehicleDetails />}
+        />
+        <Route
+          path="/taxi-admin-bookings"
+          element={<TaxiAdminViewBookings />}
+        />
+        <Route
+          path="/taxi-admin-dashboard"
+          element={<TaxiAdminViewDashboard />}
+        />
         <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
 
         {/* Stays Routes */}
@@ -228,7 +237,10 @@ function App() {
         <Route
           path="/guides/admin"
           element={
-            <ProtectedRoute allowedRoles={["provider"]} currentUser={currentUser}>
+            <ProtectedRoute
+              allowedRoles={["provider"]}
+              currentUser={currentUser}
+            >
               <GuideAdmin />
             </ProtectedRoute>
           }
