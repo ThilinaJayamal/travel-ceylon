@@ -8,7 +8,7 @@ const GuideSchema = new mongoose.Schema({
   images: { type: [String] },
   email: { type: String },
   specializeArea: {
-    histoy: {
+    history: {
       type: Boolean
     },
     wildLife: {
