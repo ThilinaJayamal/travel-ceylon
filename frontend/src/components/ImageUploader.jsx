@@ -49,7 +49,7 @@ function ImageUploader({ setImage }) {
             formData.append("my_file", selectedFile);
 
             const { data } = await axios.post(
-                "http://localhost:3000/api/upload",
+                "http://localhost:5000/api/upload",
                 formData
             );
             setPreview(data?.secure_url);

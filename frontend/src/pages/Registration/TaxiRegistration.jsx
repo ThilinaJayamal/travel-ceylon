@@ -299,16 +299,16 @@ const StepThree = () => {
 };
 
 const StepFour = () => {
-  const { addImage, aggree, setAggree } = useTaxiStore();
+  const { aggree, setAggree,setImage1,setImage2,setImage3 } = useTaxiStore();
 
   return (
     <div className="xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6">
       <div>
         <p className="mb-2">Upload Images of Your Vehicle</p>
         <div className="space-y-6">
-          <ImageUploader setImage={addImage} />
-          <ImageUploader setImage={addImage} />
-          <ImageUploader setImage={addImage} />
+          <ImageUploader setImage={setImage1} />
+          <ImageUploader setImage={setImage2} />
+          <ImageUploader setImage={setImage3} />
         </div>
       </div>
 
