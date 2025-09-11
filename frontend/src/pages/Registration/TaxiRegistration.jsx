@@ -1,185 +1,322 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
+import CustomInput from "../../components/CustomInput";
+import ImageUploader from "../../components/ImageUploader";
+import Checkbox from "../../components/Checkbox";
+import CustomSelectbox from "../../components/CustomSelectbox";
+import { useNavigate } from "react-router-dom";
+import { useTaxiStore } from "../../store/taxiStore";
 import { toast } from "react-hot-toast";
 
-export default function TaxiForm() {
-  const [formData, setFormData] = useState({
-    driverName: "",
-    nic: "",
-    drivingId: "",
-    contact: [""],
-    website: "",
-    chasyNo: "",
-    vehicleNo: "",
-    province: "",
-    vehicleType: "",
-    perKm: "",
-    location: "",
-  });
+function TaxiRegistration() {
+  const navigate = useNavigate();
 
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const { currentIndex, setCurrentIndex, submit } = useTaxiStore();
+
+  const nextStep = () => {
+    if (currentIndex === 3) return;
+    setCurrentIndex(currentIndex + 1);
   };
 
-  // Handle contact array change
-  const handleContactChange = (index, value) => {
-    const updatedContacts = [...formData.contact];
-    updatedContacts[index] = value;
-    setFormData({ ...formData, contact: updatedContacts });
+  const prevStep = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else {
+      navigate("/registration");
+    }
   };
 
-  // Add new contact field
-  const addContactField = () => {
-    setFormData({ ...formData, contact: [...formData.contact, ""] });
-  };
-
-  // Submit form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/service/taxi",
-        formData
-      );
-      toast.success("Taxi added successfully!");
+      const data = await submit();
+      toast.success(data.message);
+      navigate("/");
     } catch (error) {
-      toast.error(error?.response.data.message);
+      toast.error(error?.message);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Add Taxi</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="driverName"
-          placeholder="Driver Name"
-          value={formData.driverName}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+    <div>
+      <h3 className="text-4xl font-semibold text-center mt-12">
+        Travel<span className="text-green-400">Ceylon</span>
+      </h3>
 
-        <input
-          type="text"
-          name="nic"
-          placeholder="NIC"
-          value={formData.nic}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+      {currentIndex === 0 && (
+        <>
+          <p className="text-gray-600 text-center mt-2">Owner Information</p>
+          <StepOne />
+        </>
+      )}
 
-        <input
-          type="text"
-          name="drivingId"
-          placeholder="Driving ID"
-          value={formData.drivingId}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
+      {currentIndex === 1 && (
+        <>
+          <p className="text-gray-600 text-center mt-2">Contact & Pricing</p>
+          <StepTwo />
+        </>
+      )}
 
-        {formData.contact.map((c, index) => (
-          <div key={index} className="flex gap-2">
-            <input
-              type="text"
-              placeholder={`Contact ${index + 1}`}
-              value={c}
-              onChange={(e) => handleContactChange(index, e.target.value)}
-              className="flex-1 p-2 border rounded"
-              required
-            />
-            {index === formData.contact.length - 1 && (
-              <button
-                type="button"
-                onClick={addContactField}
-                className="px-3 bg-blue-500 text-white rounded"
-              >
-                +
-              </button>
-            )}
-          </div>
-        ))}
+      {currentIndex === 2 && (
+        <>
+          <p className="text-gray-600 text-center mt-2">Vehicle Information</p>
+          <StepThree />
+        </>
+      )}
 
-        <input
-          type="text"
-          name="website"
-          placeholder="Website"
-          value={formData.website}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
+      {currentIndex === 3 && (
+        <>
+          <p className="text-gray-600 text-center mt-2">Vehicle Images</p>
+          <StepFour />
+        </>
+      )}
 
-        <input
-          type="text"
-          name="chasyNo"
-          placeholder="Chasy Number"
-          value={formData.chasyNo}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <input
-          type="text"
-          name="vehicleNo"
-          placeholder="Vehicle Number"
-          value={formData.vehicleNo}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <input
-          type="text"
-          name="province"
-          placeholder="Province"
-          value={formData.province}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-
-        <input
-          type="text"
-          name="vehicleType"
-          placeholder="Vehicle Type"
-          value={formData.vehicleType}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <input
-          type="number"
-          name="perKm"
-          placeholder="Per Km Rate"
-          value={formData.perKm}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          value={formData.location}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-
+      <div className="flex justify-center gap-6 items-center mb-32">
         <button
-          type="submit"
-          className="w-full bg-green-500 text-white p-2 rounded font-bold"
+          className="px-12 py-2 rounded-md bg-green-400 text-white hover:bg-green-500 cursor-pointer"
+          onClick={prevStep}
         >
-          Submit
+          Back
         </button>
-      </form>
+
+        {currentIndex !== 3 && (
+          <button
+            className="px-12 py-2 rounded-md bg-green-400 text-white hover:bg-green-500 cursor-pointer"
+            onClick={nextStep}
+          >
+            Next
+          </button>
+        )}
+
+        {currentIndex === 3 && (
+          <button
+            className="px-12 py-2 rounded-md bg-green-400 text-white hover:bg-green-500 cursor-pointer"
+            onClick={handleSubmit}
+          >
+            Finish
+          </button>
+        )}
+      </div>
     </div>
   );
 }
+
+export default TaxiRegistration;
+
+//
+// ---------- STEP COMPONENTS ----------
+//
+
+const StepOne = () => {
+  const {
+    driverName,
+    nic,
+    drivingId,
+    setDriverName,
+    setNic,
+    setDrivingId,
+    setNicImg,
+    setDrivingIdImg,
+  } = useTaxiStore();
+
+  return (
+    <div className="xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6">
+      <div>
+        <p>What is the Driver Name?</p>
+        <CustomInput
+          label="Driver Name"
+          value={driverName}
+          onChange={(e) => setDriverName(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <p>Identification Numbers</p>
+        <div className="grid grid-cols-2 gap-4">
+          <CustomInput
+            label="NIC Number"
+            value={nic}
+            onChange={(e) => setNic(e.target.value)}
+          />
+          <CustomInput
+            label="Licence Number"
+            value={drivingId}
+            onChange={(e) => setDrivingId(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="mb-2">NIC Card</p>
+          <ImageUploader setImage={setNicImg} />
+        </div>
+        <div>
+          <p className="mb-2">Driving Licence Card</p>
+          <ImageUploader setImage={setDrivingIdImg} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const StepTwo = () => {
+  const {
+    contact1,
+    contact2,
+    email,
+    website,
+    perKm,
+    setContact1,
+    setContact2,
+    setEmail,
+    setWebsite,
+    setPerKm,
+  } = useTaxiStore();
+
+  return (
+    <div className="xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6">
+      <div>
+        <p>Your contact Numbers?</p>
+        <div className="grid grid-cols-2 gap-4">
+          <CustomInput
+            label="Number 1"
+            value={contact1}
+            onChange={(e) => setContact1(e.target.value)}
+          />
+          <CustomInput
+            label="Number 2"
+            value={contact2}
+            onChange={(e) => setContact2(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div>
+        <p>Setup Your Email</p>
+        <CustomInput
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <p>Website (Optional)</p>
+        <CustomInput
+          label="Website link"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <p>Price per KM</p>
+        <CustomInput
+          label="Per KM"
+          type="number"
+          value={perKm}
+          onChange={(e) => setPerKm(e.target.value)}
+        />
+      </div>
+    </div>
+  );
+};
+
+const StepThree = () => {
+  const {
+    vehicleType,
+    chasyNo,
+    vehicleNo,
+    province,
+    location,
+    setVehicleType,
+    setChasyNo,
+    setVehicleNo,
+    setProvince,
+    setLocation,
+  } = useTaxiStore();
+
+  const vehicleTypes = ["Car", "Van", "Bus", "Three Wheeler"];
+  const provinces = [
+    "Western",
+    "Central",
+    "Southern",
+    "Northern",
+    "Eastern",
+    "North Western",
+    "North Central",
+    "Uva",
+    "Sabaragamuwa",
+  ];
+
+  return (
+    <div className="xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6">
+      <div>
+        <p>What is your vehicle type?</p>
+        <CustomSelectbox
+          label="Vehicle Type"
+          options={vehicleTypes}
+          value={vehicleType}
+          onChange={(e) => setVehicleType(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <p>What is your Vehicle Model</p>
+        <CustomInput
+          label="Vehicle Model"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+      </div>
+
+      <div>
+        <p>Vehicle Registration Numbers</p>
+        <div className="grid grid-cols-2 gap-4">
+          <CustomInput
+            label="Vehicle Number"
+            value={vehicleNo}
+            onChange={(e) => setVehicleNo(e.target.value)}
+          />
+          <CustomInput
+            label="Chassis Number"
+            value={chasyNo}
+            onChange={(e) => setChasyNo(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div>
+        <p>What is the Registered Province?</p>
+        <CustomSelectbox
+          label="Province"
+          options={provinces}
+          value={province}
+          onChange={(e) => setProvince(e.target.value)}
+        />
+      </div>
+    </div>
+  );
+};
+
+const StepFour = () => {
+  const { addImage, aggree, setAggree } = useTaxiStore();
+
+  return (
+    <div className="xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6">
+      <div>
+        <p className="mb-2">Upload Images of Your Vehicle</p>
+        <div className="space-y-6">
+          <ImageUploader setImage={addImage} />
+          <ImageUploader setImage={addImage} />
+          <ImageUploader setImage={addImage} />
+        </div>
+      </div>
+
+      <Checkbox
+        title="I agree to terms and conditions"
+        checked={aggree}
+        onChange={(e) => setAggree(e.target.checked)}
+      />
+    </div>
+  );
+};

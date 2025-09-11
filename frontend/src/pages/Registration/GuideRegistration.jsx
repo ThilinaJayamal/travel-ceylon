@@ -5,6 +5,7 @@ import Checkbox from "../../components/Checkbox";
 import CustomSelectbox from "../../components/CustomSelectbox";
 import { useNavigate } from "react-router-dom";
 import { useGuideStore } from '../../store/guideStore';
+import { toast } from "react-hot-toast"
 
 const options = {
   "Select": {},
@@ -78,23 +79,44 @@ function GuideRegistration() {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      const data = await submit();
+      console.log(data)
+      toast.success(data.message);
+      navigate("/")
+    } catch (error) {
+      return null;
+    }
+  }
+
   return (
     <div>
       <h3 className='text-4xl font-semibold text-center mt-12'>
         Travel<span className='text-green-400'>Ceylon</span>
       </h3>
-      <p className='text-gray-600 text-center'>Personal Information</p>
-
+      
       {currentIndex === 0 && (
-        <StepOne />
+        <>
+          <p className='text-gray-600 text-center mt-2'>Personal Information</p>
+          <StepOne />
+        </>
+
       )}
 
       {currentIndex === 1 && (
-        <StepTwo />
+        <>
+          <p className='text-gray-600 text-center mt-2'>Profesional Information</p>
+          <StepTwo />
+        </>
+
       )}
 
       {currentIndex === 2 && (
-        <StepThree />
+        <>
+          <p className='text-gray-600 text-center mt-2'>Documents Information</p>
+          <StepThree />
+        </>
       )}
 
       <div className='flex justify-center gap-6 items-center mb-32'>
@@ -117,7 +139,7 @@ function GuideRegistration() {
         {currentIndex === 2 && (
           <button
             className='px-12 py-2 rounded-md bg-green-400 text-white hover:bg-green-500 cursor-pointer'
-            onClick={submit}
+            onClick={handleSubmit}
           >
             Finish
           </button>
@@ -148,7 +170,7 @@ const StepOne = () => {
   } = useGuideStore();
 
   return (
-    <div className='xl:max-w-4xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6'>
+    <div className='xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6'>
       <div>
         <p>What is your Name?</p>
         <CustomInput label="Full Name" value={name} onChange={e => setName(e.target.value)} />
@@ -214,7 +236,7 @@ const StepTwo = () => {
   const cities = district ? options[province][district] : [];
 
   return (
-    <div className='xl:max-w-4xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6'>
+    <div className='xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6'>
       <div>
         <p>What Are the languages do you prefer?</p>
         <div className='space-y-3 mt-4'>
@@ -261,7 +283,7 @@ const StepThree = () => {
   } = useGuideStore();
 
   return (
-    <div className='xl:max-w-4xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6'>
+    <div className='xl:max-w-xl xl:p-0 p-4 w-full mx-auto my-8 space-y-6'>
       <div>
         <p className='mb-2'>Add Guide License (SLTDA certification)</p>
         <ImageUploader setImage={setGuideLicenceImg} />

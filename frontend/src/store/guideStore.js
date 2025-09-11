@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { api } from "../config/api";
+import toast from "react-hot-toast";
 
 export const useGuideStore = create((set, get) => ({
     name: null,
@@ -75,7 +76,7 @@ export const useGuideStore = create((set, get) => ({
         } = get();
 
         if (!aggree) {
-            console.error("You must agree to terms and conditions");
+            toast.error("You must agree to terms and conditions");
             return;
         }
 
@@ -97,9 +98,9 @@ export const useGuideStore = create((set, get) => ({
 
         try {
             const { data } = await api.post("/service/guide", formData);
-            console.log(data)
+            return data
         } catch (error) {
-            console.error(error?.response?.data?.message || "Something went wrong");
+            toast.error(error?.response?.data?.message || "Something went wrong");
         }
     },
 }));

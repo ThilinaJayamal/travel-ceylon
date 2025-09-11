@@ -94,8 +94,8 @@ function ImageUploader({ setImage }) {
                                 (
                                     <div className="flex flex-col items-center justify-center p-5 w-full h-48">
                                         <ImagePlus size={32} className="text-green-300" />
-                                        <p className="text-base text-gray-700 font-semibold">Drag and Drop or upload</p>
-                                        <p className="text-sm text-gray-600">JPG/JPEG or PNG maximum size 10MB.</p>
+                                        <p className="text-base text-gray-700 font-semibold text-center">Drag and Drop or upload</p>
+                                        <p className="text-sm text-gray-600 text-center">JPG/JPEG or PNG maximum size 10MB.</p>
                                     </div>
                                 )
                         ) :
