@@ -214,6 +214,7 @@ const StepTwo = () => {
     german,
     tamil,
     wildLife,
+    history,
     adventure,
     price,
     setProvince,

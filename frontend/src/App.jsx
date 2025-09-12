@@ -117,6 +117,7 @@ function App() {
     "/service/login",
     "/registration/guide",
     "/registration/taxi",
+    "/registration/hotel"
   ].includes(path);
 
   const showFooter = ![
@@ -125,6 +126,7 @@ function App() {
     "/registration",
     "/registration/guide",
     "/registration/taxi",
+    "/registration/hotel"
   ].includes(path);
 
   return (

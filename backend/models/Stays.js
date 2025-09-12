@@ -1,28 +1,40 @@
 import mongoose from "mongoose";
 
-
-const RoomSubSchema = new mongoose.Schema({
-  roomType: { type: String, required: true },
-  price: { type: Number, default: 0 },
-  count: { type: Number, default: 1 }, // number of identical rooms
-  maxGuest: { type: Number, default: 1 },
-  beds: { type: mongoose.Schema.Types.Mixed, default: {} }, // or Map/of Number
-  features: [{ type: String }],
-  images: [{ type: String }],
-}, { _id: true }); // keep _id true if you want each subdoc to have an id
-
 const StaySchema = new mongoose.Schema({
-    name: { type: String, required: true },
+  name: { type: String, required: true },
   location: { type: String, required: true },
-  contact: { type: String },
+  contact: [{
+    type: String
+  }],
   website: { type: String },
-  facilities: [{ type: String }],
-  rooms: [RoomSubSchema], // <-- embedded subdocuments
-  images: [{ type: String }],
+  facilities: {
+    breakfast: { type: Boolean, default: false },
+    roomService: { type: Boolean, default: false },
+    bar: { type: Boolean, default: false },
+    airportShuttle: { type: Boolean, default: false },
+    fitnessCenter: { type: Boolean, default: false },
+    garden: { type: Boolean, default: false },
+    parking: { type: Boolean, default: false },
+    familyRooms: { type: Boolean, default: false },
+    freeWifi: { type: Boolean, default: false },
+    airConditioning: { type: Boolean, default: false },
+    spa: { type: Boolean, default: false },
+    swimmingPool: { type: Boolean, default: false },
+    waterPark: { type: Boolean, default: false }
+  },
+  rooms: [{
+    room: {
+      type: mongoose.Types.ObjectId,
+      ref: "room"
+    }
+  }],
+  images: [{
+    type: String
+  }],
   description: { type: String },
   profilePic: { type: String },
-  },
-{ timestamps: true});
+},
+  { timestamps: true });
 
 const stays = mongoose.model("Stays", StaySchema);
 

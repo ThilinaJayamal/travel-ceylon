@@ -5,8 +5,11 @@ const RoomSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   maxGuest: { type: Number, required: true },
   bedType: { type: String, required: true },
-  features: { type: [String], enum: ["AC", "WI-FI"] },
-  images: [String]
+  facilites: {
+    AC: { type: Boolean, default: false },
+    WIFI: { type: Boolean, default: false }
+  },
+  images: {type:[String]}
 });
 
 const room = mongoose.model("Room", RoomSchema);

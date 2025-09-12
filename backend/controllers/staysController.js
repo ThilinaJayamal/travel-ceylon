@@ -4,98 +4,41 @@ import serviceProviderModel from "../models/ServiceProvider.js";
 import staysBookingModel from "../models/Bookings/StaysBooking.js";
 
 // ------------------------- Stays -------------------------
-
-// ...existing code...
-
 export const registerStays = async (req, res) => {
   try {
-    if (!req.body)
-      return res
-        .status(400)
-        .json({ success: false, message: "No form data received" });
-    if (!req.body.name)
-      return res
-        .status(400)
-        .json({ success: false, message: "Name is required" });
-
-    // ----- parse/normalize facilities -----
-    let facilitiesRaw = req.body["facilities[]"] || req.body.facilities || [];
-    if (typeof facilitiesRaw === "string") {
-      try {
-        facilitiesRaw = JSON.parse(facilitiesRaw);
-      } catch {
-        facilitiesRaw = facilitiesRaw
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
+    if (!req?.user || req?.role !== "provider") {
+      return res.status(401).json({
+        success: false,
+        message: "You are not authorized to register a guide.",
+      });
     }
-    facilitiesRaw = Array.isArray(facilitiesRaw)
-      ? facilitiesRaw
-      : [facilitiesRaw];
-    const schemaEnum = staysModel.schema.path("facilities")?.enumValues || null;
-    const facilities = schemaEnum
-      ? facilitiesRaw.filter((f) => schemaEnum.includes(f))
-      : facilitiesRaw;
 
-    // ----- parse/normalize rooms (embed subdocuments) -----
-    let roomsPayload = req.body.rooms || [];
-    if (typeof roomsPayload === "string") {
-      try {
-        roomsPayload = JSON.parse(roomsPayload);
-      } catch {
-        roomsPayload = roomsPayload
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
+    const provider = await serviceProviderModel.findById(req.user);
+    if (!provider) {
+      return res.status(404).json({
+        success: false,
+        message: "Your service provider account could not be found. Please contact support.",
+      });
     }
-    // Ensure roomsPayload is an array of plain objects
-    const normalizedRooms = Array.isArray(roomsPayload)
-      ? roomsPayload.map((r) => ({
-          roomType: r.type || r.roomType || "Standard",
-          price: parseFloat(r.price) || 0,
-          count: r.count ?? 1,
-          maxGuest: r.maxGuest ?? 1,
-          beds:
-            typeof r.beds === "object"
-              ? r.beds
-              : r.beds
-              ? JSON.parse(r.beds)
-              : {},
-          features: Array.isArray(r.features)
-            ? r.features
-            : r.features
-            ? r.features.split(",").map((s) => s.trim())
-            : [],
-          images: Array.isArray(r.images)
-            ? r.images
-            : r.images
-            ? r.images.split(",").map((s) => s.trim())
-            : [],
-        }))
-      : [];
 
-    // files available in req.files when using upload.fields
-    const imagesFiles = req.files?.images || [];
-    const profilePicFile = req.files?.profilePic?.[0];
-    // TODO: upload image files and set URLs
-    const images = []; // set uploaded image URLs here
-    const profilePic = ""; // set uploaded profile pic URL if uploaded
+    if (provider.serviceId) {
+      return res.status(400).json({
+        success: false,
+        message: "You already have a registered service. Multiple services under one account are not allowed.",
+      });
+    }
 
-    const newStay = await staysModel.create({
-      name: req.body.name,
-      location: req.body.location,
-      contact: req.body.contact,
-      website: req.body.website || "",
-      facilities,
-      rooms: normalizedRooms, // embed room subdocuments
-      images,
-      description: req.body.description || "",
-      profilePic,
+    const newStays = await staysModel.create(req.body);
+
+    provider.serviceId = newStays._id;
+    provider.serviceType = "Stays";
+    await provider.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Stays registered successfully.",
+      data: newStays,
     });
-
-    return res.status(201).json({ success: true, data: newStay });
   } catch (error) {
     console.error(error);
     return res
