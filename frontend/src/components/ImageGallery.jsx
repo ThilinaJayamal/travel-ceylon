@@ -1,19 +1,8 @@
 import React from 'react';
 import { asserts } from '../assets/assets';
 
-const hotelImages = [
-    asserts.hotel1,
-    asserts.hotel2,
-    asserts.hotel3,
-    asserts.hotel2,
-    asserts.hotel1,
-    asserts.hotel3,
-    asserts.hotel2,
-    asserts.hotel1,
-    asserts.hotel3,
-];
 
-function ImageGallery() {
+function ImageGallery({hotelImages}) {
     const mainImage = hotelImages[0];                  // First 
     const smallImages = hotelImages.slice(1, 5);       // Next 4 small images
     const extraCount = hotelImages.length - 5;         // Count beyond the fifth

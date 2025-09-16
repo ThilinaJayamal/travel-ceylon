@@ -7,6 +7,9 @@ const StaySchema = new mongoose.Schema({
     type: String
   }],
   website: { type: String },
+  description: { type: String },
+  profilePic: { type: String },
+  cover:{type:String},
   facilities: {
     breakfast: { type: Boolean, default: false },
     roomService: { type: Boolean, default: false },

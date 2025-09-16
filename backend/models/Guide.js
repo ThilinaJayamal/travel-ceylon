@@ -6,6 +6,7 @@ const GuideSchema = new mongoose.Schema({
   contact: { type: [String], required: true },
   profilePic: { type: String },
   images: { type: [String] },
+  description:{type:String},
   email: { type: String },
   specializeArea: {
     history: {

@@ -32,6 +32,7 @@ export const useHotelStore = create((set, get) => ({
   aggree: false,
   currentIndex: 0,
 
+
   // ---------- SETTERS ----------
   setName: (name) => set({ name }),
   setLocation: (location) => set({ location }),
@@ -121,4 +122,24 @@ export const useHotelStore = create((set, get) => ({
       throw new Error(error?.response?.data?.message || "Something went wrong");
     }
   },
+
+
+  staysProfile: null,
+  setStaysProfile: (staysProfile) => set({ staysProfile }),
+  loading: false,
+  setLoading: (loading) => set({ loading }),
+
+  getStaysMe: async () => {
+    try {
+      const { setStaysProfile, setLoading } = get();
+      setLoading(true)
+      const { data } = await api.get("/service/stays/profile");
+      console.log(data?.data)
+      setStaysProfile(data?.data);
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      throw new Error(error?.response?.data?.message || "Something went wrong");
+    }
+  }
 }));
