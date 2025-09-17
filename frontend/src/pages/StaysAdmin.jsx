@@ -132,34 +132,7 @@ function StaysAdmin() {
                 <DescriptionEditor content={staysProfile?.description} />
 
                 <h2 className="text-2xl font-medium mt-8 mb-4">Room Options</h2>
-                <div className="overflow-x-auto border border-gray-200 rounded-xl bg-white">
-                  <table className="w-full text-sm text-left text-gray-700">
-                    <thead className="text-gray-900 border-b border-gray-200">
-                      <tr>
-                        <th className="px-6 py-4">Room Type</th>
-                        <th className="px-6 py-4">Base Price</th>
-                        <th className="px-6 py-4">Max Guest</th>
-                        <th className="px-6 py-4">Bed Options</th>
-                        <th className="px-6 py-4">Availability</th>
-                        <th className="px-6 py-4">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rooms.map((room, index) => (
-                        <tr key={index} className="border-t border-gray-100">
-                          <td className="px-6 py-4">{room.type}</td>
-                          <td className="px-6 py-4">${room.price.toFixed(2)}</td>
-                          <td className="px-6 py-4">{room.maxGuest}</td>
-                          <td className="px-6 py-4">{room.bed}</td>
-                          <td className="px-6 py-4">
-                            <input type="checkbox" defaultChecked={room.available} />
-                          </td>
-                          <td className="px-6 py-4 text-green-500 cursor-pointer">Edit</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                
 
                 <h2 className="text-2xl font-medium mt-10 mb-3">Facilities</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-6 mt-3">
