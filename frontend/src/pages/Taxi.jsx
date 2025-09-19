@@ -245,7 +245,7 @@ const Taxi = () => {
       </div>
 
       <div className="flex gap-6 items-center justify-start mt-12 overflow-x-auto scrollbar-hide w-auto ml-12 pb-12 pr-8">
-        {reviews.map((item, index) => (
+        {[].map((item, index) => (
           <TestimonialCard
             key={index}
             user={item.user.name}

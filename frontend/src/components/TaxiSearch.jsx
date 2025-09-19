@@ -18,9 +18,20 @@ const TaxiSearch = () => {
     }));
   };
 
+  const getApiUrl = () => {
+    const now = new Date();
+    const date = now.toISOString().slice(0, 10); // YYYY-MM-DD
+    const time = now.toTimeString().slice(0, 5); // HH:MM
+    const pickup = formData.pickup.toLowerCase();
+    const vehicleType = formData.medium.toLowerCase();
+
+    return `http://localhost:5000/api/service/taxi/available?date=${date}&time=${time}&pickup=${formData.pickup}&vehicleType=${vehicleType}`;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    const apiUrl = getApiUrl();
+    console.log("API URL:", apiUrl);
     navigate("/taxi-bookings", { state: formData });
   };
 

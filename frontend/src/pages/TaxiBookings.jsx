@@ -1,7 +1,7 @@
 import TaxiSearch from "../components/TaxiSearch.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import taxiVehicles from "../store/taxiVehicles.js";
+// import taxiVehicles from "../store/taxiVehicles.js";
 import TaxiFilter from "../components/TaxiFilter.jsx";
 
 const TaxiBookings = () => {
@@ -11,18 +11,29 @@ const TaxiBookings = () => {
   const [initialVehicles, setInitialVehicles] = useState([]);
   const [showFilter, setShowFilter] = useState(false); // State to control filter visibility on mobile
 
-  // Initial filter based on pickup and medium
+  // Fetch available taxis from API using current date, time, pickup, and vehicleType
   useEffect(() => {
-    if (formData?.pickup && formData?.medium) {
-      const initialResults = taxiVehicles.filter(
-        (v) =>
-          v.location === formData.pickup &&
-          v.vehicleType === formData.medium.toLowerCase() &&
-          v.services?.includes("hire")
-      );
-      setInitialVehicles(initialResults);
-      setFilteredVehicles(initialResults);
-    }
+    const fetchAvailableTaxis = async () => {
+      if (formData?.pickup && formData?.medium) {
+        const now = new Date();
+        const date = now.toISOString().slice(0, 10); // YYYY-MM-DD
+        const time = now.toTimeString().slice(0, 5); // HH:MM
+        const vehicleType = formData.medium.toLowerCase();
+        const apiUrl = `http://localhost:5000/api/service/taxi/available?date=${date}&time=${time}&pickup=${formData.pickup}&vehicleType=${vehicleType}`;
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) throw new Error("Failed to fetch taxis");
+          const data = await response.json();
+          console.log(data);
+          setInitialVehicles(data.data);
+          setFilteredVehicles(data.data);
+        } catch (error) {
+          setInitialVehicles([]);
+          setFilteredVehicles([]);
+        }
+      }
+    };
+    fetchAvailableTaxis();
   }, [formData]);
 
   // Handle filter changes

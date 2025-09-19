@@ -7,7 +7,6 @@ import { useState } from "react";
 import { asserts } from "../assets/assets";
 import MustVisitSlider from "../components/MustVisitSlider";
 import GuideGallary from "../components/GuideGallary";
-import GuideSearchBar from "../components/GuideSearchBar";
 
 const cards = [
   {
@@ -39,7 +38,6 @@ function Guides() {
 
   return (
     <>
-    
       {/* // Hero Section */}
       <div
         className="h-[90vh] w-full bg-cover bg-center bg-no-repeat flex items-center"
@@ -82,7 +80,7 @@ function Guides() {
       </div>
 
       {/* feature cards section */}
-      <section className="bg-white rounded-2xl p-6 md:p-10 max-w-[88%] mx-auto rounded-lg shadow-md">
+      <section className="bg-white rounded-2xl p-6 md:p-10 max-w-[88%] mx-auto shadow-md">
         <h2 className="text-2xl md:text-3xl font-bold mb-3">
           Discover Sri Lanka Through Local Eyes
         </h2>
@@ -110,7 +108,7 @@ function Guides() {
       {/* Additional Search Section */}
       <div
         className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-6 md:px-10 shadow-md
-          bg-white max-w-[88%] rounded-lg shadow-md m-auto max-h-auto mb-10 mt-14"
+          bg-white max-w-[88%] rounded-lg  m-auto max-h-auto mb-10 mt-14"
       >
         <div className="flex items-end h-full">
           <img src={asserts.guider} alt="Man with Binocular" />
@@ -126,8 +124,7 @@ function Guides() {
             your knowledge and grow your business with our traveler community.
           </p>
           <button className="bg-emerald-400 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded shadow cursor-pointer">
-            Register as Guide
-            <Link to="/guides/register">Tour Guides</Link>
+            <Link to="/service/login">Register as Guide</Link>
           </button>
         </div>
       </div>
@@ -135,9 +132,8 @@ function Guides() {
       {/* places Slider */}
       <MustVisitSlider />
       <GuideGallary />
-
     </>
   );
-};
+}
 
 export default Guides;

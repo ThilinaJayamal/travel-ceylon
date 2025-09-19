@@ -5,7 +5,8 @@ function BillViewer({
   title,
   subtitle,
   sections = [],
-  totalAmount
+  totalAmount,
+  id
 }) {
   return (
     <div className='max-w-xl p-4 md:p-8 rounded-md bg-white border border-gray-200 max-h-fit mx-auto'>
@@ -16,7 +17,12 @@ function BillViewer({
           <h3 className='text-2xl font-semibold'>{title}</h3>
           <p className='text-lg'>{subtitle}</p>
         </div>
+
       </div>
+
+      <p className='text-base my-4 text-gray-700'>
+        <span className='text-gray-500'>TRANSACTION ID: </span> {id?.toString()}
+      </p>
 
       {/* Sections */}
       {sections.map((section, sIdx) => (
@@ -25,7 +31,7 @@ function BillViewer({
           <h4 className='mt-4 text-xl font-semibold text-black/70'>{section.heading}</h4>
           <div className='ml-8 mt-4 space-y-2'>
             {section.items.map((item, iIdx) => (
-              <div key={iIdx} className='flex justify-between items-center text-black/70'>
+              <div key={iIdx} className='flex justify-between items-center gap-8 text-black/70'>
                 <p>{item.label}</p>
                 <p>{item.value}</p>
               </div>
@@ -39,7 +45,7 @@ function BillViewer({
         <>
           <hr className='mt-4' />
           <div className='ml-8 mt-4'>
-            <div className='flex justify-between items-center text-black/70 font-semibold'>
+            <div className='flex justify-between gap-8 items-center text-black/70 font-semibold'>
               <p>Total Amount</p>
               <p>{totalAmount}</p>
             </div>

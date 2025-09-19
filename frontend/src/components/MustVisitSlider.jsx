@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 import { asserts } from "../assets/assets";
 
 const places = [
@@ -36,6 +36,13 @@ const places = [
 ];
 
 const MustVisitSlider = () => {
+  const navigate = useNavigate();
+
+  const handleShowGuides = (place) => {
+    const townName = place.name;
+    navigate(`/guides/search?q=${encodeURIComponent(townName)}`);
+  };
+
   return (
     <section className="py-10 rounded-2xl max-w-[88%] mx-auto">
       <h2 className="text-2xl md:text-3xl font-bold mb-6">
@@ -57,7 +64,11 @@ const MustVisitSlider = () => {
               <h3 className="text-xl font-semibold">{place.name}</h3>
               <p className="text-sm">{place.province}</p>
             </div>
-            <button className="absolute bottom-4 right-4 bg-green-300 text-black px-4 py-2 rounded hover:bg-green-700 hover:text-white transition">
+
+            <button
+              onClick={() => handleShowGuides(place)}
+              className="absolute bottom-4 right-4 bg-green-300 text-black px-4 py-2 rounded hover:bg-green-700 hover:text-white transition"
+            >
               Show Guides
             </button>
           </div>

@@ -1,24 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
+// Stores
+import { useAuthStore } from "./store/authStore";
+import { useServiceAuthStore } from "./store/serviceAuthStrore";
 // Stores
 import { useAuthStore } from "./store/authStore";
 import { useServiceAuthStore } from "./store/serviceAuthStrore";
 import { useAppStore } from "./store/app-store";
 
 // Components
+// Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ReviewBox from "./components/ReviewBox";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ReviewBox from "./components/ReviewBox";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+// Pages
 // Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound";
 import StaysAdmin from "./pages/StaysAdmin";
+import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard";
+import ServiceProviderLogin from "./pages/ServiceproviderLogin";
+import Taxi from "./pages/Taxi";
+import TaxiBookings from "./pages/TaxiBookings";
+import SpecificTaxi from "./pages/SpecificTaxi";
+import RentTaxi from "./pages/RentTaxi";
+import RentedVehicleDetails from "./pages/RentedVehicleDetails";
 import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard";
 import ServiceProviderLogin from "./pages/ServiceproviderLogin";
 import Taxi from "./pages/Taxi";
@@ -40,7 +58,7 @@ import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings";
 import TaxiBookingPayment from "./pages/TaxiBookingPayment";
 import TaxiRentingPayment from "./pages/TaxiRentingPayment";
 import GuideAdmin from "./pages/GuideAdmin";
-
+import GuidePayment from "./pages/GuidePayment";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -112,8 +130,23 @@ function App() {
   }, [travelerError, providerError]);
 
   // Navbar/Footer visibility
-  const showNavbar = !["/", "/login", "/service/login"].includes(path);
-  const showFooter = !["/login", "/service/login"].includes(path);
+  const showNavbar = ![
+    "/",
+    "/login",
+    "/service/login",
+    "/registration/guide",
+    "/registration/taxi",
+    "/registration/hotel",
+  ].includes(path);
+
+  const showFooter = ![
+    "/login",
+    "/service/login",
+    "/registration",
+    "/registration/guide",
+    "/registration/taxi",
+    "/registration/hotel",
+  ].includes(path);
 
   return (
     <>
@@ -155,7 +188,8 @@ function App() {
         <Route path="/guides" element={<Guides />} />
         <Route path="/guides/search" element={<GuideSearchResults />} />
         <Route path="/guide/:id" element={<Guide />} />
-        <Route path="guide/:id/admin" element={<GuideAdmin />} />
+        <Route path="/guide/:id/admin" element={<GuideAdmin />} />
+        <Route path="/guide/:id/payment" element={<GuidePayment />} />
 
         {/* User Protected */}
         <Route
@@ -220,6 +254,17 @@ function App() {
               currentUser={currentUser}
             >
               <TaxiAdminViewDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guides/admin"
+          element={
+            <ProtectedRoute
+              allowedRoles={["provider"]}
+              currentUser={currentUser}
+            >
+              <GuideAdmin />
             </ProtectedRoute>
           }
         />
