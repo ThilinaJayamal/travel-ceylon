@@ -1,24 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 
-// Stores
-import { useAuthStore } from "./store/authStore";
-import { useServiceAuthStore } from "./store/serviceAuthStrore";
 // Stores
 import { useAuthStore } from "./store/authStore";
 import { useServiceAuthStore } from "./store/serviceAuthStrore";
 import { useAppStore } from "./store/app-store";
 
 // Components
-// Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ReviewBox from "./components/ReviewBox";
-import ProtectedRoute from "./components/ProtectedRoute";
 import ReviewBox from "./components/ReviewBox";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -28,15 +19,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
-import NotFound from "./pages/NotFound";
 import StaysAdmin from "./pages/StaysAdmin";
-import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard";
-import ServiceProviderLogin from "./pages/ServiceproviderLogin";
-import Taxi from "./pages/Taxi";
-import TaxiBookings from "./pages/TaxiBookings";
-import SpecificTaxi from "./pages/SpecificTaxi";
-import RentTaxi from "./pages/RentTaxi";
-import RentedVehicleDetails from "./pages/RentedVehicleDetails";
 import TaxiAdminViewDashboard from "./pages/TaxiAdminViewDashboard";
 import ServiceProviderLogin from "./pages/ServiceproviderLogin";
 import Taxi from "./pages/Taxi";
