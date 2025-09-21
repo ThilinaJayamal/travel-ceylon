@@ -1,31 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const TaxiBookingPayment = () => {
   const navigate = useNavigate();
-
-  // Mock booking data
-  const bookingData = {
-    vehicle: {
-      model: "Toyota Vitz CAX-0696",
-      driver: "Saman Kumara",
-      image: "/api/placeholder/200/150",
-    },
-    journey: {
-      pickup: "Tissamaharama",
-      drop: "Mirissa",
-      date: "04 Feb 2025",
-      time: "10:00am",
-      distance: "128km",
-    },
-    payment: {
-      baseFee: 170.0,
-      discount: 0,
-      taxes: 0,
-      serviceFee: 0,
-      total: 170.0,
-    },
-  };
+  const { state } = useLocation();
+  const { pickup, drop, date, time, medium, distance, totalFare, vehicle } =
+    state || {};
 
   const [formData, setFormData] = useState({
     nameOnCard: "",
@@ -47,10 +27,8 @@ const TaxiBookingPayment = () => {
   };
 
   const handlePayment = () => {
-    // show popup
     setShowPopup(true);
 
-    // Auto redirect after 3 seconds
     setTimeout(() => {
       navigate("/taxi");
     }, 7000);
@@ -66,17 +44,17 @@ const TaxiBookingPayment = () => {
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-20 h-16 md:w-24 md:h-20 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src={bookingData.vehicle.image}
+                  src={vehicle?.image || "/api/placeholder/200/150"}
                   alt="Vehicle"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
                 <h2 className="text-lg md:text-xl font-bold text-gray-800">
-                  {bookingData.vehicle.model}
+                  {vehicle?.model || medium} {vehicle?.vehicleNo || ""}
                 </h2>
                 <p className="text-gray-600 text-sm md:text-base">
-                  {bookingData.vehicle.driver}
+                  {vehicle?.driverName || "Driver"}
                 </p>
               </div>
             </div>
@@ -86,16 +64,29 @@ const TaxiBookingPayment = () => {
               <h3 className="text-sm font-semibold mb-4 text-gray-800">
                 Journey Details
               </h3>
-              <div className="space-y-3">
-                {Object.entries(bookingData.journey).map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="flex justify-between items-center text-sm"
-                  >
-                    <span className="text-gray-600 capitalize">{key}</span>
-                    <span className="font-medium text-gray-600">{value}</span>
-                  </div>
-                ))}
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Pickup</span>
+                  <span className="font-medium text-gray-500">{pickup}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Drop</span>
+                  <span className="font-medium text-gray-500">{drop}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Date</span>
+                  <span className="font-medium text-gray-500">{date}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Time</span>
+                  <span className="font-medium text-gray-500">{time}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Distance</span>
+                  <span className="font-medium text-gray-500">
+                    {distance} km
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -107,24 +98,28 @@ const TaxiBookingPayment = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Base Fee</span>
-                  <span>${bookingData.payment.baseFee.toFixed(2)}</span>
+                  <span className="text-gray-500">
+                    Rs. {totalFare?.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Discount</span>
-                  <span>{bookingData.payment.discount}</span>
+                  <span className="text-gray-500">0</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Taxes</span>
-                  <span>{bookingData.payment.taxes}</span>
+                  <span className="text-gray-500">0</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Service Fee</span>
-                  <span>{bookingData.payment.serviceFee}</span>
+                  <span className="text-gray-500">0</span>
                 </div>
                 <hr />
                 <div className="flex justify-between font-bold text-base">
-                  <span>Total Amount</span>
-                  <span>${bookingData.payment.total.toFixed(2)}</span>
+                  <span className="text-gray-800">Total Amount</span>
+                  <span className="text-gray-800">
+                    Rs. {totalFare?.toFixed(2)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -238,7 +233,7 @@ const TaxiBookingPayment = () => {
             </div>
             <h2 className="text-lg font-semibold">Payment Success!</h2>
             <p className="text-2xl font-bold my-2">
-              ${bookingData.payment.total.toFixed(2)}
+              Rs. {totalFare?.toFixed(2)}
             </p>
             <hr className="my-3" />
             <div className="text-left text-sm space-y-2">
@@ -252,17 +247,15 @@ const TaxiBookingPayment = () => {
               </p>
               <p>
                 <span className="text-gray-600">Date:</span>{" "}
-                <span className="font-medium">04.04.2025</span>
+                <span className="font-medium">{date}</span>
               </p>
               <p>
                 <span className="text-gray-600">Time:</span>{" "}
-                <span className="font-medium">11:11am</span>
+                <span className="font-medium">{time}</span>
               </p>
               <p>
                 <span className="text-gray-600">Amount:</span>{" "}
-                <span className="font-medium">
-                  ${bookingData.payment.total.toFixed(2)}
-                </span>
+                <span className="font-medium">Rs. {totalFare?.toFixed(2)}</span>
               </p>
             </div>
             <p className="mt-4">Thank You!</p>

@@ -10,6 +10,48 @@ export default function StartJourney({ vehicle }) {
 
   const navigate = useNavigate();
 
+  const handleSelect = async () => {
+    try {
+      // ✅ Send request to backend
+      const response = await fetch(
+        "http://localhost:5000/api/service/taxi/distance",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pickup, dropup: drop }), // match backend keys
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to calculate distance");
+
+      const data = await response.json();
+      console.log("Distance data:", data);
+
+      // Example: calculate total fare (if you want to show it on frontend)
+      let totalFare = 0;
+
+      if (data.success) {
+        totalFare = data.distance * vehicle.perKm;
+        console.log("Total Fare:", totalFare);
+      }
+      // ✅ pickup, drop, date, time already come from useState
+      navigate("/taxi-booking-payment", {
+        state: {
+          pickup,
+          drop,
+          date,
+          time,
+          medium: vehicle.vehicleType,
+          distance: data.distance,
+          totalFare,
+          vehicle,
+        },
+      });
+    } catch (error) {
+      console.error("Error calculating distance:", error);
+    }
+  };
+
   return (
     <div className="mx-auto">
       <h2 className="text-xl font-bold text-gray-600 my-8 text-center sm:text-left">
@@ -112,7 +154,7 @@ export default function StartJourney({ vehicle }) {
           <div className="flex justify-center md:justify-end mt-6">
             <button
               onClick={() => {
-                navigate("/taxi-booking-payment");
+                handleSelect();
               }}
               className="bg-green-200 hover:bg-green-300 text-black font-semibold py-2 px-8 rounded-md"
             >

@@ -2,14 +2,14 @@ import React, { useState } from "react";
 
 const TaxiFilter = ({ vehicles, onFilterChange }) => {
   const [filters, setFilters] = useState({
-    priceRange: { min: 0, max: 50 },
+    priceRange: { min: 0, max: 20 },
     selectedModels: [],
     selectedFuelTypes: [],
     selectedCarTypes: [],
   });
 
-  const minPrice = Math.min(...vehicles.map((v) => v.feePerKm));
-  const maxPrice = Math.max(...vehicles.map((v) => v.feePerKm));
+  const minPrice = Math.min(...vehicles.map((v) => v.perKm));
+  const maxPrice = Math.max(...vehicles.map((v) => v.perKm));
   const availableModels = [...new Set(vehicles.map((v) => v.model))];
   const availableFuelTypes = [...new Set(vehicles.map((v) => v.fuelType))];
   const availableCarTypes = [

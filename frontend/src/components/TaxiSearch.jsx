@@ -7,7 +7,7 @@ const TaxiSearch = () => {
   const [formData, setFormData] = useState({
     pickup: "Tissamaharama",
     drop: "Mirissa",
-    medium: "car",
+    medium: "Car",
   });
 
   const handleChange = (e) => {
@@ -21,11 +21,10 @@ const TaxiSearch = () => {
   const getApiUrl = () => {
     const now = new Date();
     const date = now.toISOString().slice(0, 10); // YYYY-MM-DD
-    const time = now.toTimeString().slice(0, 5); // HH:MM
-    const pickup = formData.pickup.toLowerCase();
-    const vehicleType = formData.medium.toLowerCase();
+    const pickup = formData.pickup; // keep original casing to match DB
+    const vehicleType = formData.medium; // keep original casing to match DB
 
-    return `http://localhost:5000/api/service/taxi/available?date=${date}&time=${time}&pickup=${formData.pickup}&vehicleType=${vehicleType}`;
+    return `http://localhost:5000/api/service/taxi/available?date=${date}&pickup=${pickup}&vehicleType=${vehicleType}`;
   };
 
   const handleSubmit = (e) => {

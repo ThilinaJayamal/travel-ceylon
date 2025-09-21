@@ -14,6 +14,7 @@ import ReviewBox from "./components/ReviewBox";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
+// Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import UserProfile from "./pages/UserProfile";
@@ -35,11 +36,12 @@ import Registration from "./pages/Registration/Registration";
 import HotelRegistration from "./pages/Registration/HotelRegistration";
 import TaxiRegistration from "./pages/Registration/TaxiRegistration";
 import GuideRegistration from "./pages/Registration/GuideRegistration";
-import GuidePayment from "./pages/GuidePayment";
-import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings";
 import TaxiAdminViewAccount from "./pages/TaxiAdminViewAccount";
+import TaxiAdminViewBookings from "./pages/TaxiAdminViewBookings";
+import TaxiBookingPayment from "./pages/TaxiBookingPayment";
+import TaxiRentingPayment from "./pages/TaxiRentingPayment";
 import GuideAdmin from "./pages/GuideAdmin";
-
+import GuidePayment from "./pages/GuidePayment";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -117,7 +119,7 @@ function App() {
     "/service/login",
     "/registration/guide",
     "/registration/taxi",
-    "/registration/hotel"
+    "/registration/hotel",
   ].includes(path);
 
   const showFooter = ![
@@ -126,7 +128,7 @@ function App() {
     "/registration",
     "/registration/guide",
     "/registration/taxi",
-    "/registration/hotel"
+    "/registration/hotel",
   ].includes(path);
 
   return (
@@ -149,6 +151,7 @@ function App() {
           path="/view-renting-vehicle"
           element={<RentedVehicleDetails />}
         />
+        <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
         <Route
           path="/taxi-admin-bookings"
           element={<TaxiAdminViewBookings />}
@@ -157,7 +160,8 @@ function App() {
           path="/taxi-admin-dashboard"
           element={<TaxiAdminViewDashboard />}
         />
-        <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
+        <Route path="/taxi-booking-payment" element={<TaxiBookingPayment />} />
+        <Route path="/taxi-renting-payment" element={<TaxiRentingPayment />} />
 
         {/* Stays Routes */}
         <Route path="/stays" element={<Stays />} />
