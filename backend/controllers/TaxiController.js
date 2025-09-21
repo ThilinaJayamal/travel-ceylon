@@ -301,3 +301,31 @@ export const changeBookingState = async (req, res) => {
       .json({ success: false, message: "Server error", error: error.message });
   }
 };
+
+//calculate the distance between 2 places
+
+export const calculateDistance = async (req, res) => {
+  try {
+    const { pickup, dropup } = req.body;
+
+    if (!pickup || !dropup) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide pickup and dropup locations",
+      });
+    }
+    const distance = await getDistanceORS(pickup, dropup);
+    if (distance === -1) {
+      return res.status(400).json({
+        success: false,
+        message: "Please check your pickup & dropup location names",
+      });
+    }
+    res.status(200).json({ success: true, distance });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
+  }
+};
