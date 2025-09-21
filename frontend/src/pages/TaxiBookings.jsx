@@ -11,28 +11,34 @@ const TaxiBookings = () => {
   const [initialVehicles, setInitialVehicles] = useState([]);
   const [showFilter, setShowFilter] = useState(false); // State to control filter visibility on mobile
 
-  // Fetch available taxis from API using current date, time, pickup, and vehicleType
   useEffect(() => {
     const fetchAvailableTaxis = async () => {
       if (formData?.pickup && formData?.medium) {
         const now = new Date();
         const date = now.toISOString().slice(0, 10); // YYYY-MM-DD
-        const time = now.toTimeString().slice(0, 5); // HH:MM
-        const vehicleType = formData.medium.toLowerCase();
-        const apiUrl = `http://localhost:5000/api/service/taxi/available?date=${date}&time=${time}&pickup=${formData.pickup}&vehicleType=${vehicleType}`;
+        const pickup = formData.pickup; // keep original casing
+        const vehicleType = formData.medium; // keep original casing
+
+        const apiUrl = `http://localhost:5000/api/service/taxi/available?date=${date}&pickup=${pickup}&vehicleType=${vehicleType}`;
+
         try {
           const response = await fetch(apiUrl);
           if (!response.ok) throw new Error("Failed to fetch taxis");
+
           const data = await response.json();
-          console.log(data);
-          setInitialVehicles(data.data);
-          setFilteredVehicles(data.data);
+
+          console.log("Available taxis:", data);
+
+          setInitialVehicles(data.data || []);
+          setFilteredVehicles(data.data || []);
         } catch (error) {
+          console.error("Error fetching taxis:", error);
           setInitialVehicles([]);
           setFilteredVehicles([]);
         }
       }
     };
+
     fetchAvailableTaxis();
   }, [formData]);
 
@@ -40,8 +46,8 @@ const TaxiBookings = () => {
   const handleFilterChange = (newFilters) => {
     const filtered = initialVehicles.filter((vehicle) => {
       return (
-        vehicle.feePerKm >= newFilters.priceRange.min &&
-        vehicle.feePerKm <= newFilters.priceRange.max &&
+        vehicle.perKm >= newFilters.priceRange.min &&
+        vehicle.perKm <= newFilters.priceRange.max &&
         (newFilters.selectedModels.length === 0 ||
           newFilters.selectedModels.includes(vehicle.model)) &&
         (newFilters.selectedFuelTypes.length === 0 ||
@@ -134,7 +140,7 @@ const TaxiBookings = () => {
                       {/* Taxi Image */}
                       <div className="w-full sm:w-auto sm:flex-shrink-0">
                         <img
-                          className="w-full sm:w-56 md:w-64 h-48 sm:h-56 object-cover rounded-t-lg sm:rounded-t-none sm:rounded-l-lg"
+                          className=" sm:w-56 md:w-64 h-48 w-full sm:h-56 object-cover rounded-t-lg sm:rounded-t-none sm:rounded-l-lg"
                           src={vehicle.image}
                           alt={vehicle.model}
                         />
@@ -145,8 +151,8 @@ const TaxiBookings = () => {
                         {/* Driver image */}
                         <div className="flex justify-start sm:justify-center items-start sm:p-3">
                           <img
-                            className="w-10 h-10 rounded-full mr-3 sm:mr-0"
-                            src={vehicle.driverImage}
+                            className="w-12 h-12 rounded-full mr-3 sm:mr-0"
+                            src={vehicle.profilePic}
                             alt={vehicle.driverName}
                           />
                         </div>
@@ -171,13 +177,13 @@ const TaxiBookings = () => {
                                 Starting from
                               </h3>
                               <p className="font-semibold text-green-600 text-xl">
-                                ${vehicle.feePerKm}/km
+                                ${vehicle.perKm}/km
                               </p>
                             </div>
                           </div>
 
-                          <div className="text-gray-600 text-base md:text-xl font-bold text-left">
-                            {vehicle.model} {vehicle.numberPlate}
+                          <div className="text-gray-500 text-base md:text-xl  font-bold text-left">
+                            {vehicle.model} {vehicle.vehicleNo}
                           </div>
 
                           {/* View Vehicle Button */}
