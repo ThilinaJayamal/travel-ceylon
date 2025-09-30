@@ -39,7 +39,9 @@ function StaysAdmin() {
   if (staysProfile == null || loading == true) {
     return (
       <>
-        <div>Loading...</div>
+        <div className='p-96'>
+fgfg
+        </div>
       </>
     )
   }

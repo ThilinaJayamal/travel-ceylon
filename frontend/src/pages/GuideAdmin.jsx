@@ -12,65 +12,7 @@ const GuideAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch guide data from API
-  const fetchGuide = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `http://localhost:5000/api/service/guide/profile`
-      );
-      setGuide(response.data.data); // use .data.data
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch guide data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchGuide();
-  }, [guideId]);
-
-  // Update guide profile API call
-  const updateProfile = async (data) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/service/guide/profile`,
-        data
-      );
-      setGuide(response.data.data);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update profile");
-    }
-  };
-
-  // Upload cover image API call
-  const handleCoverUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("coverImage", file);
-
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/service/guide/profile/cover`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      setGuide(response.data.data);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to upload cover image");
-    }
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!guide) return <p>No guide data found.</p>;
-
+  
   return (
     <>
       <div className="w-full">

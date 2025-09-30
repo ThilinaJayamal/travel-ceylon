@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 // Stores
@@ -59,200 +59,39 @@ function App() {
   const loadProvider = useServiceAuthStore((state) => state.loadUser);
   const providerError = useServiceAuthStore((state) => state.error);
   const providerErrorClear = useServiceAuthStore((state) => state.clearError);
-
+  const isAuthChecking = useAuthStore((state) => state.isAuthChecking)
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Load users on app start
   useEffect(() => {
     loadTraveler();
     loadProvider();
-  }, []);
+  }, [])
 
-  // Set currentUser
-  useEffect(() => {
-    if (traveler) setCurrentUser(traveler);
-    else if (provider) setCurrentUser(provider);
-    else setCurrentUser(null);
-  }, [traveler, provider]);
+  console.log(isAuthChecking)
 
-  // Redirect after login
-  useEffect(() => {
-    if (!currentUser) return;
+  if (isAuthChecking) {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
+  }
 
-    if (["/", "/login", "/service/login"].includes(path)) {
-      const { role, serviceType } = currentUser;
-
-      if (role === "user") {
-        navigate("/user/profile");
-      } else if (role === "provider") {
-        if (!serviceType) return navigate("/registration");
-
-        const routes = {
-          Taxi: "/taxi/admin",
-          Rent: "/",
-          Guide: "/guides/admin",
-          Stays: "/stays/admin",
-        };
-        navigate(routes[serviceType] || "/");
-      }
-    }
-  }, [currentUser, navigate, path]);
-
-  // Handle errors
-  useEffect(() => {
-    if (travelerError) {
-      toast.error(travelerError);
-      travelerErrorClear();
-    }
-    if (providerError) {
-      toast.error(providerError);
-      providerErrorClear();
-    }
-  }, [travelerError, providerError]);
-
-  // Navbar/Footer visibility
-  const showNavbar = ![
-    "/",
-    "/login",
-    "/service/login",
-    "/registration/guide",
-    "/registration/taxi",
-    "/registration/hotel"
-  ].includes(path);
-
-  const showFooter = ![
-    "/login",
-    "/service/login",
-    "/registration",
-    "/registration/guide",
-    "/registration/taxi",
-    "/registration/hotel"
-  ].includes(path);
 
   return (
     <>
-      {showNavbar && <Navbar />}
+      <Navbar />
 
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/service/login" element={<ServiceProviderLogin />} />
-        <Route path="/registration" element={<Registration />} />
+        <Route path="/" element={!traveler ? <Home /> : <Navigate to={"/user/profile"} />} />
+        <Route path="/login" element={traveler ? <UserProfile /> : <Login />} />
+        <Route path="/user/profile" element={traveler ? <UserProfile /> : <Navigate to={"/"} />} />
 
-        {/* Taxi Routes */}
-        <Route path="/taxi" element={<Taxi />} />
-        <Route path="/taxi-bookings" element={<TaxiBookings />} />
-        <Route path="/specific-taxi" element={<SpecificTaxi />} />
-        <Route path="/rent-taxi" element={<RentTaxi />} />
-        <Route
-          path="/view-renting-vehicle"
-          element={<RentedVehicleDetails />}
-        />
-        <Route
-          path="/taxi-admin-bookings"
-          element={<TaxiAdminViewBookings />}
-        />
-        <Route
-          path="/taxi-admin-dashboard"
-          element={<TaxiAdminViewDashboard />}
-        />
-        <Route path="/taxi-admin-account" element={<TaxiAdminViewAccount />} />
-
-        {/* Stays Routes */}
-        <Route path="/stays" element={<Stays />} />
-        <Route path="/stays/filter" element={<StaysFilter />} />
-
-        {/* Guides Routes */}
-        <Route path="/guides" element={<Guides />} />
-        <Route path="/guides/search" element={<GuideSearchResults />} />
-        <Route path="/guide/:id" element={<Guide />} />
-        <Route path="/guide/:id/admin" element={<GuideAdmin />} />
-        <Route path="/guide/:id/payment" element={<GuidePayment />} />
-
-        {/* User Protected */}
-        <Route
-          path="/user/profile"
-          element={
-            <ProtectedRoute allowedRoles={["user"]} currentUser={currentUser}>
-              <UserProfile />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Provider Protected */}
-        <Route
-          path="/registration/hotel"
-          element={
-            <ProtectedRoute
-              allowedRoles={["provider"]}
-              currentUser={currentUser}
-            >
-              <HotelRegistration />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/registration/taxi"
-          element={
-            <ProtectedRoute
-              allowedRoles={["provider"]}
-              currentUser={currentUser}
-            >
-              <TaxiRegistration />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/registration/guide"
-          element={
-            <ProtectedRoute
-              allowedRoles={["provider"]}
-              currentUser={currentUser}
-            >
-              <GuideRegistration />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/stays/admin"
-          element={
-            <ProtectedRoute
-              allowedRoles={["provider"]}
-              currentUser={currentUser}
-            >
-              <StaysAdmin />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/taxi/admin"
-          element={
-            <ProtectedRoute
-              allowedRoles={["provider"]}
-              currentUser={currentUser}
-            >
-              <TaxiAdminViewDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/guides/admin"
-          element={
-            <ProtectedRoute
-              allowedRoles={["provider"]}
-              currentUser={currentUser}
-            >
-              <GuideAdmin />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Catch-all */}
+        <Route path="/provider/login" element={(provider && provider?.serviceType) ? <Navigate to={`/provider/${provider?.serviceType.toLowerCase()}/admin`} /> : <ServiceProviderLogin/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {showFooter && <Footer />}
+      <Footer />
       {reviewOpen && <ReviewBox />}
       <Toaster />
     </>

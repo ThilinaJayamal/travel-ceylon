@@ -5,6 +5,7 @@ export const useAuthStore = create((set) => ({
   user: null,       // stores logged-in user info
   loading: false,   // request loading state
   error: null,      // error message
+  isAuthChecking:true,
 
   // LOGIN
   login: async (credentials) => {
@@ -51,6 +52,7 @@ export const useAuthStore = create((set) => ({
 
   // LOAD USER (on app start)
   loadUser: async () => {
+    set({isAuthChecking:true});
     try {
       const { data } = await api.get("/user/me");
 
@@ -71,6 +73,8 @@ export const useAuthStore = create((set) => ({
 
     } catch (err) {
       return null
+    }finally{
+      set({isAuthChecking:false})
     }
   },
 
